@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nova_chrono/components/create_task_form.dart';
 
 class CreateTaskPage extends StatelessWidget {
   const CreateTaskPage({super.key, required this.title});
@@ -12,21 +13,10 @@ class CreateTaskPage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(title),
       ),
-      body: const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text('Create a new task'),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pop(context);
-        },
-        tooltip: 'Cancel',
-        child: const Text('Cancel'),
-      ),
+      body: const Padding(
+        padding: EdgeInsets.only(top: 20),
+        child: CreateTaskForm(),
+      )
     );
   }
 }
