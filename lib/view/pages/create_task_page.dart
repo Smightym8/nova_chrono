@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nova_chrono/components/create_task_form.dart';
+
+import '../components/create_task_form.dart';
 
 class CreateTaskPage extends StatelessWidget {
   const CreateTaskPage({super.key, required this.title});

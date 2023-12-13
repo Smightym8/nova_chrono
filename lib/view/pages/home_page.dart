@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:nova_chrono/pages/create_task_page.dart';
+
+import 'create_task_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.title});

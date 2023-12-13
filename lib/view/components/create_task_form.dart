@@ -11,8 +11,8 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
 
   final _formKey = GlobalKey<FormState>();
   final taskNameController = TextEditingController();
-  final startDateController = TextEditingController();
-  final endDateController = TextEditingController();
+  final startTimestampController = TextEditingController();
+  final endTimestampController = TextEditingController();
   final detailsController = TextEditingController();
 
   Future<void> _selectDate(bool isStart) async {
@@ -40,11 +40,11 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
 
               if (isStart) {
                 setState(() {
-                  startDateController.text = selectedDateTime.toString();
+                  startTimestampController.text = selectedDateTime.toString();
                 });
               } else {
                 setState(() {
-                  endDateController.text = selectedDateTime.toString();
+                  endTimestampController.text = selectedDateTime.toString();
                 });
               }
             }
@@ -55,8 +55,8 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
 
   void save() {
     // TODO: Save task
-    String formValues = 'Task name: ${taskNameController.text}\nStart: ${startDateController.text}'
-        '\nEnd: ${endDateController.text}\nDetails: ${detailsController.text}';
+    String formValues = 'Task name: ${taskNameController.text}\nStart: ${startTimestampController.text}'
+        '\nEnd: ${endTimestampController.text}\nDetails: ${detailsController.text}';
 
     showDialog(
         context: context,
@@ -72,6 +72,9 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
   void dispose() {
     // Clean up the controller when the widget is disposed.
     taskNameController.dispose();
+    startTimestampController.dispose();
+    endTimestampController.dispose();
+    detailsController.dispose();
     super.dispose();
   }
 
@@ -89,6 +92,9 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
               decoration: const InputDecoration(
                 labelText: 'Task name',
                 border: OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue)
+                ),
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -102,7 +108,7 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
           Padding(
               padding: const EdgeInsets.all(16),
               child: TextFormField(
-                controller: startDateController,
+                controller: startTimestampController,
                 decoration: const InputDecoration(
                   labelText: 'Start',
                   filled: true,
@@ -130,7 +136,7 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: TextFormField(
-              controller: endDateController,
+              controller: endTimestampController,
               decoration: const InputDecoration(
                 labelText: 'End',
                 filled: true,
@@ -162,6 +168,9 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
               decoration: const InputDecoration(
                 labelText: 'Details',
                 border: OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: Colors.blue)
+                ),
               ),
             ),
           ),

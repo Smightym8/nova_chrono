@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nova_chrono/pages/home_page.dart';
+import 'package:nova_chrono/view/pages/home_page.dart';
 
 void main() {
   runApp(const App());
