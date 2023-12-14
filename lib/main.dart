@@ -10,6 +10,7 @@ import 'package:nova_chrono/view/pages/home_page.dart';
 GetIt getIt = GetIt.instance;
 
 void main() {
+  getIt.registerSingleton<TaskRepository>(TaskRepositoryImpl());
   getIt.registerSingleton<TaskCreateService>(TaskCreateServiceImpl());
 
   runApp(const App());
