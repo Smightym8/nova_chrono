@@ -8,15 +8,12 @@ class TaskCreateServiceImpl implements TaskCreateService {
   final TaskRepository taskRepository = getIt<TaskRepository>();
 
   @override
-  void createTask(String taskName, String startTimestamp, String endTimestamp,
+  void createTask(String taskName, DateTime startTimestamp, DateTime endTimestamp,
       String? details) {
 
-    var startTimestampAsDate = DateTime.parse(startTimestamp);
-    var endTimestampAsDate = DateTime.parse(endTimestamp);
     details = details ?? "";
 
-    var task = Task(taskName, startTimestampAsDate, endTimestampAsDate,
-        details);
+    var task = Task(taskName, startTimestamp, endTimestamp, details);
 
     taskRepository.add(task);
   }

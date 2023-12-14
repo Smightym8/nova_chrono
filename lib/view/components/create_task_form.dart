@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CreateTaskForm extends StatefulWidget {
   const CreateTaskForm({super.key, required this.onPressedFunction});
@@ -10,12 +11,32 @@ class CreateTaskForm extends StatefulWidget {
 }
 
 class _CreateTaskFormState extends State<CreateTaskForm> {
+  late GlobalKey<FormState> _formKey;
+  late TextEditingController _taskNameController;
+  late TextEditingController _startTimestampController;
+  late TextEditingController _endTimestampController;
+  late TextEditingController _detailsController;
+  late DateTime _selectedStartTimeStamp;
+  late DateTime _selectedEndTimeStamp;
 
-  final _formKey = GlobalKey<FormState>();
-  final taskNameController = TextEditingController();
-  final startTimestampController = TextEditingController();
-  final endTimestampController = TextEditingController();
-  final detailsController = TextEditingController();
+  @override
+  void initState() {
+    _formKey = GlobalKey<FormState>();
+
+    _selectedStartTimeStamp = DateTime.now();
+    _selectedEndTimeStamp = DateTime.now();
+
+    _taskNameController = TextEditingController();
+    _startTimestampController = TextEditingController(text: _formatDate(_selectedStartTimeStamp));
+    _endTimestampController = TextEditingController();
+    _detailsController = TextEditingController();
+
+    super.initState();
+  }
+
+  static String _formatDate(DateTime date) {
+    return DateFormat('yyyy-MM-dd - HH:mm').format(date);
+  }
 
   Future<void> _selectDate(bool isStart) async {
     DateTime now = DateTime.now();
@@ -27,9 +48,7 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
         lastDate: DateTime(now.year, now.month, now.day + 1)
     ).then((selectedDate) => {
       if (selectedDate != null) {
-          showTimePicker(
-            context: context,
-            initialTime: TimeOfDay.now(),
+          showTimePicker(context: context, initialTime: TimeOfDay.now(),
           ).then((selectedTime) {
             if (selectedTime != null) {
               DateTime selectedDateTime = DateTime(
@@ -42,11 +61,13 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
 
               if (isStart) {
                 setState(() {
-                  startTimestampController.text = selectedDateTime.toString();
+                  _selectedStartTimeStamp = selectedDateTime;
+                  _startTimestampController.text = _formatDate(selectedDateTime);
                 });
               } else {
                 setState(() {
-                  endTimestampController.text = selectedDateTime.toString();
+                  _selectedEndTimeStamp = selectedDateTime;
+                  _endTimestampController.text = _formatDate(selectedDateTime);
                 });
               }
             }
@@ -56,20 +77,12 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      startTimestampController.text = DateTime.now().toString();
-    });
-  }
-
-  @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
-    taskNameController.dispose();
-    startTimestampController.dispose();
-    endTimestampController.dispose();
-    detailsController.dispose();
+    _taskNameController.dispose();
+    _startTimestampController.dispose();
+    _endTimestampController.dispose();
+    _detailsController.dispose();
     super.dispose();
   }
 
@@ -83,7 +96,7 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: TextFormField(
-              controller: taskNameController,
+              controller: _taskNameController,
               decoration: const InputDecoration(
                 labelText: 'Task name',
                 border: OutlineInputBorder(),
@@ -103,7 +116,7 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
           Padding(
               padding: const EdgeInsets.all(16),
               child: TextFormField(
-                controller: startTimestampController,
+                controller: _startTimestampController,
                 decoration: const InputDecoration(
                   labelText: 'Start',
                   filled: true,
@@ -131,7 +144,7 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: TextFormField(
-              controller: endTimestampController,
+              controller: _endTimestampController,
               decoration: const InputDecoration(
                 labelText: 'End',
                 filled: true,
@@ -152,13 +165,8 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
                   return 'Please select a end date.';
                 }
 
-                var selectedEndDate = DateTime.parse(value);
-
-                if (startTimestampController.text.isNotEmpty) {
-                  var selectedStartDate = DateTime.parse(startTimestampController.text);
-                  if (selectedEndDate.compareTo(selectedStartDate) < 0) {
-                    return 'End has to be after start.';
-                  }
+                if (_selectedEndTimeStamp.compareTo(_selectedStartTimeStamp) < 0) {
+                  return 'End has to be after start.';
                 }
 
                 return null;
@@ -168,7 +176,7 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: TextFormField(
-              controller: detailsController,
+              controller: _detailsController,
               decoration: const InputDecoration(
                 labelText: 'Details',
                 border: OutlineInputBorder(),
@@ -187,10 +195,10 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         widget.onPressedFunction(
-                          taskNameController.text,
-                          startTimestampController.text,
-                          endTimestampController.text,
-                          detailsController.text
+                          _taskNameController.text,
+                          _selectedStartTimeStamp,
+                          _selectedEndTimeStamp,
+                          _detailsController.text
                         );
                       }
                     },

@@ -16,8 +16,9 @@ class CreateTaskPage extends StatefulWidget {
 class _CreateTaskPageState extends State<CreateTaskPage> {
   final TaskCreateService taskCreateService = getIt<TaskCreateService>();
 
-  void save(String taskName, String startTimestamp, String endTimestamp, String? details) {
+  void save(String taskName, DateTime startTimestamp, DateTime endTimestamp, String? details) {
     taskCreateService.createTask(taskName, startTimestamp, endTimestamp, details);
+    Navigator.pop(context);
   }
 
   @override
