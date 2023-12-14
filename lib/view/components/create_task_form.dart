@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CreateTaskForm extends StatefulWidget {
-  const CreateTaskForm({super.key});
+  const CreateTaskForm({super.key, required this.onPressedFunction});
+
+  final Function onPressedFunction;
 
   @override
   State<CreateTaskForm> createState() => _CreateTaskFormState();
@@ -51,21 +53,6 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
           })
       }
     });
-  }
-
-  void save() {
-    // TODO: Save task
-    String formValues = 'Task name: ${taskNameController.text}\nStart: ${startTimestampController.text}'
-        '\nEnd: ${endTimestampController.text}\nDetails: ${detailsController.text}';
-
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            content: Text(formValues),
-          );
-        }
-    );
   }
 
   @override
@@ -170,7 +157,7 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
                 if (startTimestampController.text.isNotEmpty) {
                   var selectedStartDate = DateTime.parse(startTimestampController.text);
                   if (selectedEndDate.compareTo(selectedStartDate) < 0) {
-                    return 'End has to be before start.';
+                    return 'End has to be after start.';
                   }
                 }
 
@@ -196,10 +183,15 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
             child: Row(
               children: [
                 Expanded(
-                  child:  ElevatedButton (
+                  child:  ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        save();
+                        widget.onPressedFunction(
+                          taskNameController.text,
+                          startTimestampController.text,
+                          endTimestampController.text,
+                          detailsController.text
+                        );
                       }
                     },
                     child: const Text('Save'),

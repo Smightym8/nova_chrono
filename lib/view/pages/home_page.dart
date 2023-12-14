@@ -20,7 +20,7 @@ class HomePage extends StatelessWidget {
             context,
             MaterialPageRoute(builder: (context) =>
               // TODO: Pass title to page
-              const CreateTaskPage(title: "NovaChrono")
+              CreateTaskPage(title: "NovaChrono")
             ),
           );
         },
