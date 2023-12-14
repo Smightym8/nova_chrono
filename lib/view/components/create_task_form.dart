@@ -157,6 +157,15 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
                   return 'Please select a end date.';
                 }
 
+                var selectedEndDate = DateTime.parse(value);
+
+                if (startTimestampController.text.isNotEmpty) {
+                  var selectedStartDate = DateTime.parse(startTimestampController.text);
+                  if (selectedEndDate.compareTo(selectedStartDate) < 0) {
+                    return 'End has to be before start.';
+                  }
+                }
+
                 return null;
               },
             ),
