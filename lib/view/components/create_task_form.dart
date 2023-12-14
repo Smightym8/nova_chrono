@@ -69,6 +69,14 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      startTimestampController.text = DateTime.now().toString();
+    });
+  }
+
+  @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     taskNameController.dispose();
