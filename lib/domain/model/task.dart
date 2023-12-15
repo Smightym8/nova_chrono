@@ -19,4 +19,21 @@ class Task {
   DateTime get endTimestamp => _endTimestamp;
 
   String get details => _details;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Task &&
+          runtimeType == other.runtimeType &&
+          _name == other._name &&
+          _startTimestamp == other._startTimestamp &&
+          _endTimestamp == other._endTimestamp &&
+          _details == other._details;
+
+  @override
+  int get hashCode =>
+      _name.hashCode ^
+      _startTimestamp.hashCode ^
+      _endTimestamp.hashCode ^
+      _details.hashCode;
 }

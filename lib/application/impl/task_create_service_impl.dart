@@ -5,7 +5,11 @@ import '../../main.dart';
 import '../api/task_create_service.dart';
 
 class TaskCreateServiceImpl implements TaskCreateService {
-  final TaskRepository taskRepository = getIt<TaskRepository>();
+  late TaskRepository _taskRepository;
+
+  TaskCreateServiceImpl({TaskRepository? taskRepository}) {
+    _taskRepository = taskRepository ?? getIt<TaskRepository>();
+  }
 
   @override
   void createTask(String taskName, DateTime startTimestamp, DateTime endTimestamp,
@@ -15,6 +19,6 @@ class TaskCreateServiceImpl implements TaskCreateService {
 
     var task = Task(taskName, startTimestamp, endTimestamp, details);
 
-    taskRepository.add(task);
+    _taskRepository.add(task);
   }
 }
