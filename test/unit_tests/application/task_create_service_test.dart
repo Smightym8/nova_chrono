@@ -6,7 +6,7 @@ import 'package:nova_chrono/domain/model/task.dart';
 import 'package:nova_chrono/domain/repository/task_repository.dart';
 import 'package:test/test.dart';
 
-import '../mocks/task_create_service_tests.mocks.dart';
+import '../../mocks/task_create_service_tests.mocks.dart';
 
 @GenerateMocks([TaskRepository])
 void main() {

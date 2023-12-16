@@ -96,6 +96,7 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: TextFormField(
+              key: const Key('taskNameTextField'),
               controller: _taskNameController,
               decoration: const InputDecoration(
                 labelText: 'Task name',
@@ -116,9 +117,10 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
           Padding(
               padding: const EdgeInsets.all(16),
               child: TextFormField(
-                controller: _startTimestampController,
-                decoration: const InputDecoration(
-                  labelText: 'Start',
+              key: const Key('startTimestampTextField'),
+              controller: _startTimestampController,
+              decoration: const InputDecoration(
+                labelText: 'Start',
                   filled: true,
                   prefixIcon: Icon(Icons.calendar_today),
                   enabledBorder: OutlineInputBorder(
@@ -144,6 +146,7 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: TextFormField(
+              key: const Key('endTimestampTextField'),
               controller: _endTimestampController,
               decoration: const InputDecoration(
                 labelText: 'End',
@@ -176,6 +179,7 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
           Padding(
             padding: const EdgeInsets.all(16),
             child: TextFormField(
+              key: const Key('detailsTextField'),
               controller: _detailsController,
               decoration: const InputDecoration(
                 labelText: 'Details',
@@ -187,11 +191,12 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 16),
+            padding: const EdgeInsets.all(20),
             child: Row(
               children: [
                 Expanded(
                   child:  ElevatedButton(
+                    key: const Key('saveButton'),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         widget.onPressedFunction(
@@ -205,12 +210,13 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
                     child: const Text('Save'),
                   ),
                 ),
-                const SizedBox(width: 8.0),
+                const SizedBox(width: 20),
                 Expanded(
                     child: ElevatedButton (
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+                    key: const Key('cancelButton'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                       child: const Text('Cancel'),
                     ),
                 )

@@ -5,19 +5,29 @@ import '../../main.dart';
 import '../components/create_task_form.dart';
 
 class CreateTaskPage extends StatefulWidget {
-  const CreateTaskPage({super.key, required this.title});
+  const CreateTaskPage(
+      {super.key, required this.title, this.taskCreateService});
 
   final String title;
+  final TaskCreateService? taskCreateService;
 
   @override
   State<CreateTaskPage> createState() => _CreateTaskPageState();
 }
 
 class _CreateTaskPageState extends State<CreateTaskPage> {
-  final TaskCreateService taskCreateService = getIt<TaskCreateService>();
+  late TaskCreateService _taskCreateService;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _taskCreateService = widget.taskCreateService ?? getIt<TaskCreateService>();
+  }
 
   void save(String taskName, DateTime startTimestamp, DateTime endTimestamp, String? details) {
-    taskCreateService.createTask(taskName, startTimestamp, endTimestamp, details);
+    _taskCreateService.createTask(
+        taskName, startTimestamp, endTimestamp, details);
     Navigator.pop(context);
   }
 
