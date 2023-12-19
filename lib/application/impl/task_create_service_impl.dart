@@ -14,10 +14,10 @@ class TaskCreateServiceImpl implements TaskCreateService {
   @override
   void createTask(String taskName, DateTime startTimestamp, DateTime endTimestamp,
       String? details) {
-
+    String id = _taskRepository.nextIdentity();
     details = details ?? "";
 
-    var task = Task(taskName, startTimestamp, endTimestamp, details);
+    var task = Task(id, taskName, startTimestamp, endTimestamp, details);
 
     _taskRepository.add(task);
   }

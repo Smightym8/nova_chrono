@@ -1,12 +1,26 @@
 import 'package:nova_chrono/domain/model/task.dart';
 import 'package:nova_chrono/domain/repository/task_repository.dart';
+import 'package:nova_chrono/main.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:uuid/uuid.dart';
 
-// TODO: Use other form of storing tasks
 class TaskRepositoryImpl implements TaskRepository {
-  final List<Task> _taskList = [];
+  static const String table = 'task';
+  static const uuid = Uuid();
 
   @override
-  void add(Task task) {
-    _taskList.add(task);
+  String nextIdentity() {
+    return uuid.v1();
+  }
+
+  @override
+  Future<void> add(Task task) async {
+    var database = databaseProvider.database;
+
+    await database.insert(
+      table,
+      task.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
   }
 }

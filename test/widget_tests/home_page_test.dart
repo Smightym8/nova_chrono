@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
-import 'package:nova_chrono/application/api/task_create_service.dart';
 import 'package:nova_chrono/view/pages/create_task_page.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
 
 import '../test_setup.dart';
 
-@GenerateMocks([TaskCreateService])
 void main() {
   registerServices();
 

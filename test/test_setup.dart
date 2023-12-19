@@ -7,6 +7,7 @@ import 'package:nova_chrono/infrastructure/task_repository_impl.dart';
 final GetIt getIt = GetIt.instance;
 
 void registerServices() {
+  // TODO: Get rid of this and use only generated mocks in tests
   getIt.registerLazySingleton<TaskRepository>(() => TaskRepositoryImpl());
   getIt.registerLazySingleton<TaskCreateService>(() => TaskCreateServiceImpl());
 }

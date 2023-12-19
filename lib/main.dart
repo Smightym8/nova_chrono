@@ -3,15 +3,18 @@ import 'package:get_it/get_it.dart';
 import 'package:nova_chrono/application/api/task_create_service.dart';
 import 'package:nova_chrono/application/impl/task_create_service_impl.dart';
 import 'package:nova_chrono/domain/repository/task_repository.dart';
+import 'package:nova_chrono/infrastructure/database_provider.dart';
 import 'package:nova_chrono/infrastructure/task_repository_impl.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
 
 // This is our global ServiceLocator
 GetIt getIt = GetIt.instance;
+DatabaseProvider databaseProvider = DatabaseProvider.instance;
 
-void main() {
+void main() async {
   getIt.registerSingleton<TaskRepository>(TaskRepositoryImpl());
   getIt.registerSingleton<TaskCreateService>(TaskCreateServiceImpl());
+  await databaseProvider.initDatabase();
 
   runApp(const App());
 }
