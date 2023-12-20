@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../../application/api/task_create_service.dart';
 import 'create_task_page.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key, required this.title});
+  const HomePage({super.key, required this.title, this.taskCreateService});
 
   final String title;
+  final TaskCreateService? taskCreateService;
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +20,10 @@ class HomePage extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) =>
-              // TODO: Pass title to page
-              const CreateTaskPage(title: "NovaChrono")
-            ),
+            MaterialPageRoute(builder: (context) => CreateTaskPage(
+                      title: title,
+                      taskCreateService: taskCreateService,
+                    )),
           );
         },
         tooltip: 'Add new task',

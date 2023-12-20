@@ -3,20 +3,26 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:nova_chrono/view/pages/create_task_page.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
 
-import '../test_setup.dart';
+import '../mocks/annotations.mocks.dart';
 
 void main() {
-  registerServices();
-
   const title = 'NovaChrono';
+  late MockTaskCreateService mockTaskCreateService;
+
+  setUp(() {
+    mockTaskCreateService = MockTaskCreateService();
+  });
 
   testWidgets('HomePage has a title and a floatingActionButton',
       (tester) async {
     await tester.pumpWidget(
-      const Directionality(
+      Directionality(
         textDirection: TextDirection.ltr,
         child: MaterialApp(
-          home: HomePage(title: title),
+          home: HomePage(
+            title: title,
+            taskCreateService: mockTaskCreateService,
+          ),
         ),
       ),
     );
@@ -32,10 +38,13 @@ void main() {
       'When the FloatingActionButton is pressed it navigates to '
       'CreateTaskPage', (WidgetTester tester) async {
     await tester.pumpWidget(
-      const Directionality(
+      Directionality(
         textDirection: TextDirection.ltr,
         child: MaterialApp(
-          home: HomePage(title: title),
+          home: HomePage(
+            title: title,
+            taskCreateService: mockTaskCreateService,
+          ),
         ),
       ),
     );

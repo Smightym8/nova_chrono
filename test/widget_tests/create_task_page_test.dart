@@ -5,12 +5,9 @@ import 'package:nova_chrono/view/pages/create_task_page.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
 
 import '../mocks/annotations.mocks.dart';
-import '../test_setup.dart';
 
 void main() {
   group('CreateTaskPage Tests', () {
-    registerServices();
-
     const title = 'NovaChrono';
     late MockTaskCreateService mockTaskCreateService;
 
@@ -25,10 +22,11 @@ void main() {
       var expectedNumberOfButtons = 2;
 
       await tester.pumpWidget(
-        const Directionality(
+        Directionality(
           textDirection: TextDirection.ltr,
           child: MaterialApp(
-            home: CreateTaskPage(title: title),
+            home: CreateTaskPage(
+                title: title, taskCreateService: mockTaskCreateService),
           ),
         ),
       );
@@ -56,7 +54,8 @@ void main() {
           textDirection: TextDirection.ltr,
           child: MaterialApp(
             navigatorKey: navigatorKey,
-            home: const CreateTaskPage(title: title),
+            home: CreateTaskPage(
+                title: title, taskCreateService: mockTaskCreateService),
           ),
         ),
       );
@@ -87,7 +86,10 @@ void main() {
           textDirection: TextDirection.ltr,
           child: MaterialApp(
             navigatorKey: navigatorKey,
-            home: const CreateTaskPage(title: title),
+            home: CreateTaskPage(
+              title: title,
+              taskCreateService: mockTaskCreateService,
+            ),
           ),
         ),
       );
