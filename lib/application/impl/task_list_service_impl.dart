@@ -1,13 +1,18 @@
 import 'package:nova_chrono/application/api/task_list_service.dart';
 import 'package:nova_chrono/domain/model/task.dart';
 
+import '../../domain/repository/task_repository.dart';
+import '../../main.dart';
+
 class TaskListServiceImpl implements TaskListService {
+  late TaskRepository _taskRepository;
+
+  TaskListServiceImpl({TaskRepository? taskRepository}) {
+    _taskRepository = taskRepository ?? getIt<TaskRepository>();
+  }
+
   @override
-  List<Task> getAllTasks() {
-    return <Task>[
-      Task('1', 'Task 1', DateTime.now(), DateTime.now(), ''),
-      Task('2', 'Task 2', DateTime.now(), DateTime.now(), ''),
-      Task('3', 'Task 3', DateTime.now(), DateTime.now(), '')
-    ];
+  Future<List<Task>> getAllTasks() async {
+    return await _taskRepository.getAll();
   }
 }

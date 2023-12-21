@@ -24,7 +24,16 @@ class _TaskListState extends State<TaskList> {
     super.initState();
 
     _taskListService = widget.taskListService ?? getIt<TaskListService>();
-    _tasks = _taskListService.getAllTasks();
+    _tasks = [];
+    _initializeData();
+  }
+
+  Future<void> _initializeData() async {
+    var tasks = await _taskListService.getAllTasks();
+
+    setState(() {
+      _tasks = tasks;
+    });
   }
 
   static String _formatDate(DateTime date) {
