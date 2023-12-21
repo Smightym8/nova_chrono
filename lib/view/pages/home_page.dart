@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../application/api/task_create_service.dart';
+import '../components/task_list.dart';
 import 'create_task_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -16,6 +17,7 @@ class HomePage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(title),
       ),
+      body: const TaskList(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
