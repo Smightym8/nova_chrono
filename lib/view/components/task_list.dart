@@ -1,40 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:nova_chrono/application/api/task_list_service.dart';
 import 'package:nova_chrono/domain/model/task.dart';
 
-import '../../main.dart';
+class TaskList extends StatelessWidget {
+  const TaskList({super.key, required this.tasks});
 
-class TaskList extends StatefulWidget {
-  const TaskList({super.key, this.taskListService});
-
-  final TaskListService? taskListService;
+  final List<Task> tasks;
   static const int color = 600;
-
-  @override
-  State<TaskList> createState() => _TaskListState();
-}
-
-class _TaskListState extends State<TaskList> {
-  late TaskListService _taskListService;
-  late List<Task> _tasks;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _taskListService = widget.taskListService ?? getIt<TaskListService>();
-    _tasks = [];
-    _initializeData();
-  }
-
-  Future<void> _initializeData() async {
-    var tasks = await _taskListService.getAllTasks();
-
-    setState(() {
-      _tasks = tasks;
-    });
-  }
 
   static String _formatDate(DateTime date) {
     // TODO: Move this method to somewhere
@@ -46,15 +18,15 @@ class _TaskListState extends State<TaskList> {
   Widget build(BuildContext context) {
     return ListView.separated(
       padding: const EdgeInsets.all(8),
-      itemCount: _tasks.length,
+      itemCount: tasks.length,
       itemBuilder: (BuildContext context, int index) {
         return Container(
           height: 70,
           color: Colors.amber[TaskList.color],
           child: Center(
-              child: Text('Name: ${_tasks[index].name}'
-                  '\nFrom: ${_formatDate(_tasks[index].startTimestamp)}'
-                  '\nTo: ${_formatDate(_tasks[index].endTimestamp)}')),
+              child: Text('Name: ${tasks[index].name}'
+                  '\nFrom: ${_formatDate(tasks[index].startTimestamp)}'
+                  '\nTo: ${_formatDate(tasks[index].endTimestamp)}')),
         );
       },
       separatorBuilder: (BuildContext context, int index) => const Divider(),
