@@ -100,7 +100,6 @@ void main() {
         Directionality(
           textDirection: TextDirection.ltr,
           child: MaterialApp(
-            navigatorKey: navigatorKey,
             home: CreateTaskPage(
               title: title,
               taskCreateService: mockTaskCreateService,
