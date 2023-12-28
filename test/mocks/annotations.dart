@@ -1,5 +1,6 @@
 import 'package:mockito/annotations.dart';
 import 'package:nova_chrono/application/api/task_create_service.dart';
+import 'package:nova_chrono/application/api/task_delete_service.dart';
 import 'package:nova_chrono/application/api/task_edit_service.dart';
 import 'package:nova_chrono/application/api/task_list_service.dart';
 import 'package:nova_chrono/domain/repository/task_repository.dart';
@@ -8,4 +9,5 @@ import 'package:nova_chrono/domain/repository/task_repository.dart';
 @GenerateMocks([TaskCreateService])
 @GenerateMocks([TaskListService])
 @GenerateMocks([TaskEditService])
+@GenerateMocks([TaskDeleteService])
 void main() {}

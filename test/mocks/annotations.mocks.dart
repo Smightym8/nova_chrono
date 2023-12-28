@@ -8,6 +8,7 @@ import 'dart:async' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i3;
 import 'package:nova_chrono/application/api/task_create_service.dart' as _i6;
+import 'package:nova_chrono/application/api/task_delete_service.dart' as _i9;
 import 'package:nova_chrono/application/api/task_edit_service.dart' as _i8;
 import 'package:nova_chrono/application/api/task_list_service.dart' as _i7;
 import 'package:nova_chrono/domain/model/task.dart' as _i4;
@@ -72,6 +73,16 @@ class MockTaskRepository extends _i1.Mock implements _i2.TaskRepository {
         Invocation.method(
           #updateTask,
           [task],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i5.Future<void> deleteTask(String? id) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteTask,
+          [id],
         ),
         returnValue: _i5.Future<void>.value(),
         returnValueForMissingStub: _i5.Future<void>.value(),
@@ -154,4 +165,23 @@ class MockTaskEditService extends _i1.Mock implements _i8.TaskEditService {
         ),
         returnValueForMissingStub: null,
       );
+}
+
+/// A class which mocks [TaskDeleteService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockTaskDeleteService extends _i1.Mock implements _i9.TaskDeleteService {
+  MockTaskDeleteService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.Future<void> deleteTask(String? taskId) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteTask,
+          [taskId],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 }

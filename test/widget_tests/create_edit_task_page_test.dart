@@ -12,11 +12,13 @@ void main() {
     late MockTaskCreateService mockTaskCreateService;
     late MockTaskListService mockTaskListService;
     late MockTaskEditService mockTaskEditService;
+    late MockTaskDeleteService mockTaskDeleteService;
 
     setUp(() {
       mockTaskCreateService = MockTaskCreateService();
       mockTaskListService = MockTaskListService();
       mockTaskEditService = MockTaskEditService();
+      mockTaskDeleteService = MockTaskDeleteService();
     });
 
     testWidgets(
@@ -76,6 +78,7 @@ void main() {
           builder: (context) => HomePage(
                 title: "NovaChrono",
                 taskListService: mockTaskListService,
+                taskDeleteService: mockTaskDeleteService,
               )));
 
       // Tap on the button
