@@ -88,8 +88,31 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: [
-          SearchBox(
-            onChanged: filterTasksByName,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: SearchBox(
+                  onChanged: filterTasksByName,
+                ),
+              ),
+              Expanded(
+                  child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    filled: true,
+                    prefixIcon: Icon(Icons.calendar_today),
+                    enabledBorder:
+                        OutlineInputBorder(borderSide: BorderSide.none),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
+                  ),
+                  readOnly: true,
+                ),
+              )),
+            ],
           ),
           Expanded(
             child: TaskList(
