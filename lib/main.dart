@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nova_chrono/application/api/task_create_service.dart';
+import 'package:nova_chrono/application/api/task_edit_service.dart';
 import 'package:nova_chrono/application/api/task_list_service.dart';
 import 'package:nova_chrono/application/impl/task_create_service_impl.dart';
+import 'package:nova_chrono/application/impl/task_edit_service_impl.dart';
 import 'package:nova_chrono/application/impl/task_list_service_impl.dart';
 import 'package:nova_chrono/domain/repository/task_repository.dart';
 import 'package:nova_chrono/infrastructure/database_provider.dart';
@@ -17,6 +19,7 @@ void main() async {
   getIt.registerSingleton<TaskRepository>(TaskRepositoryImpl());
   getIt.registerSingleton<TaskCreateService>(TaskCreateServiceImpl());
   getIt.registerSingleton<TaskListService>(TaskListServiceImpl());
+  getIt.registerSingleton<TaskEditService>(TaskEditServiceImpl());
   await databaseProvider.initDatabase();
 
   runApp(const App());
