@@ -3,9 +3,12 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'dart:async' as _i5;
+
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i3;
-import 'package:nova_chrono/application/api/task_create_service.dart' as _i5;
+import 'package:nova_chrono/application/api/task_create_service.dart' as _i6;
+import 'package:nova_chrono/application/api/task_list_service.dart' as _i7;
 import 'package:nova_chrono/domain/model/task.dart' as _i4;
 import 'package:nova_chrono/domain/repository/task_repository.dart' as _i2;
 
@@ -53,12 +56,21 @@ class MockTaskRepository extends _i1.Mock implements _i2.TaskRepository {
         ),
         returnValueForMissingStub: null,
       );
+
+  @override
+  _i5.Future<List<_i4.Task>> getAll() => (super.noSuchMethod(
+        Invocation.method(
+          #getAll,
+          [],
+        ),
+        returnValue: _i5.Future<List<_i4.Task>>.value(<_i4.Task>[]),
+      ) as _i5.Future<List<_i4.Task>>);
 }
 
 /// A class which mocks [TaskCreateService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTaskCreateService extends _i1.Mock implements _i5.TaskCreateService {
+class MockTaskCreateService extends _i1.Mock implements _i6.TaskCreateService {
   MockTaskCreateService() {
     _i1.throwOnMissingStub(this);
   }
@@ -82,4 +94,22 @@ class MockTaskCreateService extends _i1.Mock implements _i5.TaskCreateService {
         ),
         returnValueForMissingStub: null,
       );
+}
+
+/// A class which mocks [TaskListService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockTaskListService extends _i1.Mock implements _i7.TaskListService {
+  MockTaskListService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.Future<List<_i4.Task>> getAllTasks() => (super.noSuchMethod(
+        Invocation.method(
+          #getAllTasks,
+          [],
+        ),
+        returnValue: _i5.Future<List<_i4.Task>>.value(<_i4.Task>[]),
+      ) as _i5.Future<List<_i4.Task>>);
 }

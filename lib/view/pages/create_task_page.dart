@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nova_chrono/application/api/task_create_service.dart';
+import 'package:nova_chrono/view/pages/home_page.dart';
 
 import '../../main.dart';
 import '../components/create_task_form.dart';
@@ -28,7 +29,9 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
   void save(String taskName, DateTime startTimestamp, DateTime endTimestamp, String? details) {
     _taskCreateService.createTask(
         taskName, startTimestamp, endTimestamp, details);
-    Navigator.pop(context);
+
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => HomePage(title: widget.title)));
   }
 
   @override

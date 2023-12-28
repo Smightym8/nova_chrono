@@ -23,4 +23,26 @@ class TaskRepositoryImpl implements TaskRepository {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
+
+  @override
+  Future<List<Task>> getAll() async {
+    var database = databaseProvider.database;
+    final List<Map<String, dynamic>> maps = await database.query(table);
+
+    return List.generate(maps.length, (i) {
+      var id = maps[i]['id'] as String;
+      var name = maps[i]['name'] as String;
+      var startTimestamp = maps[i]['startTimestamp'] as String;
+      var endTimestamp = maps[i]['endTimestamp'] as String;
+      var details = maps[i]['details'] as String;
+
+      return Task(
+        id,
+        name,
+        DateTime.parse(startTimestamp),
+        DateTime.parse(endTimestamp),
+        details,
+      );
+    });
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:nova_chrono/domain/model/task.dart';
 import 'package:nova_chrono/view/pages/create_task_page.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
 
@@ -10,9 +11,11 @@ void main() {
   group('CreateTaskPage Tests', () {
     const title = 'NovaChrono';
     late MockTaskCreateService mockTaskCreateService;
+    late MockTaskListService mockTaskListService;
 
     setUp(() {
       mockTaskCreateService = MockTaskCreateService();
+      mockTaskListService = MockTaskListService();
     });
 
     testWidgets(
@@ -49,6 +52,11 @@ void main() {
       final GlobalKey<NavigatorState> navigatorKey =
           GlobalKey<NavigatorState>();
 
+      final List<Task> tasks = <Task>[];
+      final Future<List<Task>> tasksFuture = Future(() => tasks);
+
+      when(mockTaskListService.getAllTasks()).thenAnswer((_) => tasksFuture);
+
       await tester.pumpWidget(
         Directionality(
           textDirection: TextDirection.ltr,
@@ -62,7 +70,10 @@ void main() {
 
       // Manually push HomePage onto the navigation stack
       navigatorKey.currentState!.push(MaterialPageRoute(
-          builder: (context) => const HomePage(title: title)));
+          builder: (context) => HomePage(
+                title: title,
+                taskListService: mockTaskListService,
+              )));
 
       // Tap on the button
       await tester.tap(find.byKey(const Key('cancelButton')),
@@ -81,6 +92,11 @@ void main() {
       final GlobalKey<NavigatorState> navigatorKey =
           GlobalKey<NavigatorState>();
 
+      final List<Task> tasks = <Task>[];
+      final Future<List<Task>> tasksFuture = Future(() => tasks);
+
+      when(mockTaskListService.getAllTasks()).thenAnswer((_) => tasksFuture);
+
       await tester.pumpWidget(
         Directionality(
           textDirection: TextDirection.ltr,
@@ -95,7 +111,10 @@ void main() {
       );
 
       navigatorKey.currentState!.push(MaterialPageRoute(
-          builder: (context) => const HomePage(title: title)));
+          builder: (context) => HomePage(
+                title: title,
+                taskListService: mockTaskListService,
+              )));
 
       // Tap on the button
       await tester.tap(find.byKey(const Key('saveButton')),

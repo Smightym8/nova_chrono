@@ -33,5 +33,18 @@ class DatabaseProvider {
             details TEXT NOT NULL
           )
     ''');
+
+    await db.execute('''
+      INSERT INTO task(id, name, startTimestamp, endTimestamp, details)
+      VALUES('1', 'Task 1', '2023-12-21 12:00:04.847854', '2023-12-21 12:20:04.847854', 'Some details')
+      ''');
+    await db.execute('''
+      INSERT INTO task(id, name, startTimestamp, endTimestamp, details)
+      VALUES('2', 'Task 2', '2023-12-21 13:00:04.847854', '2023-12-19 14:00:04.847854', 'Some details')
+      ''');
+    await db.execute('''
+      INSERT INTO task(id, name, startTimestamp, endTimestamp, details)
+      VALUES('3', 'Task 3', '2023-12-21 15:00:04.847854', '2023-12-19 17:00:04.847854', 'Some details')
+      ''');
   }
 }
