@@ -30,7 +30,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late Future<List<Task>> _tasks;
+  late List<Task> _tasks;
+  late List<Task> _filteredTasks;
   late TaskListService _taskListService;
   late TaskDeleteService _taskDeleteService;
 
@@ -38,13 +39,20 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
+    _tasks = [];
+    _filteredTasks = [];
     _taskListService = widget.taskListService ?? getIt<TaskListService>();
     _taskDeleteService = widget.taskDeleteService ?? getIt<TaskDeleteService>();
     fetchTasks();
   }
 
   Future<void> fetchTasks() async {
-    _tasks = _taskListService.getAllTasks();
+    var tasks = await _taskListService.getAllTasks();
+
+    setState(() {
+      _tasks = tasks;
+      _filteredTasks = tasks;
+    });
   }
 
   void delete(String taskId) {
@@ -54,11 +62,20 @@ class _HomePageState extends State<HomePage> {
   }
 
   void filterTasksByName(String searchTerm) {
+    List<Task> filteredTasks = [];
+
     if (searchTerm.isEmpty) {
-      print("Nothing searched");
+      filteredTasks = _tasks;
     } else {
-      print("Searched for $searchTerm");
+      filteredTasks = _tasks
+          .where((task) =>
+              task.name.toLowerCase().contains(searchTerm.toLowerCase()))
+          .toList();
     }
+
+    setState(() {
+      _filteredTasks = filteredTasks;
+    });
   }
 
   @override
@@ -75,30 +92,11 @@ class _HomePageState extends State<HomePage> {
             onChanged: filterTasksByName,
           ),
           Expanded(
-              child: FutureBuilder(
-            future: _tasks,
-            builder: (context, AsyncSnapshot<List<Task>> snapshot) {
-              if (!snapshot.hasData || snapshot.data == null) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (snapshot.data!.isEmpty) {
-                return const Center(
-                    child: Text(
-                  "No tasks found",
-                  style: TextStyle(
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ));
-              } else {
-                return TaskList(
-                  tasks: snapshot.data!,
-                  onDeletePressedFunction: delete,
-                );
-              }
-            },
-          ))
+            child: TaskList(
+              tasks: _filteredTasks,
+              onDeletePressedFunction: delete,
+            ),
+          )
         ],
       ),
       floatingActionButton: FloatingActionButton(
