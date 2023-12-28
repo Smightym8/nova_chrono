@@ -45,4 +45,16 @@ class TaskRepositoryImpl implements TaskRepository {
       );
     });
   }
+
+  @override
+  Future<void> updateTask(Task task) async {
+    var database = databaseProvider.database;
+
+    await database.update(
+      table,
+      task.toMap(),
+      where: 'id = ?',
+      whereArgs: [task.id],
+    );
+  }
 }

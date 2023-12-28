@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nova_chrono/application/api/task_edit_service.dart';
 import 'package:nova_chrono/application/api/task_list_service.dart';
 
 import '../../application/api/task_create_service.dart';
@@ -8,15 +9,18 @@ import '../components/task_list.dart';
 import 'create_edit_task_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage(
-      {super.key,
-      required this.title,
-      this.taskCreateService,
-      this.taskListService});
+  const HomePage({
+    super.key,
+    required this.title,
+    this.taskCreateService,
+    this.taskListService,
+    this.taskEditService,
+  });
 
   final String title;
   final TaskCreateService? taskCreateService;
   final TaskListService? taskListService;
+  final TaskEditService? taskEditService;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -78,7 +82,9 @@ class _HomePageState extends State<HomePage> {
             context,
               MaterialPageRoute(
                   builder: (context) => CreateEditTaskPage(
-                      taskCreateService: widget.taskCreateService)));
+                        taskCreateService: widget.taskCreateService,
+                        taskEditService: widget.taskEditService,
+                      )));
         },
         tooltip: 'Add new task',
         child: const Icon(Icons.add),

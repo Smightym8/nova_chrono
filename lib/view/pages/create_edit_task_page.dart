@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nova_chrono/application/api/task_create_service.dart';
+import 'package:nova_chrono/application/api/task_edit_service.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
 
 import '../../domain/model/task.dart';
@@ -10,6 +11,7 @@ class CreateEditTaskPage extends StatefulWidget {
   const CreateEditTaskPage(
       {super.key,
       this.taskCreateService,
+      this.taskEditService,
       this.taskId,
       this.taskName,
       this.startTimestamp,
@@ -17,6 +19,7 @@ class CreateEditTaskPage extends StatefulWidget {
       this.details});
 
   final TaskCreateService? taskCreateService;
+  final TaskEditService? taskEditService;
   final String? taskId;
   final String? taskName;
   final DateTime? startTimestamp;
@@ -32,6 +35,7 @@ class _CreateEditTaskPageState extends State<CreateEditTaskPage> {
   late Future<Task?> task;
 
   late TaskCreateService _taskCreateService;
+  late TaskEditService _taskEditService;
 
   @override
   void initState() {
@@ -39,6 +43,7 @@ class _CreateEditTaskPageState extends State<CreateEditTaskPage> {
 
     title = "Create Task";
     _taskCreateService = widget.taskCreateService ?? getIt<TaskCreateService>();
+    _taskEditService = widget.taskEditService ?? getIt<TaskEditService>();
 
     if (widget.taskId != null) {
       title = "Edit Task";
@@ -51,7 +56,8 @@ class _CreateEditTaskPageState extends State<CreateEditTaskPage> {
       _taskCreateService.createTask(
           taskName, startTimestamp, endTimestamp, details);
     } else {
-      // TODO: taskEditService.editTask();
+      _taskEditService.editTask(
+          widget.taskId!, taskName, startTimestamp, endTimestamp, details);
     }
 
     Navigator.push(

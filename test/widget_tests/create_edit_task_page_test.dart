@@ -8,17 +8,19 @@ import 'package:nova_chrono/view/pages/home_page.dart';
 import '../mocks/annotations.mocks.dart';
 
 void main() {
-  group('CreateTaskPage Tests', () {
+  group('CreateEditTaskPage Tests', () {
     late MockTaskCreateService mockTaskCreateService;
     late MockTaskListService mockTaskListService;
+    late MockTaskEditService mockTaskEditService;
 
     setUp(() {
       mockTaskCreateService = MockTaskCreateService();
       mockTaskListService = MockTaskListService();
+      mockTaskEditService = MockTaskEditService();
     });
 
     testWidgets(
-        'CreateTaskPage has a form, two buttons and '
+        'CreateEditTaskPage has a form, two buttons and '
         'four TextFormFields', (tester) async {
       var expectedNumberOfTextFormFields = 4;
       var expectedNumberOfButtons = 2;
@@ -27,7 +29,10 @@ void main() {
         Directionality(
           textDirection: TextDirection.ltr,
           child: MaterialApp(
-            home: CreateEditTaskPage(taskCreateService: mockTaskCreateService),
+            home: CreateEditTaskPage(
+              taskCreateService: mockTaskCreateService,
+              taskEditService: mockTaskEditService,
+            ),
           ),
         ),
       );
@@ -58,7 +63,10 @@ void main() {
           textDirection: TextDirection.ltr,
           child: MaterialApp(
             navigatorKey: navigatorKey,
-            home: CreateEditTaskPage(taskCreateService: mockTaskCreateService),
+            home: CreateEditTaskPage(
+              taskCreateService: mockTaskCreateService,
+              taskEditService: mockTaskEditService,
+            ),
           ),
         ),
       );
@@ -97,6 +105,7 @@ void main() {
           child: MaterialApp(
             home: CreateEditTaskPage(
               taskCreateService: mockTaskCreateService,
+              taskEditService: mockTaskEditService,
             ),
           ),
         ),
