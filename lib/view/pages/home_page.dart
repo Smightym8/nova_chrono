@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nova_chrono/application/api/task_delete_service.dart';
 import 'package:nova_chrono/application/api/task_edit_service.dart';
 import 'package:nova_chrono/application/api/task_list_service.dart';
+import 'package:nova_chrono/view/components/search_box.dart';
 
 import '../../application/api/task_create_service.dart';
 import '../../domain/model/task.dart';
@@ -10,12 +11,12 @@ import '../components/task_list.dart';
 import 'create_edit_task_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({
-    super.key,
-    required this.title,
-    this.taskCreateService,
-    this.taskListService,
-    this.taskEditService,
+  const HomePage(
+      {super.key,
+      required this.title,
+      this.taskCreateService,
+      this.taskListService,
+      this.taskEditService,
       this.taskDeleteService});
 
   final String title;
@@ -62,6 +63,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: [
+          const SearchBox(),
           Expanded(
               child: FutureBuilder(
             future: _tasks,
@@ -92,7 +94,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-            context,
+              context,
               MaterialPageRoute(
                   builder: (context) => CreateEditTaskPage(
                         taskCreateService: widget.taskCreateService,
