@@ -76,8 +76,9 @@ void main() {
               )));
 
       // Tap on the button
-      await tester.tap(find.byKey(const Key('cancelButton')),
-          warnIfMissed: false);
+      var cancelButtonFinder = find.byKey(const Key('cancelButton'));
+      await tester.ensureVisible(cancelButtonFinder);
+      await tester.tapAt(tester.getCenter(cancelButtonFinder));
 
       // Trigger a frame
       await tester.pumpAndSettle();
@@ -88,10 +89,8 @@ void main() {
 
     testWidgets(
         'When the save button is pressed and the fields are empty '
-        'it does not call TaskCreateService', (tester) async {
-      final GlobalKey<NavigatorState> navigatorKey =
-          GlobalKey<NavigatorState>();
-
+        'it does not call TaskCreateService and '
+        'validation messages are shown', (tester) async {
       final List<Task> tasks = <Task>[];
       final Future<List<Task>> tasksFuture = Future(() => tasks);
 
@@ -101,7 +100,6 @@ void main() {
         Directionality(
           textDirection: TextDirection.ltr,
           child: MaterialApp(
-            navigatorKey: navigatorKey,
             home: CreateTaskPage(
               title: title,
               taskCreateService: mockTaskCreateService,
@@ -110,34 +108,15 @@ void main() {
         ),
       );
 
-      navigatorKey.currentState!.push(MaterialPageRoute(
-          builder: (context) => HomePage(
-                title: title,
-                taskListService: mockTaskListService,
-              )));
+      var saveButtonFinder = find.byKey(const Key('saveButton'));
+      await tester.ensureVisible(saveButtonFinder);
+      await tester.tapAt(tester.getCenter(saveButtonFinder));
 
-      // Tap on the button
-      await tester.tap(find.byKey(const Key('saveButton')),
-          warnIfMissed: false);
-
-      // Trigger a frame
       await tester.pumpAndSettle();
 
+      expect(find.text('Please enter some text.'), findsOneWidget);
+      expect(find.text('Please select a end date.'), findsOneWidget);
       verifyNever(mockTaskCreateService.createTask(any, any, any, any));
-    });
-
-    testWidgets(
-        'When the save button is pressed and the end timestamp is before '
-        'the start timestamp it stays on the page and does not call '
-        'TaskCreateService', (tester) async {
-      // TODO: Find out how to simulate selecting date and time
-    });
-
-    testWidgets(
-        'When the save button is pressed and all values are valid '
-        'TaskCreateService is called', (tester) async {
-      // TODO: Implement
-      // TODO: Find out how to simulate selecting date and time
     });
   });
 }

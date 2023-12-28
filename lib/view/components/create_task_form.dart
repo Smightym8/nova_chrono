@@ -195,30 +195,34 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
             child: Row(
               children: [
                 Expanded(
-                  child:  ElevatedButton(
-                    key: const Key('saveButton'),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        widget.onPressedFunction(
-                          _taskNameController.text,
-                          _selectedStartTimeStamp,
-                          _selectedEndTimeStamp,
-                          _detailsController.text
-                        );
-                      }
-                    },
-                    child: const Text('Save'),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      key: const Key('saveButton'),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          widget.onPressedFunction(
+                              _taskNameController.text,
+                              _selectedStartTimeStamp,
+                              _selectedEndTimeStamp,
+                              _detailsController.text);
+                        }
+                      },
+                      child: const Text('Save'),
+                    ),
                   ),
                 ),
-                const SizedBox(width: 20),
                 Expanded(
-                    child: ElevatedButton (
-                    key: const Key('cancelButton'),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ElevatedButton(
+                      key: const Key('cancelButton'),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                       child: const Text('Cancel'),
                     ),
+                  ),
                 )
               ],
             ),

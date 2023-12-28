@@ -43,8 +43,12 @@ class _CreateTaskPageState extends State<CreateTaskPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 20),
-        child: CreateTaskForm(onPressedFunction: save),
-      )
+          child: SingleChildScrollView(
+            child: Column(
+              children: [CreateTaskForm(onPressedFunction: save)],
+            ),
+          ),
+        )
     );
   }
 }
