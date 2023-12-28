@@ -53,6 +53,14 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void filterTasksByName(String searchTerm) {
+    if (searchTerm.isEmpty) {
+      print("Nothing searched");
+    } else {
+      print("Searched for $searchTerm");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +71,9 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: [
-          const SearchBox(),
+          SearchBox(
+            onChanged: filterTasksByName,
+          ),
           Expanded(
               child: FutureBuilder(
             future: _tasks,

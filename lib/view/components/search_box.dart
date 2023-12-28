@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class SearchBox extends StatelessWidget {
-  const SearchBox({super.key});
+  const SearchBox({super.key, required this.onChanged});
+
+  final Function onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +16,9 @@ class SearchBox extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           border: Border.all(color: Colors.black),
         ),
-        child: const TextField(
-          decoration: InputDecoration(
+        child: TextField(
+          onChanged: (value) => onChanged(value),
+          decoration: const InputDecoration(
               contentPadding: EdgeInsets.all(0),
               prefixIcon: Icon(
                 Icons.search,
