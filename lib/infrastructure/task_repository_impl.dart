@@ -57,4 +57,15 @@ class TaskRepositoryImpl implements TaskRepository {
       whereArgs: [task.id],
     );
   }
+
+  @override
+  Future<void> deleteTask(String id) async {
+    var database = databaseProvider.database;
+
+    await database.delete(
+      table,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
 }

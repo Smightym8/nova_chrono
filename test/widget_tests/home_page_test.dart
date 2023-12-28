@@ -12,11 +12,13 @@ void main() {
   late MockTaskCreateService mockTaskCreateService;
   late MockTaskListService mockTaskListService;
   late MockTaskEditService mockTaskEditService;
+  late MockTaskDeleteService mockTaskDeleteService;
 
   setUp(() {
     mockTaskCreateService = MockTaskCreateService();
     mockTaskListService = MockTaskListService();
     mockTaskEditService = MockTaskEditService();
+    mockTaskDeleteService = MockTaskDeleteService();
   });
 
   testWidgets('HomePage has a title and a floatingActionButton',
@@ -35,6 +37,7 @@ void main() {
             taskCreateService: mockTaskCreateService,
             taskListService: mockTaskListService,
             taskEditService: mockTaskEditService,
+            taskDeleteService: mockTaskDeleteService,
           ),
         ),
       ),
@@ -66,6 +69,7 @@ void main() {
             taskCreateService: mockTaskCreateService,
             taskListService: mockTaskListService,
             taskEditService: mockTaskEditService,
+            taskDeleteService: mockTaskDeleteService,
           ),
         ),
       ),

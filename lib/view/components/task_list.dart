@@ -5,9 +5,11 @@ import 'package:nova_chrono/domain/model/task.dart';
 import '../pages/create_edit_task_page.dart';
 
 class TaskList extends StatelessWidget {
-  const TaskList({super.key, required this.tasks});
+  const TaskList(
+      {super.key, required this.tasks, required this.onDeletePressedFunction});
 
   final List<Task> tasks;
+  final Function onDeletePressedFunction;
   static const int color = 600;
 
   static String _formatDate(DateTime date) {
@@ -71,24 +73,39 @@ class TaskList extends StatelessWidget {
                           fontWeight: FontWeight.w400,
                           fontStyle: FontStyle.italic),
                     ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CreateEditTaskPage(
-                                      taskId: taskId,
-                                      taskName: taskName,
-                                      startTimestamp: startTimestamp,
-                                      endTimestamp: endTimestamp,
-                                      details: details,
-                                    )));
-                      },
-                      child: const Icon(
-                        Icons.edit,
-                        size: 28,
-                        color: Colors.orange,
-                      ),
+                    Row(
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CreateEditTaskPage(
+                                          taskId: taskId,
+                                          taskName: taskName,
+                                          startTimestamp: startTimestamp,
+                                          endTimestamp: endTimestamp,
+                                          details: details,
+                                        )));
+                          },
+                          child: const Icon(
+                            Icons.edit,
+                            size: 28,
+                            color: Colors.orange,
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () {
+                            onDeletePressedFunction(taskId);
+                            tasks.remove(tasks[index]);
+                          },
+                          child: const Icon(
+                            Icons.delete_forever,
+                            size: 28,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nova_chrono/application/api/task_delete_service.dart';
 import 'package:nova_chrono/application/api/task_edit_service.dart';
 import 'package:nova_chrono/application/api/task_list_service.dart';
 
@@ -15,12 +16,13 @@ class HomePage extends StatefulWidget {
     this.taskCreateService,
     this.taskListService,
     this.taskEditService,
-  });
+      this.taskDeleteService});
 
   final String title;
   final TaskCreateService? taskCreateService;
   final TaskListService? taskListService;
   final TaskEditService? taskEditService;
+  final TaskDeleteService? taskDeleteService;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -29,17 +31,25 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late Future<List<Task>> _tasks;
   late TaskListService _taskListService;
+  late TaskDeleteService _taskDeleteService;
 
   @override
   void initState() {
     super.initState();
 
     _taskListService = widget.taskListService ?? getIt<TaskListService>();
+    _taskDeleteService = widget.taskDeleteService ?? getIt<TaskDeleteService>();
     fetchTasks();
   }
 
   Future<void> fetchTasks() async {
     _tasks = _taskListService.getAllTasks();
+  }
+
+  void delete(String taskId) {
+    setState(() {
+      _taskDeleteService.deleteTask(taskId);
+    });
   }
 
   @override
@@ -70,7 +80,10 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.black),
                 ));
               } else {
-                return TaskList(tasks: snapshot.data!);
+                return TaskList(
+                  tasks: snapshot.data!,
+                  onDeletePressedFunction: delete,
+                );
               }
             },
           ))
