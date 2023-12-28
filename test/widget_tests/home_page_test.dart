@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:nova_chrono/domain/model/task.dart';
-import 'package:nova_chrono/view/pages/create_task_page.dart';
+import 'package:nova_chrono/view/pages/create_edit_task_page.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
 
 import '../mocks/annotations.mocks.dart';
@@ -74,6 +74,6 @@ void main() {
     await tester.pumpAndSettle();
 
     // Verify that the navigation occurred by checking the presence of a widget on the next page
-    expect(find.byType(CreateTaskPage), findsOneWidget);
+    expect(find.byType(CreateEditTaskPage), findsOneWidget);
   });
 }

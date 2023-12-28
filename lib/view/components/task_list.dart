@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nova_chrono/domain/model/task.dart';
 
+import '../pages/create_edit_task_page.dart';
+
 class TaskList extends StatelessWidget {
   const TaskList({super.key, required this.tasks});
 
@@ -22,8 +24,10 @@ class TaskList extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         var taskId = tasks[index].id;
         var taskName = tasks[index].name;
-        var startTimestamp = _formatDate(tasks[index].startTimestamp);
-        var endTimestamp = _formatDate(tasks[index].endTimestamp);
+        var startTimestamp = tasks[index].startTimestamp;
+        var endTimestamp = tasks[index].endTimestamp;
+        var startTimestampStr = _formatDate(tasks[index].startTimestamp);
+        var endTimestampStr = _formatDate(tasks[index].endTimestamp);
         var details = tasks[index].details;
 
         return Container(
@@ -61,7 +65,7 @@ class TaskList extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "$startTimestamp - $endTimestamp",
+                      "$startTimestampStr - $endTimestampStr",
                       style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w400,
@@ -69,7 +73,16 @@ class TaskList extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () {
-                        print("Edit icon pressed for task $taskId");
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CreateEditTaskPage(
+                                      taskId: taskId,
+                                      taskName: taskName,
+                                      startTimestamp: startTimestamp,
+                                      endTimestamp: endTimestamp,
+                                      details: details,
+                                    )));
                       },
                       child: const Icon(
                         Icons.edit,

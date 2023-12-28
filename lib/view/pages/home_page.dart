@@ -5,7 +5,7 @@ import '../../application/api/task_create_service.dart';
 import '../../domain/model/task.dart';
 import '../../main.dart';
 import '../components/task_list.dart';
-import 'create_task_page.dart';
+import 'create_edit_task_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage(
@@ -77,10 +77,8 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
             context,
               MaterialPageRoute(
-                  builder: (context) => CreateTaskPage(
-                        title: widget.title,
-                        taskCreateService: widget.taskCreateService,
-                      )));
+                  builder: (context) => CreateEditTaskPage(
+                      taskCreateService: widget.taskCreateService)));
         },
         tooltip: 'Add new task',
         child: const Icon(Icons.add),

@@ -1,16 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class CreateTaskForm extends StatefulWidget {
-  const CreateTaskForm({super.key, required this.onPressedFunction});
+class CreateEditTaskForm extends StatefulWidget {
+  const CreateEditTaskForm(
+      {super.key,
+      required this.onPressedFunction,
+      this.taskName,
+      this.startTimestamp,
+      this.endTimestamp,
+      this.details});
 
   final Function onPressedFunction;
+  final String? taskName;
+  final DateTime? startTimestamp;
+  final DateTime? endTimestamp;
+  final String? details;
 
   @override
-  State<CreateTaskForm> createState() => _CreateTaskFormState();
+  State<CreateEditTaskForm> createState() => _CreateEditTaskFormState();
 }
 
-class _CreateTaskFormState extends State<CreateTaskForm> {
+class _CreateEditTaskFormState extends State<CreateEditTaskForm> {
   late GlobalKey<FormState> _formKey;
   late TextEditingController _taskNameController;
   late TextEditingController _startTimestampController;
@@ -22,16 +32,31 @@ class _CreateTaskFormState extends State<CreateTaskForm> {
   @override
   void initState() {
     _formKey = GlobalKey<FormState>();
-
-    _selectedStartTimeStamp = DateTime.now();
-    _selectedEndTimeStamp = DateTime.now();
-
-    _taskNameController = TextEditingController();
-    _startTimestampController = TextEditingController(text: _formatDate(_selectedStartTimeStamp));
-    _endTimestampController = TextEditingController();
-    _detailsController = TextEditingController();
+    initForm();
 
     super.initState();
+  }
+
+  void initForm() {
+    if (widget.taskName != null) {
+      _selectedStartTimeStamp = widget.startTimestamp!;
+      _selectedEndTimeStamp = widget.endTimestamp!;
+    } else {
+      _selectedStartTimeStamp = DateTime.now();
+      _selectedEndTimeStamp = DateTime(
+        _selectedStartTimeStamp.year,
+        _selectedStartTimeStamp.month,
+        _selectedStartTimeStamp.day,
+        _selectedStartTimeStamp.hour + 1,
+        _selectedStartTimeStamp.minute,
+      );
+    }
+
+    _taskNameController = TextEditingController(text: widget.taskName);
+    _startTimestampController = TextEditingController(text: _formatDate(_selectedStartTimeStamp));
+    _endTimestampController =
+        TextEditingController(text: _formatDate(_selectedEndTimeStamp));
+    _detailsController = TextEditingController(text: widget.details);
   }
 
   static String _formatDate(DateTime date) {
