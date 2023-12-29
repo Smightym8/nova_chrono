@@ -34,6 +34,7 @@ class _HomePageState extends State<HomePage> {
   late List<Task> _tasks;
   late List<Task> _filteredTasks;
   late DateTime _selectedDate;
+  late String _searchTerm;
   late TextEditingController _selectedDateController;
   late TaskListService _taskListService;
   late TaskDeleteService _taskDeleteService;
@@ -42,6 +43,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
+    _searchTerm = "";
     _selectedDate = DateTime.now();
     _selectedDateController = TextEditingController(
         text: DateFormatter.formatDateWithoutTime(_selectedDate));
@@ -67,21 +69,23 @@ class _HomePageState extends State<HomePage> {
 
     await showDatePicker(
             context: context,
-            initialDate: now,
+            initialDate: _selectedDate,
             firstDate: DateTime(0),
-            lastDate: now)
-        .then((selectedDate) => {
-              if (selectedDate != null)
-                {
-                  setState(() {
-                    _selectedDate = selectedDate;
-                    _selectedDateController.text =
-                        DateFormatter.formatDateWithoutTime(_selectedDate);
+            lastDate: now
+    )
+    .then((selectedDate) async {
+        if (selectedDate != null) {
+          setState(() {
+            _selectedDate = selectedDate;
+            _selectedDateController.text =
+                DateFormatter.formatDateWithoutTime(_selectedDate);
+          });
 
-                    fetchTasks();
-                  })
-                }
-            });
+          await fetchTasks();
+          filterTasksByName();
+        }
+      }
+    );
   }
 
   void delete(String taskId) {
@@ -90,15 +94,22 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void filterTasksByName(String searchTerm) {
+  void setSearchterm(String searchTerm) {
+    _searchTerm = searchTerm;
+
+    filterTasksByName();
+  }
+
+  void filterTasksByName() {
     List<Task> filteredTasks = [];
 
-    if (searchTerm.isEmpty) {
+    if (_searchTerm.isEmpty) {
       filteredTasks = _tasks;
     } else {
       filteredTasks = _tasks
           .where((task) =>
-              task.name.toLowerCase().contains(searchTerm.toLowerCase()))
+            task.name.toLowerCase().contains(_searchTerm.toLowerCase())
+          )
           .toList();
     }
 
@@ -122,7 +133,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               Expanded(
                 child: SearchBox(
-                  onChanged: filterTasksByName,
+                  onChanged: setSearchterm,
                 ),
               ),
               Expanded(
