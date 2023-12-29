@@ -60,10 +60,10 @@ class MockTaskRepository extends _i1.Mock implements _i2.TaskRepository {
       );
 
   @override
-  _i5.Future<List<_i4.Task>> getAll() => (super.noSuchMethod(
+  _i5.Future<List<_i4.Task>> getByDate(DateTime? date) => (super.noSuchMethod(
         Invocation.method(
-          #getAll,
-          [],
+          #getByDate,
+          [date],
         ),
         returnValue: _i5.Future<List<_i4.Task>>.value(<_i4.Task>[]),
       ) as _i5.Future<List<_i4.Task>>);
@@ -127,10 +127,11 @@ class MockTaskListService extends _i1.Mock implements _i7.TaskListService {
   }
 
   @override
-  _i5.Future<List<_i4.Task>> getAllTasks() => (super.noSuchMethod(
+  _i5.Future<List<_i4.Task>> getTasksByDate(DateTime? date) =>
+      (super.noSuchMethod(
         Invocation.method(
-          #getAllTasks,
-          [],
+          #getTasksByDate,
+          [date],
         ),
         returnValue: _i5.Future<List<_i4.Task>>.value(<_i4.Task>[]),
       ) as _i5.Future<List<_i4.Task>>);
