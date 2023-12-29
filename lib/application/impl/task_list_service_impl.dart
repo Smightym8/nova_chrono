@@ -12,7 +12,7 @@ class TaskListServiceImpl implements TaskListService {
   }
 
   @override
-  Future<List<Task>> getAllTasks() async {
-    return await _taskRepository.getAll();
+  Future<List<Task>> getTasksByDate(DateTime date) async {
+    return await _taskRepository.getByDate(date);
   }
 }

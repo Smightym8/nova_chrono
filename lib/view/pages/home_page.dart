@@ -49,11 +49,12 @@ class _HomePageState extends State<HomePage> {
     _filteredTasks = [];
     _taskListService = widget.taskListService ?? getIt<TaskListService>();
     _taskDeleteService = widget.taskDeleteService ?? getIt<TaskDeleteService>();
+
     fetchTasks();
   }
 
   Future<void> fetchTasks() async {
-    var tasks = await _taskListService.getAllTasks();
+    var tasks = await _taskListService.getTasksByDate(_selectedDate);
 
     setState(() {
       _tasks = tasks;
@@ -76,7 +77,8 @@ class _HomePageState extends State<HomePage> {
                     _selectedDate = selectedDate;
                     _selectedDateController.text =
                         DateFormatter.formatDateWithoutTime(_selectedDate);
-                    // TODO: Fetch tasks again with new selected date
+
+                    fetchTasks();
                   })
                 }
             });
