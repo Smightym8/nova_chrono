@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -34,17 +36,28 @@ class DatabaseProvider {
           )
     ''');
 
-    await db.execute('''
-      INSERT INTO task(id, name, startTimestamp, endTimestamp, details)
-      VALUES('1', 'Task 1', '2023-12-21 12:00:04.847854', '2023-12-21 12:20:04.847854', 'Some details')
-      ''');
-    await db.execute('''
-      INSERT INTO task(id, name, startTimestamp, endTimestamp, details)
-      VALUES('2', 'Task 2', '2023-12-21 13:00:04.847854', '2023-12-19 14:00:04.847854', 'Some details')
-      ''');
-    await db.execute('''
-      INSERT INTO task(id, name, startTimestamp, endTimestamp, details)
-      VALUES('3', 'Task 3', '2023-12-21 15:00:04.847854', '2023-12-19 17:00:04.847854', 'Some details')
-      ''');
+    await generateTestdata(db);
+  }
+
+  Future<void> generateTestdata(Database db) async {
+    final today = DateTime.now();
+
+    var taskId = 1;
+    for (int i = 0; i < 5; i++) {
+      for (int j = 0; j < 3; j++) {
+        final startTimestamp = today.subtract(Duration(days: i));
+        final endTimestamp = startTimestamp.add(Duration(minutes: Random().nextInt(120) + 20)); // Random duration between 20 and 140 minutes
+
+        final sqlStatement = '''
+          INSERT INTO task(id, name, startTimestamp, endTimestamp, details)
+          VALUES('$taskId', 'Task $taskId', '${startTimestamp.toString()}', 
+          '${endTimestamp.toString()}', 'Some details for task $taskId');
+        ''';
+
+        await db.execute(sqlStatement);
+
+        taskId++;
+      }
+    }
   }
 }
