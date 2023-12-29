@@ -26,7 +26,8 @@ void main() {
     final List<Task> tasks = <Task>[];
     final Future<List<Task>> tasksFuture = Future(() => tasks);
 
-    when(mockTaskListService.getAllTasks()).thenAnswer((_) => tasksFuture);
+    when(mockTaskListService.getTasksByDate(any))
+        .thenAnswer((_) => tasksFuture);
 
     await tester.pumpWidget(
       Directionality(
@@ -58,7 +59,8 @@ void main() {
     final List<Task> tasks = <Task>[];
     final Future<List<Task>> tasksFuture = Future(() => tasks);
 
-    when(mockTaskListService.getAllTasks()).thenAnswer((_) => tasksFuture);
+    when(mockTaskListService.getTasksByDate(any))
+        .thenAnswer((_) => tasksFuture);
 
     await tester.pumpWidget(
       Directionality(

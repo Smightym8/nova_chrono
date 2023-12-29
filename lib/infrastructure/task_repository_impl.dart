@@ -25,9 +25,14 @@ class TaskRepositoryImpl implements TaskRepository {
   }
 
   @override
-  Future<List<Task>> getAll() async {
+  Future<List<Task>> getByDate(DateTime date) async {
     var database = databaseProvider.database;
-    final List<Map<String, dynamic>> maps = await database.query(table);
+
+    final List<Map<String, dynamic>> maps = await database.query(
+      table,
+      where: 'DATE(startTimestamp) = DATE(?) OR DATE(endTimestamp) = DATE(?)',
+      whereArgs: [date.toString(), date.toString()],
+    );
 
     return List.generate(maps.length, (i) {
       var id = maps[i]['id'] as String;
