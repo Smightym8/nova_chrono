@@ -8,6 +8,7 @@ import '../../application/api/task_create_service.dart';
 import '../../domain/model/task.dart';
 import '../../main.dart';
 import '../components/task_list.dart';
+import '../shared/date_formatter.dart';
 import 'create_edit_task_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -32,6 +33,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late List<Task> _tasks;
   late List<Task> _filteredTasks;
+  late DateTime _selectedDate;
+  late TextEditingController _selectedDateController;
   late TaskListService _taskListService;
   late TaskDeleteService _taskDeleteService;
 
@@ -39,6 +42,9 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
+    _selectedDate = DateTime.now();
+    _selectedDateController = TextEditingController(
+        text: DateFormatter.formatDateWithoutTime(_selectedDate));
     _tasks = [];
     _filteredTasks = [];
     _taskListService = widget.taskListService ?? getIt<TaskListService>();
@@ -53,6 +59,27 @@ class _HomePageState extends State<HomePage> {
       _tasks = tasks;
       _filteredTasks = tasks;
     });
+  }
+
+  Future<void> _selectDate() async {
+    DateTime now = DateTime.now();
+
+    await showDatePicker(
+            context: context,
+            initialDate: now,
+            firstDate: DateTime(0),
+            lastDate: now)
+        .then((selectedDate) => {
+              if (selectedDate != null)
+                {
+                  setState(() {
+                    _selectedDate = selectedDate;
+                    _selectedDateController.text =
+                        DateFormatter.formatDateWithoutTime(_selectedDate);
+                    // TODO: Fetch tasks again with new selected date
+                  })
+                }
+            });
   }
 
   void delete(String taskId) {
@@ -101,7 +128,9 @@ class _HomePageState extends State<HomePage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 child: TextFormField(
+                  controller: _selectedDateController,
                   decoration: const InputDecoration(
+                    labelText: 'Date',
                     filled: true,
                     prefixIcon: Icon(Icons.calendar_today),
                     enabledBorder:
@@ -110,6 +139,9 @@ class _HomePageState extends State<HomePage> {
                         borderSide: BorderSide(color: Colors.blue)),
                   ),
                   readOnly: true,
+                  onTap: () {
+                    _selectDate();
+                  },
                 ),
               )),
             ],
