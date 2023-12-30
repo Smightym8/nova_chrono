@@ -64,13 +64,23 @@ class _CreateEditTaskFormState extends State<CreateEditTaskForm> {
   }
 
   Future<void> _selectDate(bool isStart) async {
-    DateTime now = DateTime.now();
+    DateTime firstDate = _selectedStartTimeStamp;
+    DateTime initialDate;
+    DateTime lastDate;
+
+    if (isStart) {
+      initialDate = _selectedStartTimeStamp;
+      lastDate = _selectedStartTimeStamp;
+    } else {
+      initialDate = _selectedEndTimeStamp;
+      lastDate = DateTime(firstDate.year, firstDate.month, firstDate.day + 1);
+    }
 
     await showDatePicker(
         context: context,
-        initialDate: now,
-        firstDate: now,
-        lastDate: DateTime(now.year, now.month, now.day + 1)
+        initialDate: initialDate,
+        firstDate: firstDate,
+        lastDate: lastDate
     ).then((selectedDate) => {
       if (selectedDate != null) {
           showTimePicker(context: context, initialTime: TimeOfDay.now(),
