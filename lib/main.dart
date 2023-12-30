@@ -12,6 +12,8 @@ import 'package:nova_chrono/domain/repository/task_repository.dart';
 import 'package:nova_chrono/infrastructure/database_provider.dart';
 import 'package:nova_chrono/infrastructure/task_repository_impl.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
+import 'package:nova_chrono/view/providers/task_filter_date_provider.dart';
+import 'package:provider/provider.dart';
 
 // This is our global ServiceLocator
 GetIt getIt = GetIt.instance;
@@ -25,7 +27,14 @@ void main() async {
   getIt.registerSingleton<TaskDeleteService>(TaskDeleteServiceImpl());
   await databaseProvider.initDatabase();
 
-  runApp(const App());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
+      ],
+      child: const App(),
+    ),
+  );
 }
 
 class App extends StatelessWidget {

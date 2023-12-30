@@ -4,6 +4,8 @@ import 'package:mockito/mockito.dart';
 import 'package:nova_chrono/domain/model/task.dart';
 import 'package:nova_chrono/view/pages/create_edit_task_page.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
+import 'package:nova_chrono/view/providers/task_filter_date_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../mocks/annotations.mocks.dart';
 
@@ -30,18 +32,23 @@ void main() {
         .thenAnswer((_) => tasksFuture);
 
     await tester.pumpWidget(
-      Directionality(
-        textDirection: TextDirection.ltr,
-        child: MaterialApp(
-          home: HomePage(
-            title: title,
-            taskCreateService: mockTaskCreateService,
-            taskListService: mockTaskListService,
-            taskEditService: mockTaskEditService,
-            taskDeleteService: mockTaskDeleteService,
+      MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
+        ],
+        child:  Directionality(
+          textDirection: TextDirection.ltr,
+          child: MaterialApp(
+            home: HomePage(
+              title: title,
+              taskCreateService: mockTaskCreateService,
+              taskListService: mockTaskListService,
+              taskEditService: mockTaskEditService,
+              taskDeleteService: mockTaskDeleteService,
+            ),
           ),
         ),
-      ),
+      )
     );
 
     final titleFinder = find.text(title);
@@ -63,18 +70,23 @@ void main() {
         .thenAnswer((_) => tasksFuture);
 
     await tester.pumpWidget(
-      Directionality(
-        textDirection: TextDirection.ltr,
-        child: MaterialApp(
-          home: HomePage(
-            title: title,
-            taskCreateService: mockTaskCreateService,
-            taskListService: mockTaskListService,
-            taskEditService: mockTaskEditService,
-            taskDeleteService: mockTaskDeleteService,
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
+          ],
+          child:  Directionality(
+            textDirection: TextDirection.ltr,
+            child: MaterialApp(
+              home: HomePage(
+                title: title,
+                taskCreateService: mockTaskCreateService,
+                taskListService: mockTaskListService,
+                taskEditService: mockTaskEditService,
+                taskDeleteService: mockTaskDeleteService,
+              ),
+            ),
           ),
-        ),
-      ),
+        )
     );
 
     // Tap on the floating action button
