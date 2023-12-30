@@ -1,9 +1,31 @@
 import 'package:flutter/material.dart';
 
-class SearchBox extends StatelessWidget {
+class SearchBox extends StatefulWidget {
   const SearchBox({super.key, required this.onChanged});
 
   final Function onChanged;
+
+  @override
+  State<SearchBox> createState() => _SearchBoxState();
+}
+
+class _SearchBoxState extends State<SearchBox> {
+  late TextEditingController _textFieldController;
+
+  @override
+  void initState() {
+    _textFieldController = TextEditingController();
+
+    super.initState();
+  }
+
+
+  @override
+  void dispose() {
+    _textFieldController.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,21 +39,39 @@ class SearchBox extends StatelessWidget {
           border: Border.all(color: Colors.black),
         ),
         child: TextField(
-          onChanged: (value) => onChanged(value),
-          decoration: const InputDecoration(
-              contentPadding: EdgeInsets.all(0),
-              prefixIcon: Icon(
+          controller: _textFieldController,
+          onChanged: (_) => widget.onChanged(_textFieldController.text),
+          decoration: InputDecoration(
+              contentPadding: const EdgeInsets.all(0),
+              prefixIcon: const Icon(
                 Icons.search,
                 color: Colors.black,
                 size: 20,
               ),
-              prefixIconConstraints: BoxConstraints(
+              prefixIconConstraints: const BoxConstraints(
+                maxHeight: 20,
+                maxWidth: 20,
+              ),
+              suffixIcon: _textFieldController.text.isNotEmpty ?
+              GestureDetector(
+                onTap: () {
+                  _textFieldController.clear();
+                  widget.onChanged(_textFieldController.text);
+                },
+                child: const Icon(
+                  Icons.clear,
+                  color: Colors.black,
+                  size: 20,
+                ),
+              ) : null,
+              suffixIconConstraints: const BoxConstraints(
                 maxHeight: 20,
                 maxWidth: 20,
               ),
               border: InputBorder.none,
               hintText: "Search by name",
-              hintStyle: TextStyle(color: Colors.grey)),
+              hintStyle: const TextStyle(color: Colors.grey)
+          ),
         ),
       ),
     );
