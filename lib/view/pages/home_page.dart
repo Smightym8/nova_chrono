@@ -3,6 +3,8 @@ import 'package:nova_chrono/application/api/task_delete_service.dart';
 import 'package:nova_chrono/application/api/task_edit_service.dart';
 import 'package:nova_chrono/application/api/task_list_service.dart';
 import 'package:nova_chrono/view/components/search_box.dart';
+import 'package:nova_chrono/view/providers/task_filter_date_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../application/api/task_create_service.dart';
 import '../../domain/model/task.dart';
@@ -33,7 +35,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late List<Task> _tasks;
   late List<Task> _filteredTasks;
-  late DateTime _selectedDate;
+  late TaskFilterDateProvider _dateProvider;
   late String _searchTerm;
   late TextEditingController _selectedDateController;
   late TaskListService _taskListService;
@@ -44,9 +46,9 @@ class _HomePageState extends State<HomePage> {
     super.initState();
 
     _searchTerm = "";
-    _selectedDate = DateTime.now();
+    _dateProvider = context.read<TaskFilterDateProvider>();
     _selectedDateController = TextEditingController(
-        text: DateFormatter.formatDateWithoutTime(_selectedDate));
+        text: DateFormatter.formatDateWithoutTime(_dateProvider.selectedDate));
     _tasks = [];
     _filteredTasks = [];
     _taskListService = widget.taskListService ?? getIt<TaskListService>();
@@ -56,7 +58,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> fetchTasks() async {
-    var tasks = await _taskListService.getTasksByDate(_selectedDate);
+    var tasks = await _taskListService.getTasksByDate(_dateProvider.selectedDate);
 
     setState(() {
       _tasks = tasks;
@@ -69,17 +71,14 @@ class _HomePageState extends State<HomePage> {
 
     await showDatePicker(
             context: context,
-            initialDate: _selectedDate,
+            initialDate: _dateProvider.selectedDate,
             firstDate: DateTime(0),
             lastDate: now
     )
     .then((selectedDate) async {
         if (selectedDate != null) {
-          setState(() {
-            _selectedDate = selectedDate;
-            _selectedDateController.text =
-                DateFormatter.formatDateWithoutTime(_selectedDate);
-          });
+          _dateProvider.selectedDate = selectedDate;
+          _selectedDateController.text = DateFormatter.formatDateWithoutTime(selectedDate);
 
           await fetchTasks();
           filterTasksByName();

@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:nova_chrono/application/api/task_create_service.dart';
 import 'package:nova_chrono/application/api/task_edit_service.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
+import 'package:provider/provider.dart';
 
 import '../../domain/model/task.dart';
 import '../../main.dart';
 import '../components/create_edit_task_form.dart';
+import '../providers/task_filter_date_provider.dart';
 
 class CreateEditTaskPage extends StatefulWidget {
   const CreateEditTaskPage(
@@ -53,6 +55,9 @@ class _CreateEditTaskPageState extends State<CreateEditTaskPage> {
   void save(String taskName, DateTime startTimestamp, DateTime endTimestamp,
       String? details) {
     if (widget.taskId == null) {
+      TaskFilterDateProvider dateProvider = context.read<TaskFilterDateProvider>();
+      dateProvider.selectedDate = startTimestamp;
+
       _taskCreateService.createTask(
           taskName, startTimestamp, endTimestamp, details);
     } else {
