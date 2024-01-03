@@ -35,5 +35,28 @@ void main() {
       Task? taskActual = await taskRepository.getById(taskId);
       expect(taskActual, taskExpected);
     });
+
+    test("Given date when getByDate then expected tasks are returned", () async {
+      // Given
+      var date = DateTime(2023, 1, 22);
+      var tasksExpected = <Task>[
+        Task("3", "Task 3", DateTime(2023, 1, 22, 08, 00),
+            DateTime(2023, 1, 22, 10, 00), "Some Details for task 3"),
+        Task("4", "Task 4", DateTime(2023, 1, 22, 10, 00),
+            DateTime(2023, 1, 22, 12, 00), "Some Details for task 4"),
+      ];
+
+      // When
+      var tasksActual = await taskRepository.getByDate(date);
+
+      // Then
+      expect(tasksActual.length, tasksExpected.length);
+      for (var i = 0; i < tasksExpected.length; i++) {
+        var taskExpected = tasksExpected[i];
+        var taskActual = tasksActual[i];
+
+        expect(taskActual, taskExpected);
+      }
+    });
   });
 }

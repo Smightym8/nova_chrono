@@ -39,5 +39,42 @@ class TestDatabaseProvider {
             details TEXT NOT NULL
           )
     ''');
+
+    await generateTestdata(db);
+  }
+
+  Future<void> generateTestdata(Database db) async {
+    var startTimestamp = DateTime(2023, 1, 20, 14, 30);
+    var endTimestamp = DateTime(2023, 1, 20, 15, 00);
+
+    await db.execute('''
+    INSERT INTO task(id, name, startTimestamp, endTimestamp, details)
+    VALUES('1', 'Task 1', '${startTimestamp.toString()}', 
+    '${endTimestamp.toString()}', '');
+    ''');
+
+    startTimestamp = DateTime(2023, 1, 20, 16, 00);
+    endTimestamp = DateTime(2023, 1, 20, 18, 00);
+    await db.execute('''
+    INSERT INTO task(id, name, startTimestamp, endTimestamp, details)
+    VALUES('2', 'Task 2', '${startTimestamp.toString()}', 
+    '${endTimestamp.toString()}', 'Some details for task 2');
+    ''');
+
+    startTimestamp = DateTime(2023, 1, 22, 08, 00);
+    endTimestamp = DateTime(2023, 1, 22, 10, 00);
+    await db.execute('''
+    INSERT INTO task(id, name, startTimestamp, endTimestamp, details)
+    VALUES('3', 'Task 3', '${startTimestamp.toString()}', 
+    '${endTimestamp.toString()}', 'Some details for task 3');
+    ''');
+
+    startTimestamp = DateTime(2023, 1, 22, 10, 00);
+    endTimestamp = DateTime(2023, 1, 22, 12, 00);
+    await db.execute('''
+    INSERT INTO task(id, name, startTimestamp, endTimestamp, details)
+    VALUES('4', 'Task 4', '${startTimestamp.toString()}', 
+    '${endTimestamp.toString()}', 'Some details for task 4');
+    ''');
   }
 }
