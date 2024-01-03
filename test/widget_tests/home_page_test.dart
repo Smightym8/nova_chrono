@@ -16,7 +16,7 @@ void main() {
   late MockTaskEditService mockTaskEditService;
   late MockTaskDeleteService mockTaskDeleteService;
 
-  setUp(() {
+  setUpAll(() {
     mockTaskCreateService = MockTaskCreateService();
     mockTaskListService = MockTaskListService();
     mockTaskEditService = MockTaskEditService();

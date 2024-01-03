@@ -11,7 +11,7 @@ void main() {
     late TaskCreateService taskCreateService;
     late MockTaskRepository mockTaskRepository;
 
-    setUp(() {
+    setUpAll(() {
       mockTaskRepository = MockTaskRepository();
       taskCreateService = TaskCreateServiceImpl(taskRepository: mockTaskRepository);
     });

@@ -10,7 +10,7 @@ void main() {
     late TaskDeleteService taskDeleteService;
     late MockTaskRepository mockTaskRepository;
 
-    setUp(() {
+    setUpAll(() {
       mockTaskRepository = MockTaskRepository();
       taskDeleteService = TaskDeleteServiceImpl(taskRepository: mockTaskRepository);
     });
