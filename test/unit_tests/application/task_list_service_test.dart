@@ -7,7 +7,7 @@ import 'package:nova_chrono/domain/model/task.dart';
 import '../../mocks/annotations.mocks.dart';
 
 void main() {
-  group("TaskListService tests", () {
+  group("TaskListService Unit Tests", () {
     late TaskListService taskListService;
     late MockTaskRepository mockTaskRepository;
 
