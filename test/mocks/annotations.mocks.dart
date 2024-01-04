@@ -108,13 +108,13 @@ class MockTaskCreateService extends _i1.Mock implements _i6.TaskCreateService {
   }
 
   @override
-  void createTask(
+  _i4.Future<String> createTask(
     String? taskName,
     DateTime? startTimestamp,
     DateTime? endTimestamp,
     String? details,
   ) =>
-      super.noSuchMethod(
+      (super.noSuchMethod(
         Invocation.method(
           #createTask,
           [
@@ -124,8 +124,19 @@ class MockTaskCreateService extends _i1.Mock implements _i6.TaskCreateService {
             details,
           ],
         ),
-        returnValueForMissingStub: null,
-      );
+        returnValue: _i4.Future<String>.value(_i3.dummyValue<String>(
+          this,
+          Invocation.method(
+            #createTask,
+            [
+              taskName,
+              startTimestamp,
+              endTimestamp,
+              details,
+            ],
+          ),
+        )),
+      ) as _i4.Future<String>);
 }
 
 /// A class which mocks [TaskListService].
