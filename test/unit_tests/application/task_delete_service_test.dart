@@ -6,7 +6,7 @@ import 'package:nova_chrono/application/impl/task_delete_service_impl.dart';
 import '../../mocks/annotations.mocks.dart';
 
 void main() {
-  group("TaskDeleteService Tests", () {
+  group("TaskDeleteService Unit Tests", () {
     late TaskDeleteService taskDeleteService;
     late MockTaskRepository mockTaskRepository;
 
@@ -19,7 +19,6 @@ void main() {
         "mockTaskRepository.delete is called", () {
       // Given
       String taskId = "1";
-
 
       // When
       taskDeleteService.deleteTask(taskId);
