@@ -52,19 +52,23 @@ class _CreateEditTaskPageState extends State<CreateEditTaskPage> {
     }
   }
 
-  void save(String taskName, DateTime startTimestamp, DateTime endTimestamp,
-      String? details) {
+  Future<void> save(String taskName, DateTime startTimestamp, DateTime endTimestamp,
+      String? details) async {
     if (widget.taskId == null) {
       TaskFilterDateProvider dateProvider = context.read<TaskFilterDateProvider>();
       dateProvider.selectedDate = startTimestamp;
 
-      _taskCreateService.createTask(
+      await _taskCreateService.createTask(
           taskName, startTimestamp, endTimestamp, details);
     } else {
-      _taskEditService.editTask(
+      await _taskEditService.editTask(
           widget.taskId!, taskName, startTimestamp, endTimestamp, details);
     }
 
+    navigateToHomePage();
+  }
+
+  void navigateToHomePage() {
     Navigator.push(
         context,
         MaterialPageRoute(

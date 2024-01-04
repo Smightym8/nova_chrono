@@ -167,14 +167,14 @@ class MockTaskEditService extends _i1.Mock implements _i8.TaskEditService {
   }
 
   @override
-  void editTask(
+  _i4.Future<void> editTask(
     String? taskId,
     String? taskName,
     DateTime? startTimestamp,
     DateTime? endTimestamp,
     String? details,
   ) =>
-      super.noSuchMethod(
+      (super.noSuchMethod(
         Invocation.method(
           #editTask,
           [
@@ -185,8 +185,9 @@ class MockTaskEditService extends _i1.Mock implements _i8.TaskEditService {
             details,
           ],
         ),
-        returnValueForMissingStub: null,
-      );
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 }
 
 /// A class which mocks [TaskDeleteService].
