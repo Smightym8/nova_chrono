@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:nova_chrono/view/shared/date_formatter.dart';
 
 class CreateEditTaskForm extends StatefulWidget {
   const CreateEditTaskForm(
@@ -53,14 +53,13 @@ class _CreateEditTaskFormState extends State<CreateEditTaskForm> {
     }
 
     _taskNameController = TextEditingController(text: widget.taskName);
-    _startTimestampController = TextEditingController(text: _formatDate(_selectedStartTimeStamp));
-    _endTimestampController =
-        TextEditingController(text: _formatDate(_selectedEndTimeStamp));
+    _startTimestampController = TextEditingController(
+        text: DateFormatter.formatDateWithTime(_selectedStartTimeStamp)
+    );
+    _endTimestampController = TextEditingController(
+            text: DateFormatter.formatDateWithTime(_selectedEndTimeStamp)
+      );
     _detailsController = TextEditingController(text: widget.details);
-  }
-
-  static String _formatDate(DateTime date) {
-    return DateFormat('yyyy-MM-dd - HH:mm').format(date);
   }
 
   Future<void> _selectDate(bool isStart) async {
@@ -97,12 +96,12 @@ class _CreateEditTaskFormState extends State<CreateEditTaskForm> {
               if (isStart) {
                 setState(() {
                   _selectedStartTimeStamp = selectedDateTime;
-                  _startTimestampController.text = _formatDate(selectedDateTime);
+                  _startTimestampController.text = DateFormatter.formatDateWithTime(selectedDateTime);
                 });
               } else {
                 setState(() {
                   _selectedEndTimeStamp = selectedDateTime;
-                  _endTimestampController.text = _formatDate(selectedDateTime);
+                  _endTimestampController.text = DateFormatter.formatDateWithTime(selectedDateTime);
                 });
               }
             }

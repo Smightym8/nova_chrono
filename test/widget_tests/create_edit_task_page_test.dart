@@ -23,8 +23,7 @@ void main() {
       mockTaskDeleteService = MockTaskDeleteService();
     });
 
-    testWidgets(
-        'CreateEditTaskPage has a form, two buttons and '
+    testWidgets('CreateEditTaskPage has a form, two buttons and '
         'four TextFormFields', (tester) async {
       var expectedNumberOfTextFormFields = 4;
       var expectedNumberOfButtons = 2;
@@ -101,16 +100,9 @@ void main() {
       expect(find.byType(HomePage), findsOneWidget);
     });
 
-    testWidgets(
-        'When the save button is pressed and the fields are empty '
+    testWidgets('When the save button is pressed and the fields are empty '
         'it does not call TaskCreateService and '
         'validation messages are shown', (tester) async {
-      final List<Task> tasks = <Task>[];
-      final Future<List<Task>> tasksFuture = Future(() => tasks);
-
-      when(mockTaskListService.getTasksByDate(DateTime.now()))
-          .thenAnswer((_) => tasksFuture);
-
       await tester.pumpWidget(
         Directionality(
           textDirection: TextDirection.ltr,
@@ -130,6 +122,110 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Please enter some text.'), findsOneWidget);
+      verifyNever(mockTaskCreateService.createTask(any, any, any, any));
+    });
+
+    testWidgets("Given no task when all fields are valid createTask is called "
+        "and it navigates to homepage", (tester) async {
+      const taskNameExpected = "Some task";
+      const detailsExpected = "Some details";
+
+      when(mockTaskCreateService.createTask(taskNameExpected, any, any, detailsExpected)).thenAnswer((_) => Future(() => "1"));
+
+      await tester.pumpWidget(
+          MultiProvider(
+            providers: [
+              ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
+            ],
+            child:  Directionality(
+              textDirection: TextDirection.ltr,
+              child: MaterialApp(
+                home: CreateEditTaskPage(
+                  taskCreateService: mockTaskCreateService,
+                  taskEditService: mockTaskEditService,
+                  taskListService: mockTaskListService,
+                  taskDeleteService: mockTaskDeleteService,
+                ),
+              ),
+            ),
+          )
+      );
+
+      var taskNameTextFieldFinder = find.byKey(const Key("taskNameTextField"));
+      await tester.enterText(taskNameTextFieldFinder, taskNameExpected);
+
+      await tester.pumpAndSettle();
+
+      var detailsTextFieldFinder = find.byKey(const Key("detailsTextField"));
+      await tester.enterText(detailsTextFieldFinder, detailsExpected);
+
+      await tester.pumpAndSettle();
+
+      var saveButtonFinder = find.byKey(const Key('saveButton'));
+      await tester.ensureVisible(saveButtonFinder);
+      await tester.tapAt(tester.getCenter(saveButtonFinder));
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(HomePage), findsOneWidget);
+      verify(mockTaskCreateService.createTask(taskNameExpected, any, any, detailsExpected));
+      verifyNever(mockTaskEditService.editTask(any, any, any, any, any));
+    });
+
+    testWidgets("Given task when all fields are valid editTask is called "
+        "and it navigates to homepage", (tester) async {
+      const taskId = "1";
+      const taskName = "Some task";
+      const details = "Some details";
+      final startTimestamp = DateTime.now();
+      final endTimestamp = DateTime(startTimestamp.year, startTimestamp.month,
+          startTimestamp.day, startTimestamp.hour + 1);
+      const updatedDetails = "Some new details";
+
+
+      await tester.pumpWidget(
+          MultiProvider(
+            providers: [
+              ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
+            ],
+            child:  Directionality(
+              textDirection: TextDirection.ltr,
+              child: MaterialApp(
+                home: CreateEditTaskPage(
+                  taskCreateService: mockTaskCreateService,
+                  taskEditService: mockTaskEditService,
+                  taskListService: mockTaskListService,
+                  taskDeleteService: mockTaskDeleteService,
+                  taskId: taskId,
+                  taskName: taskName,
+                  startTimestamp: startTimestamp,
+                  endTimestamp: endTimestamp,
+                  details: details,
+                ),
+              ),
+            ),
+          )
+      );
+
+      var detailsTextFieldFinder = find.byKey(const Key("detailsTextField"));
+      await tester.enterText(detailsTextFieldFinder, updatedDetails);
+
+      await tester.pumpAndSettle();
+
+      var saveButtonFinder = find.byKey(const Key('saveButton'));
+      await tester.ensureVisible(saveButtonFinder);
+      await tester.tapAt(tester.getCenter(saveButtonFinder));
+
+      await tester.pumpAndSettle();
+
+      expect(find.byType(HomePage), findsOneWidget);
+      verify(mockTaskEditService.editTask(
+        taskId,
+        taskName,
+        startTimestamp,
+        endTimestamp,
+        updatedDetails
+      ));
       verifyNever(mockTaskCreateService.createTask(any, any, any, any));
     });
   });
