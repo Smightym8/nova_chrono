@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:nova_chrono/view/shared/date_formatter.dart';
 
 class CreateEditTaskForm extends StatefulWidget {
-  const CreateEditTaskForm(
-      {super.key,
-      required this.onPressedFunction,
-      this.taskName,
-      this.startTimestamp,
-      this.endTimestamp,
-      this.details});
+  const CreateEditTaskForm({
+    super.key,
+    required this.onPressedFunction,
+    this.taskName,
+    this.startTimestamp,
+    this.endTimestamp,
+    this.details
+  });
 
   final Function onPressedFunction;
   final String? taskName;
