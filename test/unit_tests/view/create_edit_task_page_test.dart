@@ -7,7 +7,7 @@ import 'package:nova_chrono/view/pages/home_page.dart';
 import 'package:nova_chrono/view/providers/task_filter_date_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../mocks/annotations.mocks.dart';
+import '../../mocks/annotations.mocks.dart';
 
 void main() {
   group('CreateEditTaskPage Tests', () {
