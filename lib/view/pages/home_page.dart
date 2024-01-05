@@ -14,13 +14,14 @@ import '../shared/date_formatter.dart';
 import 'create_edit_task_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage(
-      {super.key,
-      required this.title,
-      this.taskCreateService,
-      this.taskListService,
-      this.taskEditService,
-      this.taskDeleteService});
+  const HomePage({
+    super.key,
+    required this.title,
+    this.taskCreateService,
+    this.taskListService,
+    this.taskEditService,
+    this.taskDeleteService
+  });
 
   final String title;
   final TaskCreateService? taskCreateService;
@@ -140,6 +141,7 @@ class _HomePageState extends State<HomePage> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 child: TextFormField(
+                  key: const Key("dateFilterTextFormField"),
                   controller: _selectedDateController,
                   decoration: const InputDecoration(
                     labelText: 'Date',
@@ -162,6 +164,8 @@ class _HomePageState extends State<HomePage> {
             child: TaskList(
               tasks: _filteredTasks,
               onDeletePressedFunction: delete,
+              taskCreateService: widget.taskCreateService,
+              taskEditService: widget.taskEditService,
             ),
           )
         ],
@@ -174,7 +178,9 @@ class _HomePageState extends State<HomePage> {
                   builder: (context) => CreateEditTaskPage(
                         taskCreateService: widget.taskCreateService,
                         taskEditService: widget.taskEditService,
-                      )));
+                      )
+              )
+          );
         },
         tooltip: 'Add new task',
         child: const Icon(Icons.add),

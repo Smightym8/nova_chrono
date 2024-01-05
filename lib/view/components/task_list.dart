@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:nova_chrono/domain/model/task.dart';
+import 'package:nova_chrono/view/shared/date_formatter.dart';
 
+import '../../application/api/task_create_service.dart';
+import '../../application/api/task_edit_service.dart';
 import '../pages/create_edit_task_page.dart';
 
 class TaskList extends StatelessWidget {
-  const TaskList(
-      {super.key, required this.tasks, required this.onDeletePressedFunction});
+  const TaskList({
+    super.key,
+    required this.tasks,
+    required this.onDeletePressedFunction,
+    this.taskCreateService,
+    this.taskEditService,
+  });
 
   final List<Task> tasks;
   final Function onDeletePressedFunction;
+  final TaskCreateService? taskCreateService;
+  final TaskEditService? taskEditService;
   static const int color = 600;
-
-  static String _formatDate(DateTime date) {
-    // TODO: Move this method to somewhere
-    // so it can be used in all widgets that need it
-    return DateFormat('yyyy-MM-dd HH:mm').format(date);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +39,8 @@ class TaskList extends StatelessWidget {
           var taskName = tasks[index].name;
           var startTimestamp = tasks[index].startTimestamp;
           var endTimestamp = tasks[index].endTimestamp;
-          var startTimestampStr = _formatDate(tasks[index].startTimestamp);
-          var endTimestampStr = _formatDate(tasks[index].endTimestamp);
+          var startTimestampStr = DateFormatter.formatDateWithTime(tasks[index].startTimestamp);
+          var endTimestampStr = DateFormatter.formatDateWithTime(tasks[index].endTimestamp);
           var details = tasks[index].details;
 
           return Container(
@@ -90,12 +93,16 @@ class TaskList extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => CreateEditTaskPage(
-                                            taskId: taskId,
-                                            taskName: taskName,
-                                            startTimestamp: startTimestamp,
-                                            endTimestamp: endTimestamp,
-                                            details: details,
-                                          )));
+                                        taskCreateService: taskCreateService,
+                                        taskEditService: taskEditService,
+                                        taskId: taskId,
+                                        taskName: taskName,
+                                        startTimestamp: startTimestamp,
+                                        endTimestamp: endTimestamp,
+                                        details: details,
+                                      )
+                                  )
+                              );
                             },
                             child: const Icon(
                               Icons.edit,
