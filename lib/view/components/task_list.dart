@@ -10,14 +10,12 @@ class TaskList extends StatelessWidget {
   const TaskList({
     super.key,
     required this.tasks,
-    required this.searchTerm,
     required this.onDeletePressedFunction,
     this.taskCreateService,
     this.taskEditService,
   });
 
   final List<Task> tasks;
-  final String searchTerm;
   final Function onDeletePressedFunction;
   final TaskCreateService? taskCreateService;
   final TaskEditService? taskEditService;

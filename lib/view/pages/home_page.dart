@@ -55,6 +55,14 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
+
+  @override
+  void dispose() {
+    _selectedDateController.dispose();
+
+    super.dispose();
+  }
+
   Future<void> _selectDate() async {
     DateTime now = DateTime.now();
 
@@ -173,9 +181,16 @@ class _HomePageState extends State<HomePage> {
                       ),
                     );
                   } else {
+                    var filteredTasks = snapshot.data!;
+
+                    if (_searchTerm.isNotEmpty) {
+                      filteredTasks = filteredTasks.where((task) =>
+                        task.name.toLowerCase().contains(_searchTerm.toLowerCase())
+                      ).toList();
+                    }
+
                     return TaskList(
-                      tasks: snapshot.data!,
-                      searchTerm: _searchTerm,
+                      tasks: filteredTasks,
                       onDeletePressedFunction: delete,
                       taskCreateService: widget.taskCreateService,
                       taskEditService: widget.taskEditService,
