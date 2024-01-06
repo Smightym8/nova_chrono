@@ -4,14 +4,14 @@ import 'package:nova_chrono/view/shared/date_formatter.dart';
 class CreateEditTaskForm extends StatefulWidget {
   const CreateEditTaskForm({
     super.key,
-    required this.onPressedFunction,
+    required this.onSavePressed,
     this.taskName,
     this.startTimestamp,
     this.endTimestamp,
     this.details
   });
 
-  final Function onPressedFunction;
+  final Function onSavePressed;
   final String? taskName;
   final DateTime? startTimestamp;
   final DateTime? endTimestamp;
@@ -234,13 +234,14 @@ class _CreateEditTaskFormState extends State<CreateEditTaskForm> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       key: const Key('saveButton'),
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          widget.onPressedFunction(
+                          await widget.onSavePressed(
                               _taskNameController.text,
                               _selectedStartTimeStamp,
                               _selectedEndTimeStamp,
-                              _detailsController.text);
+                              _detailsController.text
+                          );
                         }
                       },
                       child: const Text('Save'),

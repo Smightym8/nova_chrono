@@ -61,6 +61,7 @@ class _CreateEditTaskPageState extends State<CreateEditTaskPage> {
 
   Future<void> save(String taskName, DateTime startTimestamp, DateTime endTimestamp,
       String? details) async {
+
     if (widget.taskId == null) {
       TaskFilterDateProvider dateProvider = context.read<TaskFilterDateProvider>();
       dateProvider.selectedDate = startTimestamp;
@@ -99,7 +100,7 @@ class _CreateEditTaskPageState extends State<CreateEditTaskPage> {
           padding: const EdgeInsets.only(top: 20),
           child: SingleChildScrollView(
             child: CreateEditTaskForm(
-              onPressedFunction: save,
+              onSavePressed: save,
               taskName: widget.taskName,
               startTimestamp: widget.startTimestamp,
               endTimestamp: widget.endTimestamp,

@@ -19,7 +19,11 @@ class TaskCreateServiceImpl implements TaskCreateService {
 
     var task = Task(id, taskName, startTimestamp, endTimestamp, details);
 
-    await _taskRepository.add(task);
+    int dbId = await _taskRepository.add(task);
+    if (dbId == 0) {
+      // TODO: Handle error
+      print("Error during saving task!");
+    }
 
     return id;
   }
