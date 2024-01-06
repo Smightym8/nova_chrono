@@ -28,7 +28,9 @@ void main() {
   testWidgets('HomePage has a title, a searchbox, a textformfield, a tasklist '
       'and a floatingActionButton',
       (tester) async {
-    final List<Task> tasks = <Task>[];
+    final List<Task> tasks = <Task>[
+      Task("1", "Test", DateTime.now(), DateTime.now(), "Test"),
+    ];
     final Future<List<Task>> tasksFuture = Future(() => tasks);
 
     when(mockTaskListService.getTasksByDate(any))
@@ -197,7 +199,8 @@ void main() {
     expect(find.byType(CreateEditTaskPage), findsOne);
   });
 
-  testWidgets("When the delete icon is the list is empty", (tester) async {
+  testWidgets("When the delete icon is clicked delete is called with "
+      "the expected task id", (tester) async {
     final List<Task> tasks = <Task>[
       Task("1", "Task 1", DateTime.now(), DateTime.now(), ""),
     ];
@@ -237,7 +240,7 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    expect(find.text("No tasks found"), findsOne);
+    verify(mockTaskDeleteService.deleteTask(tasks[0].id));
   });
 
   testWidgets("When a date is selected getTasksByDate is called with "
