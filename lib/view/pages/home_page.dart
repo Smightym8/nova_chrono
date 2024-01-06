@@ -210,6 +210,8 @@ class _HomePageState extends State<HomePage> {
                   builder: (context) => CreateEditTaskPage(
                         taskCreateService: widget.taskCreateService,
                         taskEditService: widget.taskEditService,
+                        taskListService: _taskListService,
+                        taskDeleteService: _taskDeleteService,
                       )
               )
           );

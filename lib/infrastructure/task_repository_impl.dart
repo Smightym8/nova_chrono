@@ -20,11 +20,15 @@ class TaskRepositoryImpl implements TaskRepository {
 
   @override
   Future<int> add(Task task) async {
-    int id = await _database.insert(
-      table,
-      task.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.rollback,
-    );
+    int id = 0;
+
+    await _database.transaction((txn) async {
+      id = await txn.insert(
+        table,
+        task.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.rollback,
+      );
+    });
 
     return id;
   }

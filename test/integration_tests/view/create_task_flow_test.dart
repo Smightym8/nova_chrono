@@ -37,55 +37,60 @@ void main() {
     });
 
     tearDown(() async {
-      print("TearDown called!");
       await testDatabaseProvider.deleteDatabase();
     });
 
     testWidgets("When a task is created the task appears in the task list"
         " on the homepage", (tester) async {
-      const taskNameExpected = "Test Task";
-      const detailsExpected = "Details for the test task";
+      await tester.runAsync(() async {
+        const taskNameExpected = "Test Task";
+        const detailsExpected = "Details for the test task";
 
-      await tester.pumpWidget(
-          MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
-            ],
-            child: Directionality(
-              textDirection: TextDirection.ltr,
-              child: MaterialApp(
-                home: HomePage(
-                  title: "Title",
-                  taskCreateService: taskCreateService,
-                  taskListService: taskListService,
-                  taskEditService: taskEditService,
-                  taskDeleteService: taskDeleteService,
+        await tester.pumpWidget(
+            MultiProvider(
+              providers: [
+                ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
+              ],
+              child: Directionality(
+                textDirection: TextDirection.ltr,
+                child: MaterialApp(
+                  home: HomePage(
+                    title: "Title",
+                    taskCreateService: taskCreateService,
+                    taskListService: taskListService,
+                    taskEditService: taskEditService,
+                    taskDeleteService: taskDeleteService,
+                  ),
                 ),
               ),
-            ),
-          )
-      );
+            )
+        );
 
-      var createTaskButtonFinder = find.byType(FloatingActionButton);
-      await tester.tap(createTaskButtonFinder);
+        var createTaskButtonFinder = find.byType(FloatingActionButton);
+        await tester.tap(createTaskButtonFinder);
 
-      await tester.pumpAndSettle();
+        await tester.pumpAndSettle();
 
-      var taskNameTextFieldFinder = find.byKey(const Key("taskNameTextField"));
-      await tester.enterText(taskNameTextFieldFinder, taskNameExpected);
+        var taskNameTextFieldFinder = find.byKey(const Key("taskNameTextField"));
+        await tester.enterText(taskNameTextFieldFinder, taskNameExpected);
 
-      var detailsTextFieldFinder = find.byKey(const Key("detailsTextField"));
-      await tester.enterText(detailsTextFieldFinder, detailsExpected);
+        var detailsTextFieldFinder = find.byKey(const Key("detailsTextField"));
+        await tester.enterText(detailsTextFieldFinder, detailsExpected);
 
-      var saveButtonFinder = find.byKey(const Key('saveButton'));
-      await tester.ensureVisible(saveButtonFinder);
-      await tester.tapAt(tester.getCenter(saveButtonFinder));
+        var saveButtonFinder = find.byKey(const Key('saveButton'));
+        await tester.ensureVisible(saveButtonFinder);
+        await tester.tapAt(tester.getCenter(saveButtonFinder));
 
-      await tester.pumpAndSettle();
+        await Future.delayed(const Duration(seconds: 1));
+        await tester.pumpAndSettle();
 
-      expect(find.byType(HomePage), findsOne);
-      expect(find.text(taskNameExpected), findsOne);
-      expect(find.text(detailsExpected), findsOne);
+        await Future.delayed(const Duration(seconds: 1));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(HomePage), findsOne);
+        expect(find.text(taskNameExpected), findsOne);
+        expect(find.text(detailsExpected), findsOne);
+      });
     });
   });
 }
