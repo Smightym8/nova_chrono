@@ -38,12 +38,12 @@ void main() {
 
     test("Given date when getByDate then expected tasks are returned", () async {
       // Given
-      var date = DateTime(2023, 1, 22);
+      var date = DateTime.now().add(const Duration(days: -2));
       var tasksExpected = <Task>[
-        Task("3", "Task 3", DateTime(2023, 1, 22, 08, 00),
-            DateTime(2023, 1, 22, 10, 00), "Some Details for task 3"),
-        Task("4", "Task 4", DateTime(2023, 1, 22, 10, 00),
-            DateTime(2023, 1, 22, 12, 00), "Some Details for task 4"),
+        Task("3", "Task 3", date,
+            date, "Some Details for task 3"),
+        Task("4", "Task 4", date,
+            date, "Some Details for task 4"),
       ];
 
       // When
