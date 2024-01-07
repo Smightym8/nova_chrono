@@ -20,12 +20,13 @@ GetIt getIt = GetIt.instance;
 DatabaseProvider databaseProvider = DatabaseProvider.instance;
 
 void main() async {
+  await databaseProvider.initDatabase();
+
   getIt.registerSingleton<TaskRepository>(TaskRepositoryImpl());
   getIt.registerSingleton<TaskCreateService>(TaskCreateServiceImpl());
   getIt.registerSingleton<TaskListService>(TaskListServiceImpl());
   getIt.registerSingleton<TaskEditService>(TaskEditServiceImpl());
   getIt.registerSingleton<TaskDeleteService>(TaskDeleteServiceImpl());
-  await databaseProvider.initDatabase();
 
   runApp(
     MultiProvider(

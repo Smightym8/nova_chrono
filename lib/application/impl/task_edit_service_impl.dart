@@ -12,12 +12,14 @@ class TaskEditServiceImpl implements TaskEditService {
   }
 
   @override
-  void editTask(String taskId, String taskName, DateTime startTimestamp,
-      DateTime endTimestamp, String? details) {
+  Future<void> editTask(String taskId, String taskName, DateTime startTimestamp,
+      DateTime endTimestamp, String? details) async {
+    // TODO: Check if task to be updated exists
+    // TODO: Fetch task from db by id and update it instead of creating new task
     details = details ?? "";
 
     var task = Task(taskId, taskName, startTimestamp, endTimestamp, details);
 
-    _taskRepository.updateTask(task);
+    await _taskRepository.updateTask(task);
   }
 }

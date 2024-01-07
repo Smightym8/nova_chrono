@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:nova_chrono/view/shared/date_formatter.dart';
 
 class CreateEditTaskForm extends StatefulWidget {
-  const CreateEditTaskForm(
-      {super.key,
-      required this.onPressedFunction,
-      this.taskName,
-      this.startTimestamp,
-      this.endTimestamp,
-      this.details});
+  const CreateEditTaskForm({
+    super.key,
+    required this.onSavePressed,
+    this.taskName,
+    this.startTimestamp,
+    this.endTimestamp,
+    this.details
+  });
 
-  final Function onPressedFunction;
+  final Function onSavePressed;
   final String? taskName;
   final DateTime? startTimestamp;
   final DateTime? endTimestamp;
@@ -53,14 +54,13 @@ class _CreateEditTaskFormState extends State<CreateEditTaskForm> {
     }
 
     _taskNameController = TextEditingController(text: widget.taskName);
-    _startTimestampController = TextEditingController(text: _formatDate(_selectedStartTimeStamp));
-    _endTimestampController =
-        TextEditingController(text: _formatDate(_selectedEndTimeStamp));
+    _startTimestampController = TextEditingController(
+        text: DateFormatter.formatDateWithTime(_selectedStartTimeStamp)
+    );
+    _endTimestampController = TextEditingController(
+            text: DateFormatter.formatDateWithTime(_selectedEndTimeStamp)
+      );
     _detailsController = TextEditingController(text: widget.details);
-  }
-
-  static String _formatDate(DateTime date) {
-    return DateFormat('yyyy-MM-dd - HH:mm').format(date);
   }
 
   Future<void> _selectDate(bool isStart) async {
@@ -97,12 +97,12 @@ class _CreateEditTaskFormState extends State<CreateEditTaskForm> {
               if (isStart) {
                 setState(() {
                   _selectedStartTimeStamp = selectedDateTime;
-                  _startTimestampController.text = _formatDate(selectedDateTime);
+                  _startTimestampController.text = DateFormatter.formatDateWithTime(selectedDateTime);
                 });
               } else {
                 setState(() {
                   _selectedEndTimeStamp = selectedDateTime;
-                  _endTimestampController.text = _formatDate(selectedDateTime);
+                  _endTimestampController.text = DateFormatter.formatDateWithTime(selectedDateTime);
                 });
               }
             }
@@ -234,13 +234,14 @@ class _CreateEditTaskFormState extends State<CreateEditTaskForm> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       key: const Key('saveButton'),
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState!.validate()) {
-                          widget.onPressedFunction(
+                          await widget.onSavePressed(
                               _taskNameController.text,
                               _selectedStartTimeStamp,
                               _selectedEndTimeStamp,
-                              _detailsController.text);
+                              _detailsController.text
+                          );
                         }
                       },
                       child: const Text('Save'),

@@ -14,13 +14,14 @@ import '../shared/date_formatter.dart';
 import 'create_edit_task_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage(
-      {super.key,
-      required this.title,
-      this.taskCreateService,
-      this.taskListService,
-      this.taskEditService,
-      this.taskDeleteService});
+  const HomePage({
+    super.key,
+    required this.title,
+    this.taskCreateService,
+    this.taskListService,
+    this.taskEditService,
+    this.taskDeleteService
+  });
 
   final String title;
   final TaskCreateService? taskCreateService;
@@ -33,8 +34,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late List<Task> _tasks;
-  late List<Task> _filteredTasks;
+  late Future<List<Task>> _tasksFuture;
   late TaskFilterDateProvider _dateProvider;
   late String _searchTerm;
   late TextEditingController _selectedDateController;
@@ -43,27 +43,24 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    super.initState();
-
     _searchTerm = "";
     _dateProvider = context.read<TaskFilterDateProvider>();
     _selectedDateController = TextEditingController(
         text: DateFormatter.formatDateWithoutTime(_dateProvider.selectedDate));
-    _tasks = [];
-    _filteredTasks = [];
     _taskListService = widget.taskListService ?? getIt<TaskListService>();
     _taskDeleteService = widget.taskDeleteService ?? getIt<TaskDeleteService>();
 
-    fetchTasks();
+    _tasksFuture = _taskListService.getTasksByDate(_dateProvider.selectedDate);
+
+    super.initState();
   }
 
-  Future<void> fetchTasks() async {
-    var tasks = await _taskListService.getTasksByDate(_dateProvider.selectedDate);
 
-    setState(() {
-      _tasks = tasks;
-      _filteredTasks = tasks;
-    });
+  @override
+  void dispose() {
+    _selectedDateController.dispose();
+
+    super.dispose();
   }
 
   Future<void> _selectDate() async {
@@ -75,45 +72,30 @@ class _HomePageState extends State<HomePage> {
             firstDate: DateTime(0),
             lastDate: now
     )
-    .then((selectedDate) async {
+    .then((selectedDate) {
         if (selectedDate != null) {
           _dateProvider.selectedDate = selectedDate;
-          _selectedDateController.text = DateFormatter.formatDateWithoutTime(selectedDate);
 
-          await fetchTasks();
-          filterTasksByName();
+          setState(() {
+            _selectedDateController.text = DateFormatter.formatDateWithoutTime(selectedDate);
+            _tasksFuture = _taskListService.getTasksByDate(_dateProvider.selectedDate);
+          });
         }
       }
     );
   }
 
-  void delete(String taskId) {
+  Future<void> delete(String taskId) async {
+    await _taskDeleteService.deleteTask(taskId);
+
     setState(() {
-      _taskDeleteService.deleteTask(taskId);
+      _tasksFuture = _taskListService.getTasksByDate(_dateProvider.selectedDate);
     });
   }
 
-  void setSearchterm(String searchTerm) {
-    _searchTerm = searchTerm;
-
-    filterTasksByName();
-  }
-
-  void filterTasksByName() {
-    List<Task> filteredTasks = [];
-
-    if (_searchTerm.isEmpty) {
-      filteredTasks = _tasks;
-    } else {
-      filteredTasks = _tasks
-          .where((task) =>
-            task.name.toLowerCase().contains(_searchTerm.toLowerCase())
-          )
-          .toList();
-    }
-
+  void setSearchTerm(String searchTerm) {
     setState(() {
-      _filteredTasks = filteredTasks;
+      _searchTerm = searchTerm;
     });
   }
 
@@ -132,37 +114,93 @@ class _HomePageState extends State<HomePage> {
             children: [
               Expanded(
                 child: SearchBox(
-                  onChanged: setSearchterm,
+                  onChanged: setSearchTerm,
                 ),
               ),
               Expanded(
-                  child: Padding(
-                padding:
+                child: Padding(
+                  padding:
                     const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                child: TextFormField(
-                  controller: _selectedDateController,
-                  decoration: const InputDecoration(
-                    labelText: 'Date',
-                    filled: true,
-                    prefixIcon: Icon(Icons.calendar_today),
-                    enabledBorder:
-                        OutlineInputBorder(borderSide: BorderSide.none),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)),
+                  child: TextFormField(
+                    key: const Key("dateFilterTextFormField"),
+                    controller: _selectedDateController,
+                    decoration: const InputDecoration(
+                      labelText: 'Date',
+                      filled: true,
+                      prefixIcon: Icon(Icons.calendar_today),
+                      enabledBorder:
+                          OutlineInputBorder(borderSide: BorderSide.none),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue)),
+                    ),
+                    readOnly: true,
+                    onTap: () {
+                      _selectDate();
+                    },
                   ),
-                  readOnly: true,
-                  onTap: () {
-                    _selectDate();
-                  },
-                ),
-              )),
+                )
+              ),
             ],
           ),
           Expanded(
-            child: TaskList(
-              tasks: _filteredTasks,
-              onDeletePressedFunction: delete,
-            ),
+            child: FutureBuilder(
+              future: _tasksFuture,
+              builder: (BuildContext context, AsyncSnapshot<List<Task>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: Text(
+                      "Loading tasks...",
+                      style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  );
+                } else {
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return const Center(
+                      child: Text(
+                        "No tasks found",
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return const Center(
+                      child: Text(
+                        "An error occurred",
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    );
+                  } else {
+                    var filteredTasks = snapshot.data!;
+
+                    if (_searchTerm.isNotEmpty) {
+                      filteredTasks = filteredTasks.where((task) =>
+                        task.name.toLowerCase().contains(_searchTerm.toLowerCase())
+                      ).toList();
+                    }
+
+                    return TaskList(
+                      tasks: filteredTasks,
+                      onDeletePressedFunction: delete,
+                      taskCreateService: widget.taskCreateService,
+                      taskEditService: widget.taskEditService,
+                      taskListService: _taskListService,
+                      taskDeleteService: _taskDeleteService,
+                    );
+                  }
+                }
+              },
+            )
           )
         ],
       ),
@@ -174,7 +212,11 @@ class _HomePageState extends State<HomePage> {
                   builder: (context) => CreateEditTaskPage(
                         taskCreateService: widget.taskCreateService,
                         taskEditService: widget.taskEditService,
-                      )));
+                        taskListService: _taskListService,
+                        taskDeleteService: _taskDeleteService,
+                      )
+              )
+          );
         },
         tooltip: 'Add new task',
         child: const Icon(Icons.add),

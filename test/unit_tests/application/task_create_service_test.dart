@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:mockito/mockito.dart';
 import 'package:nova_chrono/application/api/task_create_service.dart';
 import 'package:nova_chrono/application/impl/task_create_service_impl.dart';
@@ -7,11 +9,11 @@ import 'package:test/test.dart';
 import '../../mocks/annotations.mocks.dart';
 
 void main() {
-  group('TaskCreateService Tests', () {
+  group('TaskCreateService Unit Tests', () {
     late TaskCreateService taskCreateService;
     late MockTaskRepository mockTaskRepository;
 
-    setUp(() {
+    setUpAll(() {
       mockTaskRepository = MockTaskRepository();
       taskCreateService = TaskCreateServiceImpl(taskRepository: mockTaskRepository);
     });
@@ -20,13 +22,15 @@ void main() {
         'given id, taskName, startTimestamp and endTimestamp. When calling '
         'taskCreateService.createTask then mockTaskRepository.add is called', () {
       // Given
-      const id = '0';
+      const id = '1';
+      int dbId = 1;
       const taskName = 'Test Task';
       final startTimestamp = DateTime.now();
       final endTimestamp = startTimestamp.add(const Duration(hours: 1));
       final taskExpected = Task(id, taskName, startTimestamp, endTimestamp, '');
 
       when(mockTaskRepository.nextIdentity()).thenReturn(id);
+      when(mockTaskRepository.add(any)).thenAnswer((_) => Future(() => dbId));
 
       // When
       taskCreateService.createTask(taskName, startTimestamp, endTimestamp, null);
