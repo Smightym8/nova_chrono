@@ -194,6 +194,8 @@ class _HomePageState extends State<HomePage> {
                       onDeletePressedFunction: delete,
                       taskCreateService: widget.taskCreateService,
                       taskEditService: widget.taskEditService,
+                      taskListService: _taskListService,
+                      taskDeleteService: _taskDeleteService,
                     );
                   }
                 }
