@@ -17,7 +17,7 @@ import 'package:provider/provider.dart';
 import '../../utils/test_database_provider.dart';
 
 void main() {
-  group("Creating task flow test", () {
+  group("Deleting task flow test", () {
     late TestDatabaseProvider testDatabaseProvider;
     late TaskRepository taskRepository;
     late TaskListService taskListService;
@@ -41,12 +41,9 @@ void main() {
       await testDatabaseProvider.deleteDatabase();
     });
 
-    testWidgets("When a task is created the task appears in the task list"
-        " on the homepage", (tester) async {
+    testWidgets("Give at leas one task in the task list when deleting a task "
+        "the task is not in the list anymore", (tester) async {
       await tester.runAsync(() async {
-        const taskNameExpected = "Test Task";
-        const detailsExpected = "Details for the test task";
-
         await tester.pumpWidget(
             MultiProvider(
               providers: [
@@ -67,30 +64,24 @@ void main() {
             )
         );
 
-        var createTaskButtonFinder = find.byType(FloatingActionButton);
-        await tester.tap(createTaskButtonFinder);
-
+        await Future.delayed(const Duration(seconds: 1));
         await tester.pumpAndSettle();
 
-        var taskNameTextFieldFinder = find.byKey(const Key("taskNameTextField"));
-        await tester.enterText(taskNameTextFieldFinder, taskNameExpected);
+        final deleteInkWellFinder = find.widgetWithIcon(
+            InkWell,
+            Icons.delete_forever
+        ).first;
 
-        var detailsTextFieldFinder = find.byKey(const Key("detailsTextField"));
-        await tester.enterText(detailsTextFieldFinder, detailsExpected);
+        // To prove that task is there
+        expect(find.text("Task 1"), findsOne);
 
-        var saveButtonFinder = find.byKey(const Key('saveButton'));
-        await tester.ensureVisible(saveButtonFinder);
-        await tester.tapAt(tester.getCenter(saveButtonFinder));
+        await tester.tap(deleteInkWellFinder);
 
         await Future.delayed(const Duration(seconds: 1));
         await tester.pumpAndSettle();
 
-        await Future.delayed(const Duration(seconds: 1));
-        await tester.pumpAndSettle();
-
-        expect(find.byType(HomePage), findsOne);
-        expect(find.text(taskNameExpected), findsOne);
-        expect(find.text(detailsExpected), findsOne);
+        // First task in the list during test is always Task 1
+        expect(find.text("Task 1"), findsNothing);
       });
     });
   });

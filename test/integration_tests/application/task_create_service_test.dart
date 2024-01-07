@@ -21,6 +21,7 @@ void main() {
     });
 
     tearDown(() async {
+      await testDatabaseProvider.closeDatabase();
       await testDatabaseProvider.deleteDatabase();
     });
 

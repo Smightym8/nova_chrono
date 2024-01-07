@@ -19,8 +19,16 @@ class TestDatabaseProvider {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
 
-    _database = await openDatabase(path,
-        version: _databaseVersion, onCreate: _onCreate);
+    _database = await openDatabase(
+      path,
+      version: _databaseVersion,
+      onCreate: _onCreate,
+      readOnly: false
+    );
+  }
+
+  Future<void> closeDatabase() async {
+    await _database.close();
   }
 
   Future<void> deleteDatabase() async {
