@@ -16,7 +16,7 @@ import 'package:nova_chrono/view/pages/home_page.dart';
 import 'package:nova_chrono/view/providers/task_filter_date_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../utils/test_database_provider.dart';
+import 'test_database_provider.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -41,7 +41,6 @@ void main() {
     });
 
     tearDown(() async {
-      await testDatabaseProvider.closeDatabase();
       await testDatabaseProvider.deleteDatabase();
     });
 
@@ -64,6 +63,9 @@ void main() {
             ),
           ),
         );
+
+        await Future.delayed(const Duration(seconds: 1));
+        await tester.pumpAndSettle();
 
         var createTaskButtonFinder = find.byType(FloatingActionButton);
         await tester.tap(createTaskButtonFinder);

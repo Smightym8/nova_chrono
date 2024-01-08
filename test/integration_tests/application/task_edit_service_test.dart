@@ -5,7 +5,7 @@ import 'package:nova_chrono/domain/model/task.dart';
 import 'package:nova_chrono/domain/repository/task_repository.dart';
 import 'package:nova_chrono/infrastructure/task_repository_impl.dart';
 
-import '../../utils/test_database_provider.dart';
+import '../../../integration_test/test_database_provider.dart';
 
 void main() {
   group("TaskEditService Integration Tests", () {

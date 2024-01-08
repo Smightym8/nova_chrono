@@ -4,7 +4,7 @@ import 'package:nova_chrono/application/impl/task_create_service_impl.dart';
 import 'package:nova_chrono/domain/repository/task_repository.dart';
 import 'package:nova_chrono/infrastructure/task_repository_impl.dart';
 
-import '../../utils/test_database_provider.dart';
+import '../../../integration_test/test_database_provider.dart';
 
 void main() {
   group("TaskCreateService Integration Tests", () {
