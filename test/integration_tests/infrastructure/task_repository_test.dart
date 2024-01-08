@@ -6,7 +6,7 @@ import 'package:nova_chrono/infrastructure/task_repository_impl.dart';
 import '../../utils/test_database_provider.dart';
 
 void main() {
-  group("TaskRepository tests", () {
+  group("TaskRepository integration tests", () {
     late TestDatabaseProvider testDatabaseProvider;
     late TaskRepository taskRepository;
 
@@ -39,16 +39,20 @@ void main() {
 
     test("Given date when getByDate then expected tasks are returned", () async {
       // Given
-      var date = DateTime.now().add(const Duration(days: -2));
+      var now = DateTime.now();
+      var startTimestamp3 = now.subtract(const Duration(days: 2));
+      var endTimestamp3 = startTimestamp3.add(const Duration(hours: 1));
+      var startTimestamp4 = now.subtract(const Duration(days: 2)).add(const Duration(hours: 1));
+      var endTimestamp4 = startTimestamp4.add(const Duration(hours: 2));
       var tasksExpected = <Task>[
-        Task("3", "Task 3", date,
-            date, "Some Details for task 3"),
-        Task("4", "Task 4", date,
-            date, "Some Details for task 4"),
+        Task("3", "Task 3", startTimestamp3,
+            endTimestamp3, "Some Details for task 3"),
+        Task("4", "Task 4", startTimestamp4,
+            endTimestamp4, "Some Details for task 4"),
       ];
 
       // When
-      var tasksActual = await taskRepository.getByDate(date);
+      var tasksActual = await taskRepository.getByDate(startTimestamp3);
 
       // Then
       expect(tasksActual.length, tasksExpected.length);

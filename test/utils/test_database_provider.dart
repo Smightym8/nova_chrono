@@ -52,37 +52,38 @@ class TestDatabaseProvider {
   }
 
   Future<void> generateTestdata(Database db) async {
-    var startTimestamp = DateTime.now();
-    var endTimestamp = startTimestamp.add(const Duration(hours: 1));
+    var now = DateTime.now();
 
+    var startTimestamp = now;
+    var endTimestamp = now.add(const Duration(hours: 1));
     await db.execute('''
     INSERT INTO task(id, name, startTimestamp, endTimestamp, details)
     VALUES('1', 'Task 1', '${startTimestamp.toString()}', 
     '${endTimestamp.toString()}', '');
     ''');
 
-    startTimestamp = startTimestamp.add(const Duration(hours: -3));
-    endTimestamp = startTimestamp.add(const Duration(hours: -2));
+    var startTimestamp2 = now.subtract(const Duration(hours: 3));
+    var endTimestamp2 = startTimestamp2.add(const Duration(hours: 2));
     await db.execute('''
     INSERT INTO task(id, name, startTimestamp, endTimestamp, details)
-    VALUES('2', 'Task 2', '${startTimestamp.toString()}', 
-    '${endTimestamp.toString()}', 'Some details for task 2');
+    VALUES('2', 'Task 2', '${startTimestamp2.toString()}', 
+    '${endTimestamp2.toString()}', 'Some details for task 2');
     ''');
 
-    startTimestamp = startTimestamp.add(const Duration(days: -2));
-    endTimestamp = startTimestamp.add(const Duration(hours: 3));
+    var startTimestamp3 = now.subtract(const Duration(days: 2));
+    var endTimestamp3 = startTimestamp3.add(const Duration(hours: 1));
     await db.execute('''
     INSERT INTO task(id, name, startTimestamp, endTimestamp, details)
-    VALUES('3', 'Task 3', '${startTimestamp.toString()}', 
-    '${endTimestamp.toString()}', 'Some details for task 3');
+    VALUES('3', 'Task 3', '${startTimestamp3.toString()}', 
+    '${endTimestamp3.toString()}', 'Some details for task 3');
     ''');
 
-    startTimestamp = startTimestamp.add(const Duration(hours: 1));
-    endTimestamp = startTimestamp.add(const Duration(hours: 2));
+    var startTimestamp4 = now.subtract(const Duration(days: 2)).add(const Duration(hours: 1));
+    var endTimestamp4 = startTimestamp4.add(const Duration(hours: 2));
     await db.execute('''
     INSERT INTO task(id, name, startTimestamp, endTimestamp, details)
-    VALUES('4', 'Task 4', '${startTimestamp.toString()}', 
-    '${endTimestamp.toString()}', 'Some details for task 4');
+    VALUES('4', 'Task 4', '${startTimestamp4.toString()}', 
+    '${endTimestamp4.toString()}', 'Some details for task 4');
     ''');
   }
 }
