@@ -12,15 +12,16 @@ import 'package:nova_chrono/application/impl/task_list_service_impl.dart';
 import 'package:nova_chrono/domain/repository/task_repository.dart';
 import 'package:nova_chrono/infrastructure/task_repository_impl.dart';
 import 'package:nova_chrono/main.dart';
+import 'package:nova_chrono/view/pages/home_page.dart';
 import 'package:nova_chrono/view/providers/task_filter_date_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../utils/test_database_provider.dart';
+import 'test_database_provider.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  group("Deleting task flow test", () {
+  group("Edit task flow test", () {
     late TestDatabaseProvider testDatabaseProvider;
     late TaskRepository taskRepository;
     late TaskListService taskListService;
@@ -40,13 +41,15 @@ void main() {
     });
 
     tearDown(() async {
-      await testDatabaseProvider.closeDatabase();
       await testDatabaseProvider.deleteDatabase();
     });
 
-    testWidgets("Given at leas one task in the task list when deleting a task "
-        "the task is not in the list anymore", (tester) async {
+    testWidgets("Given task in task list when editing task the information "
+        "of the task are updated", (tester) async {
       await tester.runAsync(() async {
+        const taskNameExpected = "Test Task";
+        const detailsExpected = "Details for the test task";
+
         await tester.pumpWidget(
           MultiProvider(
             providers: [
@@ -64,21 +67,34 @@ void main() {
         await Future.delayed(const Duration(seconds: 1));
         await tester.pumpAndSettle();
 
-        final deleteInkWellFinder = find.widgetWithIcon(
+        final editInkWellFinder = find.widgetWithIcon(
             InkWell,
-            Icons.delete_forever
+            Icons.edit
         ).first;
 
-        // To prove that task is there
-        expect(find.text("Task 1"), findsOne);
+        await tester.tap(editInkWellFinder);
 
-        await tester.tap(deleteInkWellFinder);
+        await tester.pumpAndSettle();
+
+        var taskNameTextFieldFinder = find.byKey(const Key("taskNameTextField"));
+        await tester.enterText(taskNameTextFieldFinder, taskNameExpected);
+
+        var detailsTextFieldFinder = find.byKey(const Key("detailsTextField"));
+        await tester.enterText(detailsTextFieldFinder, detailsExpected);
+
+        var saveButtonFinder = find.byKey(const Key('saveButton'));
+        await tester.ensureVisible(saveButtonFinder);
+        await tester.tapAt(tester.getCenter(saveButtonFinder));
 
         await Future.delayed(const Duration(seconds: 1));
         await tester.pumpAndSettle();
 
-        // First task in the list during test is always Task 1
-        expect(find.text("Task 1"), findsNothing);
+        await Future.delayed(const Duration(seconds: 1));
+        await tester.pumpAndSettle();
+
+        expect(find.byType(HomePage), findsOne);
+        expect(find.text(taskNameExpected), findsOne);
+        expect(find.text(detailsExpected), findsOne);
       });
     });
   });
