@@ -7,10 +7,10 @@ import 'dart:async' as _i4;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i3;
-import 'package:nova_chrono/application/api/task_create_service.dart' as _i6;
-import 'package:nova_chrono/application/api/task_delete_service.dart' as _i9;
-import 'package:nova_chrono/application/api/task_edit_service.dart' as _i8;
-import 'package:nova_chrono/application/api/task_list_service.dart' as _i7;
+import 'package:nova_chrono/application/api/task/task_create_service.dart' as _i6;
+import 'package:nova_chrono/application/api/task/task_delete_service.dart' as _i9;
+import 'package:nova_chrono/application/api/task/task_edit_service.dart' as _i8;
+import 'package:nova_chrono/application/api/task/task_list_service.dart' as _i7;
 import 'package:nova_chrono/domain/model/task.dart' as _i5;
 import 'package:nova_chrono/domain/repository/task_repository.dart' as _i2;
 

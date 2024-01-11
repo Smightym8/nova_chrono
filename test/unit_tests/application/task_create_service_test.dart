@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:mockito/mockito.dart';
-import 'package:nova_chrono/application/api/task_create_service.dart';
-import 'package:nova_chrono/application/impl/task_create_service_impl.dart';
+import 'package:nova_chrono/application/api/task/task_create_service.dart';
+import 'package:nova_chrono/application/impl/task/task_create_service_impl.dart';
 import 'package:nova_chrono/domain/model/task.dart';
 import 'package:test/test.dart';
 

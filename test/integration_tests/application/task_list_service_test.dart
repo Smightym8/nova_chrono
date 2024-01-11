@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:nova_chrono/application/api/task_list_service.dart';
-import 'package:nova_chrono/application/impl/task_list_service_impl.dart';
+import 'package:nova_chrono/application/api/task/task_list_service.dart';
+import 'package:nova_chrono/application/impl/task/task_list_service_impl.dart';
 import 'package:nova_chrono/domain/model/task.dart';
 import 'package:nova_chrono/domain/repository/task_repository.dart';
 import 'package:nova_chrono/infrastructure/task_repository_impl.dart';

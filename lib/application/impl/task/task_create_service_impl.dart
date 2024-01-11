@@ -1,8 +1,8 @@
 import 'package:nova_chrono/domain/model/task.dart';
 import 'package:nova_chrono/domain/repository/task_repository.dart';
 
-import '../../main.dart';
-import '../api/task_create_service.dart';
+import '../../../main.dart';
+import '../../api/task/task_create_service.dart';
 
 class TaskCreateServiceImpl implements TaskCreateService {
   late TaskRepository _taskRepository;
