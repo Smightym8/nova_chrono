@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:nova_chrono/application/api/common_task_name_create_service.dart';
+import 'package:nova_chrono/application/api/common_task_name_edit_service.dart';
 import 'package:nova_chrono/main.dart';
 
 import '../../application/api/common_task_name_list_service.dart';
 import '../../domain/model/common_task_name.dart';
 import '../components/search_box.dart';
+import 'create_edit_common_task_name_page.dart';
 
 class CommonTaskNamesListPage extends StatefulWidget {
   const CommonTaskNamesListPage({
     super.key,
     required this.title,
     this.commonTaskNameListService,
+    this.commonTaskNameCreateService,
+    this.commonTaskNameEditService,
   });
 
   final String title;
   final CommonTaskNameListService? commonTaskNameListService;
+  final CommonTaskNameCreateService? commonTaskNameCreateService;
+  final CommonTaskNameEditService? commonTaskNameEditService;
 
   @override
   State<CommonTaskNamesListPage> createState() =>
@@ -63,12 +70,17 @@ class _CommonTaskNamesListPageState extends State<CommonTaskNamesListPage> {
           Expanded(
               child: FutureBuilder(
                   future: _commonTaskNamesFuture,
-                  builder: (BuildContext context, AsyncSnapshot<List<CommonTaskName>> snapshot) {
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<CommonTaskName>> snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(
                         child: Text(
                           "Loading common task names...",
-                          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.black,),
+                          style: TextStyle(
+                            fontSize: 25,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
                       );
                     } else {
@@ -98,9 +110,11 @@ class _CommonTaskNamesListPageState extends State<CommonTaskNamesListPage> {
                         var filteredCommonTaskNames = snapshot.data!;
 
                         if (_searchTerm.isNotEmpty) {
-                          filteredCommonTaskNames = filteredCommonTaskNames.where((commonTaskName) =>
-                            commonTaskName.name.toLowerCase().contains(_searchTerm.toLowerCase())
-                          ).toList();
+                          filteredCommonTaskNames = filteredCommonTaskNames
+                              .where((commonTaskName) => commonTaskName.name
+                                  .toLowerCase()
+                                  .contains(_searchTerm.toLowerCase()))
+                              .toList();
                         }
 
                         if (filteredCommonTaskNames.isEmpty) {
@@ -127,16 +141,20 @@ class _CommonTaskNamesListPageState extends State<CommonTaskNamesListPage> {
                                     color: Colors.yellow.shade300,
                                     boxShadow: const [
                                       BoxShadow(
-                                          color: Colors.black12, blurRadius: 12, spreadRadius: 1),
+                                          color: Colors.black12,
+                                          blurRadius: 12,
+                                          spreadRadius: 1),
                                     ],
                                   ),
                                   child: Column(
                                     children: [
                                       ListTile(
-                                          contentPadding: const EdgeInsets.all(10),
+                                          contentPadding:
+                                              const EdgeInsets.all(10),
                                           title: Text(
                                             name,
-                                            style: const TextStyle(fontSize: 19),
+                                            style:
+                                                const TextStyle(fontSize: 19),
                                           ),
                                           trailing: const Row(
                                             mainAxisSize: MainAxisSize.min,
@@ -154,21 +172,36 @@ class _CommonTaskNamesListPageState extends State<CommonTaskNamesListPage> {
                                                 ),
                                               )
                                             ],
-                                          )
-                                      )
+                                          ))
                                     ],
-                                  )
-                              );
+                                  ));
                             },
-                            separatorBuilder: (BuildContext context, int index) => const Divider(),
+                            separatorBuilder:
+                                (BuildContext context, int index) =>
+                                    const Divider(),
                           );
                         }
                       }
                     }
-                  }
-              )
-          )
+                  }))
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        key: const Key("createEditCommonTaskNamePageFloatingActionButton"),
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => CreateEditCommonTaskNamePage(
+                        commonTaskNameCreateService:
+                            widget.commonTaskNameCreateService,
+                        commonTaskNameEditService:
+                            widget.commonTaskNameEditService,
+                      )));
+        },
+        tooltip: 'Add new common task name',
+        heroTag: "newCommonTaskNameButton",
+        child: const Icon(Icons.add),
       ),
     );
   }
