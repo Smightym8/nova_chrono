@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nova_chrono/view/shared/date_formatter.dart';
 
+// TODO: integrate common task names as suggestions
+
 class CreateEditTaskForm extends StatefulWidget {
   const CreateEditTaskForm({
     super.key,

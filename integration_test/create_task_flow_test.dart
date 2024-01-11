@@ -67,8 +67,8 @@ void main() {
         await Future.delayed(const Duration(seconds: 1));
         await tester.pumpAndSettle();
 
-        var createTaskButtonFinder = find.byType(FloatingActionButton);
-        await tester.tap(createTaskButtonFinder);
+        var createEditTaskPageFloatingActionButtonFinder = find.byKey(const Key("createEditTaskPageFloatingActionButton"));
+        await tester.tap(createEditTaskPageFloatingActionButtonFinder);
 
         await tester.pumpAndSettle();
 

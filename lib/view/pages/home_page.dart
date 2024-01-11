@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:nova_chrono/application/api/common_task_name_create_service.dart';
 import 'package:nova_chrono/application/api/task_delete_service.dart';
 import 'package:nova_chrono/application/api/task_edit_service.dart';
 import 'package:nova_chrono/application/api/task_list_service.dart';
 import 'package:nova_chrono/view/components/search_box.dart';
+import 'package:nova_chrono/view/pages/create_edit_common_task_name_page.dart';
 import 'package:nova_chrono/view/providers/task_filter_date_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../application/api/common_task_name_edit_service.dart';
 import '../../application/api/task_create_service.dart';
 import '../../domain/model/task.dart';
 import '../../main.dart';
@@ -14,20 +17,24 @@ import '../shared/date_formatter.dart';
 import 'create_edit_task_page.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({
-    super.key,
-    required this.title,
-    this.taskCreateService,
-    this.taskListService,
-    this.taskEditService,
-    this.taskDeleteService
-  });
+  const HomePage(
+      {super.key,
+      required this.title,
+      this.taskCreateService,
+      this.taskListService,
+      this.taskEditService,
+      this.taskDeleteService,
+      this.commonTaskNameCreateService,
+      this.commonTaskNameEditService});
 
   final String title;
   final TaskCreateService? taskCreateService;
   final TaskListService? taskListService;
   final TaskEditService? taskEditService;
   final TaskDeleteService? taskDeleteService;
+
+  final CommonTaskNameCreateService? commonTaskNameCreateService;
+  final CommonTaskNameEditService? commonTaskNameEditService;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -204,22 +211,45 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => CreateEditTaskPage(
-                        taskCreateService: widget.taskCreateService,
-                        taskEditService: widget.taskEditService,
-                        taskListService: _taskListService,
-                        taskDeleteService: _taskDeleteService,
-                      )
-              )
-          );
-        },
-        tooltip: 'Add new task',
-        child: const Icon(Icons.add),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            key: const Key("createEditTaskPageFloatingActionButton"),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CreateEditTaskPage(
+                            taskCreateService: widget.taskCreateService,
+                            taskEditService: widget.taskEditService,
+                            taskListService: _taskListService,
+                            taskDeleteService: _taskDeleteService,
+                          )));
+            },
+            tooltip: 'Add new task',
+            heroTag: "newTaskButton",
+            child: const Icon(Icons.add),
+          ),
+          const SizedBox(width: 10.0,),
+          FloatingActionButton(
+            key: const Key("createEditCommonTaskNamePageFloatingActionButton"),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CreateEditCommonTaskNamePage(
+                        commonTaskNameCreateService: widget.commonTaskNameCreateService,
+                        commonTaskNameEditService: widget.commonTaskNameEditService,
+                      )));
+            },
+            tooltip: 'Add new common task name',
+            heroTag: "newCommonTaskNameButton",
+            child: const Icon(Icons.add),
+          ),
+        ],
       ),
     );
   }
