@@ -1,4 +1,6 @@
 import 'package:mockito/annotations.dart';
+import 'package:nova_chrono/application/api/common_task_name_delete_service.dart';
+import 'package:nova_chrono/application/api/common_task_name_list_service.dart';
 import 'package:nova_chrono/application/api/task_create_service.dart';
 import 'package:nova_chrono/application/api/task_delete_service.dart';
 import 'package:nova_chrono/application/api/task_edit_service.dart';
@@ -12,6 +14,8 @@ import 'package:nova_chrono/domain/repository/task_repository.dart';
   TaskListService,
   TaskEditService,
   TaskDeleteService,
-  CommonTaskNameRepository
+  CommonTaskNameRepository,
+  CommonTaskNameListService,
+  CommonTaskNameDeleteService
 ])
 void main() {}

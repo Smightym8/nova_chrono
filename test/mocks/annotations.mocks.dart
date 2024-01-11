@@ -7,6 +7,10 @@ import 'dart:async' as _i5;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i4;
+import 'package:nova_chrono/application/api/common_task_name_delete_service.dart'
+    as _i13;
+import 'package:nova_chrono/application/api/common_task_name_list_service.dart'
+    as _i12;
 import 'package:nova_chrono/application/api/task_create_service.dart' as _i7;
 import 'package:nova_chrono/application/api/task_delete_service.dart' as _i10;
 import 'package:nova_chrono/application/api/task_edit_service.dart' as _i9;
@@ -300,4 +304,45 @@ class MockCommonTaskNameRepository extends _i1.Mock
         returnValue:
             _i5.Future<List<_i2.CommonTaskName>>.value(<_i2.CommonTaskName>[]),
       ) as _i5.Future<List<_i2.CommonTaskName>>);
+}
+
+/// A class which mocks [CommonTaskNameListService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCommonTaskNameListService extends _i1.Mock
+    implements _i12.CommonTaskNameListService {
+  MockCommonTaskNameListService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.Future<List<_i2.CommonTaskName>> getAllCommonTaskNames() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAllCommonTaskNames,
+          [],
+        ),
+        returnValue:
+            _i5.Future<List<_i2.CommonTaskName>>.value(<_i2.CommonTaskName>[]),
+      ) as _i5.Future<List<_i2.CommonTaskName>>);
+}
+
+/// A class which mocks [CommonTaskNameDeleteService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCommonTaskNameDeleteService extends _i1.Mock
+    implements _i13.CommonTaskNameDeleteService {
+  MockCommonTaskNameDeleteService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.Future<void> deleteCommonTaskName(String? id) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteCommonTaskName,
+          [id],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 }
