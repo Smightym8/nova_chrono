@@ -1,4 +1,3 @@
-import 'package:nova_chrono/domain/model/common_task_name.dart';
 import 'package:nova_chrono/domain/repository/common_task_name_repository.dart';
 import 'package:nova_chrono/main.dart';
 
@@ -12,9 +11,16 @@ class CommonTaskNameEditServiceImpl implements CommonTaskNameEditService {
   }
 
   @override
-  void editCommonTaskName(String id, String name) {
-    var commonTaskName = CommonTaskName(id, name);
+  Future<void> editCommonTaskName(String id, String name) async {
+    var commonTaskName = await _commonTaskNameRepository.getById(id);
 
-    _commonTaskNameRepository.updateCommonTaskName(commonTaskName);
+    if (commonTaskName == null) {
+      // TODO: Throw exception
+      print("CommonTaskName not found!");
+    }
+
+    commonTaskName?.update(name);
+
+    _commonTaskNameRepository.updateCommonTaskName(commonTaskName!);
   }
 }

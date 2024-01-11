@@ -133,6 +133,7 @@ class _CommonTaskNamesListPageState extends State<CommonTaskNamesListPage> {
                             padding: const EdgeInsets.all(8),
                             itemCount: filteredCommonTaskNames.length,
                             itemBuilder: (BuildContext context, int index) {
+                              var id = filteredCommonTaskNames[index].id;
                               var name = filteredCommonTaskNames[index].name;
 
                               return Container(
@@ -156,16 +157,29 @@ class _CommonTaskNamesListPageState extends State<CommonTaskNamesListPage> {
                                             style:
                                                 const TextStyle(fontSize: 19),
                                           ),
-                                          trailing: const Row(
+                                          trailing: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               InkWell(
-                                                child: Icon(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) => CreateEditCommonTaskNamePage(
+                                                            commonTaskNameCreateService:
+                                                            widget.commonTaskNameCreateService,
+                                                            commonTaskNameEditService:
+                                                            widget.commonTaskNameEditService,
+                                                            commonTaskNameId: id,
+                                                            commonTaskName: name,
+                                                          )));
+                                                },
+                                                child: const Icon(
                                                   Icons.edit,
                                                   color: Colors.orange,
                                                 ),
                                               ),
-                                              InkWell(
+                                              const InkWell(
                                                 child: Icon(
                                                   Icons.delete_forever,
                                                   color: Colors.red,

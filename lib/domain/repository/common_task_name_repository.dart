@@ -6,6 +6,6 @@ abstract class CommonTaskNameRepository {
 
   Future<void> updateCommonTaskName(CommonTaskName commonTaskName);
   Future<void> deleteCommonTaskName(String id);
-  Future<CommonTaskName> getById(String id);
+  Future<CommonTaskName?> getById(String id);
   Future<List<CommonTaskName>> getAll();
 }
