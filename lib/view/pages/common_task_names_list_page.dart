@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nova_chrono/application/api/common_task_name_create_service.dart';
+import 'package:nova_chrono/application/api/common_task_name_delete_service.dart';
 import 'package:nova_chrono/application/api/common_task_name_edit_service.dart';
 import 'package:nova_chrono/main.dart';
 
@@ -13,12 +14,14 @@ class CommonTaskNamesListPage extends StatefulWidget {
     super.key,
     required this.title,
     this.commonTaskNameListService,
+    this.commonTaskNameDeleteService,
     this.commonTaskNameCreateService,
     this.commonTaskNameEditService,
   });
 
   final String title;
   final CommonTaskNameListService? commonTaskNameListService;
+  final CommonTaskNameDeleteService? commonTaskNameDeleteService;
   final CommonTaskNameCreateService? commonTaskNameCreateService;
   final CommonTaskNameEditService? commonTaskNameEditService;
 
@@ -29,6 +32,7 @@ class CommonTaskNamesListPage extends StatefulWidget {
 
 class _CommonTaskNamesListPageState extends State<CommonTaskNamesListPage> {
   late CommonTaskNameListService _commonTaskNameListService;
+  late CommonTaskNameDeleteService _commonTaskNameDeleteService;
   late String _searchTerm;
   late Future<List<CommonTaskName>> _commonTaskNamesFuture;
 
@@ -36,6 +40,7 @@ class _CommonTaskNamesListPageState extends State<CommonTaskNamesListPage> {
   void initState() {
     _commonTaskNameListService =
         widget.commonTaskNameListService ?? getIt<CommonTaskNameListService>();
+    _commonTaskNameDeleteService = widget.commonTaskNameDeleteService ?? getIt<CommonTaskNameDeleteService>();
     _searchTerm = "";
     _commonTaskNamesFuture = _commonTaskNameListService.getAllCommonTaskNames();
 
@@ -45,6 +50,14 @@ class _CommonTaskNamesListPageState extends State<CommonTaskNamesListPage> {
   void setSearchTerm(String searchTerm) {
     setState(() {
       _searchTerm = searchTerm;
+    });
+  }
+
+  Future<void> onDeletePressed(String id) async {
+    await _commonTaskNameDeleteService.deleteCommonTaskName(id);
+
+    setState(() {
+      _commonTaskNamesFuture = _commonTaskNameListService.getAllCommonTaskNames();
     });
   }
 
@@ -133,6 +146,7 @@ class _CommonTaskNamesListPageState extends State<CommonTaskNamesListPage> {
                             padding: const EdgeInsets.all(8),
                             itemCount: filteredCommonTaskNames.length,
                             itemBuilder: (BuildContext context, int index) {
+                              var id = filteredCommonTaskNames[index].id;
                               var name = filteredCommonTaskNames[index].name;
 
                               return Container(
@@ -156,17 +170,20 @@ class _CommonTaskNamesListPageState extends State<CommonTaskNamesListPage> {
                                             style:
                                                 const TextStyle(fontSize: 19),
                                           ),
-                                          trailing: const Row(
+                                          trailing: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              InkWell(
+                                              const InkWell(
                                                 child: Icon(
                                                   Icons.edit,
                                                   color: Colors.orange,
                                                 ),
                                               ),
                                               InkWell(
-                                                child: Icon(
+                                                onTap: () async {
+                                                  await onDeletePressed(id);
+                                                },
+                                                child: const Icon(
                                                   Icons.delete_forever,
                                                   color: Colors.red,
                                                 ),
