@@ -36,6 +36,13 @@ class DatabaseProvider {
           )
     ''');
 
+    await db.execute('''
+          CREATE TABLE common_task_name (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL
+          )
+    ''');
+
     await generateTestdata(db);
   }
 
@@ -58,6 +65,18 @@ class DatabaseProvider {
 
         taskId++;
       }
+    }
+
+    var commonTaskNameId = 1;
+    for (int i = 0; i < 5; i++) {
+      final sqlStatement = '''
+          INSERT INTO common_task_name(id, name)
+          VALUES('$commonTaskNameId', 'Common task name $commonTaskNameId');
+        ''';
+
+      await db.execute(sqlStatement);
+
+      commonTaskNameId++;
     }
   }
 }
