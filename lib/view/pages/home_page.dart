@@ -182,6 +182,7 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
+            key: const Key("createEditTaskFloatingActionButton"),
             onPressed: () {
               Navigator.push(
                   context,
@@ -197,6 +198,7 @@ class _HomePageState extends State<HomePage> {
           ),
           const SizedBox(width: 10.0,),
           FloatingActionButton(
+            key: const Key("createEditCommonTaskNameFloatingActionButton"),
             onPressed: () {
               Navigator.push(
                   context,

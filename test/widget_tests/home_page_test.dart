@@ -23,7 +23,7 @@ void main() {
     mockTaskDeleteService = MockTaskDeleteService();
   });
 
-  testWidgets('HomePage has a title and a floatingActionButton',
+  testWidgets('HomePage has a title and two floatingActionButtons',
       (tester) async {
     final List<Task> tasks = <Task>[];
     final Future<List<Task>> tasksFuture = Future(() => tasks);
@@ -52,12 +52,14 @@ void main() {
     );
 
     final titleFinder = find.text(title);
-    final floatingActionButtonFinder = find.byType(FloatingActionButton);
+    final createEditTaskFloatingActionButtonFinder = find.byKey(const Key("createEditTaskFloatingActionButton"));
+    final createEditCommonTaskNameFloatingActionButtonFinder = find.byKey(const Key("createEditCommonTaskNameFloatingActionButton"));
 
     await tester.pumpAndSettle();
 
     expect(titleFinder, findsOneWidget);
-    expect(floatingActionButtonFinder, findsOneWidget);
+    expect(createEditTaskFloatingActionButtonFinder, findsOneWidget);
+    expect(createEditCommonTaskNameFloatingActionButtonFinder, findsOneWidget);
   });
 
   testWidgets(
@@ -89,8 +91,9 @@ void main() {
         )
     );
 
-    // Tap on the floating action button
-    await tester.tap(find.byType(FloatingActionButton));
+    final createEditTaskFloatingActionButtonFinder = find.byKey(const Key("createEditTaskFloatingActionButton"));
+
+    await tester.tap(createEditTaskFloatingActionButtonFinder);
 
     // Trigger a frame
     await tester.pumpAndSettle();
