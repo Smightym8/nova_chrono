@@ -33,7 +33,6 @@ class TaskList extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       itemCount: tasks.length,
       itemBuilder: (BuildContext context, int index) {
-        // TODO: Filter
         var taskId = tasks[index].id;
         var taskName = tasks[index].name;
         var startTimestamp = tasks[index].startTimestamp;
