@@ -3,11 +3,15 @@ import 'package:nova_chrono/application/api/task_create_service.dart';
 import 'package:nova_chrono/application/api/task_delete_service.dart';
 import 'package:nova_chrono/application/api/task_edit_service.dart';
 import 'package:nova_chrono/application/api/task_list_service.dart';
+import 'package:nova_chrono/domain/repository/common_task_name_repository.dart';
 import 'package:nova_chrono/domain/repository/task_repository.dart';
 
-@GenerateMocks([TaskRepository])
-@GenerateMocks([TaskCreateService])
-@GenerateMocks([TaskListService])
-@GenerateMocks([TaskEditService])
-@GenerateMocks([TaskDeleteService])
+@GenerateMocks([
+  TaskRepository,
+  TaskCreateService,
+  TaskListService,
+  TaskEditService,
+  TaskDeleteService,
+  CommonTaskNameRepository
+])
 void main() {}
