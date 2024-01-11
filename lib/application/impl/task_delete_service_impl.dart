@@ -12,6 +12,7 @@ class TaskDeleteServiceImpl implements TaskDeleteService {
 
   @override
   Future<void> deleteTask(String taskId) async {
+    // TODO: Check if task exists
     await _taskRepository.deleteTask(taskId);
   }
 }

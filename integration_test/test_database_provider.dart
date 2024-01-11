@@ -1,26 +1,40 @@
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-class DatabaseProvider {
-  static const _databaseName = "novachrono.db";
+class TestDatabaseProvider {
+  static const _databaseName = "novachrono_test.db";
   static const _databaseVersion = 1;
   late Database _database;
 
-  DatabaseProvider._privateConstructor();
+  TestDatabaseProvider._privateConstructor();
 
-  static final DatabaseProvider instance =
-      DatabaseProvider._privateConstructor();
+  static final TestDatabaseProvider instance = TestDatabaseProvider
+      ._privateConstructor();
 
   Database get database => _database;
 
-  initDatabase() async {
+  Future<void> initDatabase() async {
     String path = join(".", _databaseName);
 
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
 
-    _database = await openDatabase(path,
-        version: _databaseVersion, onCreate: _onCreate);
+    _database = await openDatabase(
+      path,
+      version: _databaseVersion,
+      onCreate: _onCreate,
+      readOnly: false
+    );
+  }
+
+  Future<void> closeDatabase() async {
+    await _database.close();
+  }
+
+  Future<void> deleteDatabase() async {
+    String path = join(".", _databaseName);
+
+    await databaseFactory.deleteDatabase(path);
   }
 
   Future _onCreate(Database db, int version) async {
@@ -31,13 +45,6 @@ class DatabaseProvider {
             startTimestamp TEXT NOT NULL,
             endTimestamp TEXT NOT NULL,
             details TEXT NOT NULL
-          )
-    ''');
-
-    await db.execute('''
-          CREATE TABLE common_task_name (
-            id TEXT PRIMARY KEY,
-            name TEXT NOT NULL
           )
     ''');
 
@@ -63,7 +70,7 @@ class DatabaseProvider {
     '${endTimestamp2.toString()}', 'Some details for task 2');
     ''');
 
-    var startTimestamp3 = now.subtract(const Duration(days: 1));
+    var startTimestamp3 = now.subtract(const Duration(days: 2));
     var endTimestamp3 = startTimestamp3.add(const Duration(hours: 1));
     await db.execute('''
     INSERT INTO task(id, name, startTimestamp, endTimestamp, details)
@@ -71,24 +78,12 @@ class DatabaseProvider {
     '${endTimestamp3.toString()}', 'Some details for task 3');
     ''');
 
-    var startTimestamp4 = now.subtract(const Duration(days: 1)).add(const Duration(hours: 1));
+    var startTimestamp4 = now.subtract(const Duration(days: 2)).add(const Duration(hours: 1));
     var endTimestamp4 = startTimestamp4.add(const Duration(hours: 2));
     await db.execute('''
     INSERT INTO task(id, name, startTimestamp, endTimestamp, details)
     VALUES('4', 'Task 4', '${startTimestamp4.toString()}', 
     '${endTimestamp4.toString()}', 'Some details for task 4');
     ''');
-    
-    var commonTaskNameId = 1;
-    for (int i = 0; i < 5; i++) {
-      final sqlStatement = '''
-          INSERT INTO common_task_name(id, name)
-          VALUES('$commonTaskNameId', 'Common task name $commonTaskNameId');
-        ''';
-
-      await db.execute(sqlStatement);
-
-      commonTaskNameId++;
-    }
   }
 }

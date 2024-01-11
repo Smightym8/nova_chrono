@@ -3,7 +3,7 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
+import 'dart:async' as _i4;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i3;
@@ -11,7 +11,7 @@ import 'package:nova_chrono/application/api/task_create_service.dart' as _i6;
 import 'package:nova_chrono/application/api/task_delete_service.dart' as _i9;
 import 'package:nova_chrono/application/api/task_edit_service.dart' as _i8;
 import 'package:nova_chrono/application/api/task_list_service.dart' as _i7;
-import 'package:nova_chrono/domain/model/task.dart' as _i4;
+import 'package:nova_chrono/domain/model/task.dart' as _i5;
 import 'package:nova_chrono/domain/repository/task_repository.dart' as _i2;
 
 // ignore_for_file: type=lint
@@ -51,42 +51,51 @@ class MockTaskRepository extends _i1.Mock implements _i2.TaskRepository {
       ) as String);
 
   @override
-  void add(_i4.Task? task) => super.noSuchMethod(
+  _i4.Future<int> add(_i5.Task? task) => (super.noSuchMethod(
         Invocation.method(
           #add,
           [task],
         ),
-        returnValueForMissingStub: null,
-      );
+        returnValue: _i4.Future<int>.value(0),
+      ) as _i4.Future<int>);
 
   @override
-  _i5.Future<List<_i4.Task>> getByDate(DateTime? date) => (super.noSuchMethod(
+  _i4.Future<_i5.Task?> getById(String? taskId) => (super.noSuchMethod(
+        Invocation.method(
+          #getById,
+          [taskId],
+        ),
+        returnValue: _i4.Future<_i5.Task?>.value(),
+      ) as _i4.Future<_i5.Task?>);
+
+  @override
+  _i4.Future<List<_i5.Task>> getByDate(DateTime? date) => (super.noSuchMethod(
         Invocation.method(
           #getByDate,
           [date],
         ),
-        returnValue: _i5.Future<List<_i4.Task>>.value(<_i4.Task>[]),
-      ) as _i5.Future<List<_i4.Task>>);
+        returnValue: _i4.Future<List<_i5.Task>>.value(<_i5.Task>[]),
+      ) as _i4.Future<List<_i5.Task>>);
 
   @override
-  _i5.Future<void> updateTask(_i4.Task? task) => (super.noSuchMethod(
+  _i4.Future<void> updateTask(_i5.Task? task) => (super.noSuchMethod(
         Invocation.method(
           #updateTask,
           [task],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 
   @override
-  _i5.Future<void> deleteTask(String? id) => (super.noSuchMethod(
+  _i4.Future<void> deleteTask(String? id) => (super.noSuchMethod(
         Invocation.method(
           #deleteTask,
           [id],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 }
 
 /// A class which mocks [TaskCreateService].
@@ -98,13 +107,13 @@ class MockTaskCreateService extends _i1.Mock implements _i6.TaskCreateService {
   }
 
   @override
-  void createTask(
+  _i4.Future<String> createTask(
     String? taskName,
     DateTime? startTimestamp,
     DateTime? endTimestamp,
     String? details,
   ) =>
-      super.noSuchMethod(
+      (super.noSuchMethod(
         Invocation.method(
           #createTask,
           [
@@ -114,8 +123,19 @@ class MockTaskCreateService extends _i1.Mock implements _i6.TaskCreateService {
             details,
           ],
         ),
-        returnValueForMissingStub: null,
-      );
+        returnValue: _i4.Future<String>.value(_i3.dummyValue<String>(
+          this,
+          Invocation.method(
+            #createTask,
+            [
+              taskName,
+              startTimestamp,
+              endTimestamp,
+              details,
+            ],
+          ),
+        )),
+      ) as _i4.Future<String>);
 }
 
 /// A class which mocks [TaskListService].
@@ -127,14 +147,14 @@ class MockTaskListService extends _i1.Mock implements _i7.TaskListService {
   }
 
   @override
-  _i5.Future<List<_i4.Task>> getTasksByDate(DateTime? date) =>
+  _i4.Future<List<_i5.Task>> getTasksByDate(DateTime? date) =>
       (super.noSuchMethod(
         Invocation.method(
           #getTasksByDate,
           [date],
         ),
-        returnValue: _i5.Future<List<_i4.Task>>.value(<_i4.Task>[]),
-      ) as _i5.Future<List<_i4.Task>>);
+        returnValue: _i4.Future<List<_i5.Task>>.value(<_i5.Task>[]),
+      ) as _i4.Future<List<_i5.Task>>);
 }
 
 /// A class which mocks [TaskEditService].
@@ -146,14 +166,14 @@ class MockTaskEditService extends _i1.Mock implements _i8.TaskEditService {
   }
 
   @override
-  void editTask(
+  _i4.Future<void> editTask(
     String? taskId,
     String? taskName,
     DateTime? startTimestamp,
     DateTime? endTimestamp,
     String? details,
   ) =>
-      super.noSuchMethod(
+      (super.noSuchMethod(
         Invocation.method(
           #editTask,
           [
@@ -164,8 +184,9 @@ class MockTaskEditService extends _i1.Mock implements _i8.TaskEditService {
             details,
           ],
         ),
-        returnValueForMissingStub: null,
-      );
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 }
 
 /// A class which mocks [TaskDeleteService].
@@ -177,12 +198,12 @@ class MockTaskDeleteService extends _i1.Mock implements _i9.TaskDeleteService {
   }
 
   @override
-  _i5.Future<void> deleteTask(String? taskId) => (super.noSuchMethod(
+  _i4.Future<void> deleteTask(String? taskId) => (super.noSuchMethod(
         Invocation.method(
           #deleteTask,
           [taskId],
         ),
-        returnValue: _i5.Future<void>.value(),
-        returnValueForMissingStub: _i5.Future<void>.value(),
-      ) as _i5.Future<void>);
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
 }

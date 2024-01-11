@@ -12,13 +12,19 @@ class TaskCreateServiceImpl implements TaskCreateService {
   }
 
   @override
-  void createTask(String taskName, DateTime startTimestamp, DateTime endTimestamp,
-      String? details) {
+  Future<String> createTask(String taskName, DateTime startTimestamp, DateTime endTimestamp,
+      String? details) async {
     String id = _taskRepository.nextIdentity();
     details = details ?? "";
 
     var task = Task(id, taskName, startTimestamp, endTimestamp, details);
 
-    _taskRepository.add(task);
+    int dbId = await _taskRepository.add(task);
+    if (dbId == 0) {
+      // TODO: Handle error
+      print("Error during saving task!");
+    }
+
+    return id;
   }
 }

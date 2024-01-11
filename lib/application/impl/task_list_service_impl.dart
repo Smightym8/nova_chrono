@@ -13,6 +13,10 @@ class TaskListServiceImpl implements TaskListService {
 
   @override
   Future<List<Task>> getTasksByDate(DateTime date) async {
-    return await _taskRepository.getByDate(date);
+    var tasks = await _taskRepository.getByDate(date);
+
+    tasks.sort((a, b) => b.startTimestamp.compareTo(a.startTimestamp));
+
+    return tasks;
   }
 }

@@ -7,6 +7,11 @@ import 'package:uuid/uuid.dart';
 class TaskRepositoryImpl implements TaskRepository {
   static const String table = 'task';
   static const uuid = Uuid();
+  late Database _database;
+
+  TaskRepositoryImpl({Database? database}) {
+    _database = database ?? databaseProvider.database;
+  }
 
   @override
   String nextIdentity() {
@@ -14,21 +19,52 @@ class TaskRepositoryImpl implements TaskRepository {
   }
 
   @override
-  Future<void> add(Task task) async {
-    var database = databaseProvider.database;
+  Future<int> add(Task task) async {
+    int id = 0;
 
-    await database.insert(
+    await _database.transaction((txn) async {
+      id = await txn.insert(
+        table,
+        task.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.rollback,
+      );
+    });
+
+    return id;
+  }
+
+  @override
+  Future<Task?> getById(String taskId) async {
+    final List<Map<String, dynamic>> maps = await _database.query(
       table,
-      task.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
+      where: 'id = ?',
+      whereArgs: [taskId],
     );
+
+    List<Task> tasks = List.generate(maps.length, (i) {
+      var id = maps[i]['id'] as String;
+      var name = maps[i]['name'] as String;
+      var startTimestamp = maps[i]['startTimestamp'] as String;
+      var endTimestamp = maps[i]['endTimestamp'] as String;
+      var details = maps[i]['details'] as String;
+
+      return Task(
+        id,
+        name,
+        DateTime.parse(startTimestamp),
+        DateTime.parse(endTimestamp),
+        details,
+      );
+    });
+
+    Task? task = tasks.firstOrNull;
+
+    return task;
   }
 
   @override
   Future<List<Task>> getByDate(DateTime date) async {
-    var database = databaseProvider.database;
-
-    final List<Map<String, dynamic>> maps = await database.query(
+    final List<Map<String, dynamic>> maps = await _database.query(
       table,
       where: 'DATE(startTimestamp) = DATE(?) OR DATE(endTimestamp) = DATE(?)',
       whereArgs: [date.toString(), date.toString()],
@@ -53,9 +89,7 @@ class TaskRepositoryImpl implements TaskRepository {
 
   @override
   Future<void> updateTask(Task task) async {
-    var database = databaseProvider.database;
-
-    await database.update(
+    await _database.update(
       table,
       task.toMap(),
       where: 'id = ?',
@@ -65,9 +99,7 @@ class TaskRepositoryImpl implements TaskRepository {
 
   @override
   Future<void> deleteTask(String id) async {
-    var database = databaseProvider.database;
-
-    await database.delete(
+    await _database.delete(
       table,
       where: 'id = ?',
       whereArgs: [id],
