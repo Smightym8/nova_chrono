@@ -26,7 +26,7 @@ void main() {
   });
 
   testWidgets('HomePage has a title, a searchbox, a textformfield, a tasklist '
-      'and a floatingActionButton',
+      'and two floatingActionButtons',
       (tester) async {
     final List<Task> tasks = <Task>[
       Task("1", "Test", DateTime.now(), DateTime.now(), "Test"),
@@ -68,7 +68,7 @@ void main() {
     expect(searchBoxFinder, findsOneWidget);
     expect(textFormFieldFinder, findsOneWidget);
     expect(listViewFinder, findsOneWidget);
-    expect(floatingActionButtonFinder, findsOneWidget);
+    expect(floatingActionButtonFinder, findsExactly(2));
   });
 
   testWidgets(
@@ -100,8 +100,8 @@ void main() {
         )
     );
 
-    // Tap on the floating action button
-    await tester.tap(find.byType(FloatingActionButton));
+    var createEditTaskPageFloatingActionButtonFinder = find.byKey(const Key("createEditTaskPageFloatingActionButton"));
+    await tester.tap(createEditTaskPageFloatingActionButtonFinder);
 
     // Trigger a frame
     await tester.pumpAndSettle();

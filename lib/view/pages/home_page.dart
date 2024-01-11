@@ -217,7 +217,7 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           FloatingActionButton(
-            key: const Key("createEditTaskFloatingActionButton"),
+            key: const Key("createEditTaskPageFloatingActionButton"),
             onPressed: () {
               Navigator.push(
                   context,
@@ -225,6 +225,8 @@ class _HomePageState extends State<HomePage> {
                       builder: (context) => CreateEditTaskPage(
                             taskCreateService: widget.taskCreateService,
                             taskEditService: widget.taskEditService,
+                            taskListService: _taskListService,
+                            taskDeleteService: _taskDeleteService,
                           )));
             },
             tooltip: 'Add new task',
@@ -233,7 +235,7 @@ class _HomePageState extends State<HomePage> {
           ),
           const SizedBox(width: 10.0,),
           FloatingActionButton(
-            key: const Key("createEditCommonTaskNameFloatingActionButton"),
+            key: const Key("createEditCommonTaskNamePageFloatingActionButton"),
             onPressed: () {
               Navigator.push(
                   context,
