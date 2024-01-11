@@ -39,6 +39,7 @@ class _SearchBoxState extends State<SearchBox> {
           border: Border.all(color: Colors.black),
         ),
         child: TextField(
+          key: const Key("searchBoxTextField"),
           controller: _textFieldController,
           onChanged: (_) => widget.onChanged(_textFieldController.text),
           decoration: InputDecoration(

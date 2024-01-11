@@ -31,6 +31,8 @@ GetIt getIt = GetIt.instance;
 DatabaseProvider databaseProvider = DatabaseProvider.instance;
 
 void main() async {
+  await databaseProvider.initDatabase();
+
   getIt.registerSingleton<TaskRepository>(TaskRepositoryImpl());
   getIt.registerSingleton<TaskCreateService>(TaskCreateServiceImpl());
   getIt.registerSingleton<TaskListService>(TaskListServiceImpl());
@@ -55,9 +57,19 @@ void main() async {
 }
 
 class App extends StatelessWidget {
-  const App({super.key});
+  const App({
+    super.key,
+    this.taskCreateService,
+    this.taskListService,
+    this.taskEditService,
+    this.taskDeleteService
+  });
 
   final String title = 'NovaChrono';
+  final TaskCreateService? taskCreateService;
+  final TaskListService? taskListService;
+  final TaskEditService? taskEditService;
+  final TaskDeleteService? taskDeleteService;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +79,13 @@ class App extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomePage(title: "NovaChrono"),
+      home: HomePage(
+        title: title,
+        taskCreateService: taskCreateService,
+        taskListService: taskListService,
+        taskEditService: taskEditService,
+        taskDeleteService: taskDeleteService,
+      ),
     );
   }
 }

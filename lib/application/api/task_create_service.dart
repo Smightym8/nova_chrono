@@ -1,4 +1,4 @@
 abstract class TaskCreateService {
-  void createTask(String taskName, DateTime startTimestamp, DateTime endTimestamp,
+  Future<String> createTask(String taskName, DateTime startTimestamp, DateTime endTimestamp,
       String? details);
 }
