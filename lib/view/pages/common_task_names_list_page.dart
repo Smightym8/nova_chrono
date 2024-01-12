@@ -40,7 +40,8 @@ class _CommonTaskNamesListPageState extends State<CommonTaskNamesListPage> {
   void initState() {
     _commonTaskNameListService =
         widget.commonTaskNameListService ?? getIt<CommonTaskNameListService>();
-    _commonTaskNameDeleteService = widget.commonTaskNameDeleteService ?? getIt<CommonTaskNameDeleteService>();
+    _commonTaskNameDeleteService = widget.commonTaskNameDeleteService ??
+        getIt<CommonTaskNameDeleteService>();
     _searchTerm = "";
     _commonTaskNamesFuture = _commonTaskNameListService.getAllCommonTaskNames();
 
@@ -57,7 +58,8 @@ class _CommonTaskNamesListPageState extends State<CommonTaskNamesListPage> {
     await _commonTaskNameDeleteService.deleteCommonTaskName(id);
 
     setState(() {
-      _commonTaskNamesFuture = _commonTaskNameListService.getAllCommonTaskNames();
+      _commonTaskNamesFuture =
+          _commonTaskNameListService.getAllCommonTaskNames();
     });
   }
 
@@ -173,8 +175,21 @@ class _CommonTaskNamesListPageState extends State<CommonTaskNamesListPage> {
                                           trailing: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              const InkWell(
-                                                child: Icon(
+                                              InkWell(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) => CreateEditCommonTaskNamePage(
+                                                            commonTaskNameCreateService:
+                                                            widget.commonTaskNameCreateService,
+                                                            commonTaskNameEditService:
+                                                            widget.commonTaskNameEditService,
+                                                            commonTaskNameId: id,
+                                                            commonTaskName: name,
+                                                          )));
+                                                },
+                                                child: const Icon(
                                                   Icons.edit,
                                                   color: Colors.orange,
                                                 ),
