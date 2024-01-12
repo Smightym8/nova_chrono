@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:nova_chrono/application/api/common_task_name_create_service.dart';
-import 'package:nova_chrono/application/api/common_task_name_delete_service.dart';
-import 'package:nova_chrono/application/api/common_task_name_edit_service.dart';
 import 'package:nova_chrono/main.dart';
 
-import '../../application/api/common_task_name_list_service.dart';
+import '../../application/api/common_task_name/common_task_name_create_service.dart';
+import '../../application/api/common_task_name/common_task_name_delete_service.dart';
+import '../../application/api/common_task_name/common_task_name_edit_service.dart';
+import '../../application/api/common_task_name/common_task_name_list_service.dart';
 import '../../domain/model/common_task_name.dart';
 import '../components/search_box.dart';
 import 'create_edit_common_task_name_page.dart';

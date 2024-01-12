@@ -1,7 +1,7 @@
-import 'package:nova_chrono/application/api/common_task_name_delete_service.dart';
 import 'package:nova_chrono/domain/repository/common_task_name_repository.dart';
 
-import '../../main.dart';
+import '../../../main.dart';
+import '../../api/common_task_name/common_task_name_delete_service.dart';
 
 class CommonTaskNameDeleteServiceImpl implements CommonTaskNameDeleteService {
   late CommonTaskNameRepository _commonTaskNameRepository;

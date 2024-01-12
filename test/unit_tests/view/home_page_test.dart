@@ -6,6 +6,7 @@ import 'package:nova_chrono/domain/model/task.dart';
 import 'package:nova_chrono/view/pages/common_task_names_list_page.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
 import 'package:nova_chrono/view/pages/task_list_page.dart';
+import 'package:nova_chrono/view/providers/selected_page_provider.dart';
 import 'package:nova_chrono/view/providers/task_filter_date_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -41,6 +42,7 @@ void main() {
           MultiProvider(
             providers: [
               ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
+              ChangeNotifierProvider(create: (context) => SelectedPageProvider()),
             ],
             child:  Directionality(
               textDirection: TextDirection.ltr,

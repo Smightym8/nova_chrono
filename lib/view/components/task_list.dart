@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:nova_chrono/application/api/task_delete_service.dart';
+import 'package:nova_chrono/application/api/task/task_delete_service.dart';
 import 'package:nova_chrono/domain/model/task.dart';
 import 'package:nova_chrono/view/shared/date_formatter.dart';
 
-import '../../application/api/task_create_service.dart';
-import '../../application/api/task_edit_service.dart';
-import '../../application/api/task_list_service.dart';
+import '../../application/api/task/task_create_service.dart';
+import '../../application/api/task/task_edit_service.dart';
+import '../../application/api/task/task_list_service.dart';
 import '../pages/create_edit_task_page.dart';
 
 class TaskList extends StatelessWidget {

@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:nova_chrono/application/api/task_create_service.dart';
-import 'package:nova_chrono/application/api/task_delete_service.dart';
-import 'package:nova_chrono/application/api/task_edit_service.dart';
-import 'package:nova_chrono/application/api/task_list_service.dart';
-import 'package:nova_chrono/application/impl/task_create_service_impl.dart';
-import 'package:nova_chrono/application/impl/task_delete_service_impl.dart';
-import 'package:nova_chrono/application/impl/task_edit_service_impl.dart';
-import 'package:nova_chrono/application/impl/task_list_service_impl.dart';
+import 'package:nova_chrono/application/api/task/task_create_service.dart';
+import 'package:nova_chrono/application/api/task/task_delete_service.dart';
+import 'package:nova_chrono/application/api/task/task_edit_service.dart';
+import 'package:nova_chrono/application/api/task/task_list_service.dart';
+import 'package:nova_chrono/application/impl/task/task_create_service_impl.dart';
+import 'package:nova_chrono/application/impl/task/task_delete_service_impl.dart';
+import 'package:nova_chrono/application/impl/task/task_edit_service_impl.dart';
+import 'package:nova_chrono/application/impl/task/task_list_service_impl.dart';
 import 'package:nova_chrono/domain/repository/task_repository.dart';
 import 'package:nova_chrono/infrastructure/task_repository_impl.dart';
 import 'package:nova_chrono/main.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
+import 'package:nova_chrono/view/providers/selected_page_provider.dart';
 import 'package:nova_chrono/view/providers/task_filter_date_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -54,6 +55,7 @@ void main() {
           MultiProvider(
             providers: [
               ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
+              ChangeNotifierProvider(create: (context) => SelectedPageProvider()),
             ],
             child: App(
               taskCreateService: taskCreateService,

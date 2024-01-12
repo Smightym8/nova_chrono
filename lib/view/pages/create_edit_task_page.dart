@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:nova_chrono/application/api/task_create_service.dart';
-import 'package:nova_chrono/application/api/task_delete_service.dart';
-import 'package:nova_chrono/application/api/task_edit_service.dart';
+import 'package:nova_chrono/application/api/task/task_create_service.dart';
+import 'package:nova_chrono/application/api/task/task_delete_service.dart';
+import 'package:nova_chrono/application/api/task/task_edit_service.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
 import 'package:provider/provider.dart';
 
-import '../../application/api/task_list_service.dart';
+import '../../application/api/task/task_list_service.dart';
 import '../../domain/model/task.dart';
 import '../../main.dart';
 import '../components/create_edit_task_form.dart';

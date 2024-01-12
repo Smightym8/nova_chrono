@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:nova_chrono/application/api/task_delete_service.dart';
-import 'package:nova_chrono/application/impl/task_delete_service_impl.dart';
+import 'package:nova_chrono/application/api/task/task_delete_service.dart';
+import 'package:nova_chrono/application/impl/task/task_delete_service_impl.dart';
 
 import '../../mocks/annotations.mocks.dart';
 

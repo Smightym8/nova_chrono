@@ -1,6 +1,6 @@
 class CommonTaskName {
-  late final _id;
-  late final _name;
+  late final String _id;
+  late String _name;
 
   CommonTaskName(String id, String name,) {
     _id = id;
@@ -10,6 +10,10 @@ class CommonTaskName {
   String get id => _id;
 
   String get name => _name;
+
+  void update(String name) {
+    _name = name;
+  }
 
   Map<String, dynamic> toMap() {
     return {

@@ -1,8 +1,8 @@
-import 'package:nova_chrono/application/api/task_edit_service.dart';
+import 'package:nova_chrono/application/api/task/task_edit_service.dart';
 
-import '../../domain/model/task.dart';
-import '../../domain/repository/task_repository.dart';
-import '../../main.dart';
+import '../../../domain/model/task.dart';
+import '../../../domain/repository/task_repository.dart';
+import '../../../main.dart';
 
 class TaskEditServiceImpl implements TaskEditService {
   late TaskRepository _taskRepository;

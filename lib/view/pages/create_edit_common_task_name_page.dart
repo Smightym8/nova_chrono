@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:nova_chrono/application/api/common_task_name_create_service.dart';
-import 'package:nova_chrono/application/api/common_task_name_edit_service.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
 
+import '../../application/api/common_task_name/common_task_name_create_service.dart';
+import '../../application/api/common_task_name/common_task_name_edit_service.dart';
 import '../../domain/model/task.dart';
 import '../../main.dart';
 import '../components/create_edit_common_task_name_form.dart';
@@ -44,15 +44,19 @@ class _CreateEditCommonTaskNamePageState extends State<CreateEditCommonTaskNameP
     }
   }
 
-  void save(String commonTaskName) {
+  Future<void> save(String commonTaskName) async {
     if (widget.commonTaskNameId == null) {
-      _commonTaskNameCreateService.createCommonTaskName(
+      await _commonTaskNameCreateService.createCommonTaskName(
           commonTaskName);
     } else {
-      _commonTaskNameEditService.editCommonTaskName(
+      await _commonTaskNameEditService.editCommonTaskName(
           widget.commonTaskNameId!, commonTaskName);
     }
 
+    navigateToHomePage();
+  }
+
+  void navigateToHomePage() {
     Navigator.push(
         context,
         MaterialPageRoute(
