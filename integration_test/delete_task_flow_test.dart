@@ -12,6 +12,7 @@ import 'package:nova_chrono/application/impl/task/task_list_service_impl.dart';
 import 'package:nova_chrono/domain/repository/task_repository.dart';
 import 'package:nova_chrono/infrastructure/task_repository_impl.dart';
 import 'package:nova_chrono/main.dart';
+import 'package:nova_chrono/view/providers/selected_page_provider.dart';
 import 'package:nova_chrono/view/providers/task_filter_date_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -50,6 +51,7 @@ void main() {
           MultiProvider(
             providers: [
               ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
+              ChangeNotifierProvider(create: (context) => SelectedPageProvider()),
             ],
             child: App(
               taskCreateService: taskCreateService,

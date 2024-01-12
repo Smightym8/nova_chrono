@@ -4,6 +4,8 @@ import 'package:nova_chrono/application/api/task/task_edit_service.dart';
 import 'package:nova_chrono/application/api/task/task_list_service.dart';
 import 'package:nova_chrono/view/pages/common_task_names_list_page.dart';
 import 'package:nova_chrono/view/pages/task_list_page.dart';
+import 'package:nova_chrono/view/providers/selected_page_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../application/api/task/task_create_service.dart';
 
@@ -28,11 +30,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late int _selectedIndex;
+  late SelectedPageProvider _selectedPageProvider;
+  late int _selectedPageIndex;
 
   @override
   void initState() {
-    _selectedIndex = 0;
+    _selectedPageProvider = context.read<SelectedPageProvider>();
+    _selectedPageIndex = _selectedPageProvider.selectedPageIndex;
 
     super.initState();
   }
@@ -40,7 +44,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Widget page;
-    switch (_selectedIndex) {
+    switch (_selectedPageIndex) {
       case 0:
         page = TaskListPage(
           title: widget.title,
@@ -55,7 +59,7 @@ class _HomePageState extends State<HomePage> {
           title: widget.title,
         );
       default:
-        throw UnimplementedError('no widget for $_selectedIndex');
+        throw UnimplementedError('no widget for $_selectedPageIndex');
     }
 
     return LayoutBuilder(
@@ -77,10 +81,12 @@ class _HomePageState extends State<HomePage> {
                         label: Text('Common Task Names'),
                       ),
                     ],
-                    selectedIndex: _selectedIndex,
+                    selectedIndex: _selectedPageIndex,
                     onDestinationSelected: (value) {
+                      _selectedPageProvider.selectedPageIndex = value;
+
                       setState(() {
-                        _selectedIndex = value;
+                        _selectedPageIndex = value;
                       });
                     },
                   ),
