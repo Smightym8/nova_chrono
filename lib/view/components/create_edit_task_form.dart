@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nova_chrono/view/shared/date_formatter.dart';
 
+import '../../domain/model/common_task_name.dart';
+
 // TODO: integrate common task names as suggestions
 
 class CreateEditTaskForm extends StatefulWidget {
@@ -10,7 +12,8 @@ class CreateEditTaskForm extends StatefulWidget {
     this.taskName,
     this.startTimestamp,
     this.endTimestamp,
-    this.details
+    this.details,
+    required this.commonTaskNames
   });
 
   final Function onSavePressed;
@@ -18,6 +21,7 @@ class CreateEditTaskForm extends StatefulWidget {
   final DateTime? startTimestamp;
   final DateTime? endTimestamp;
   final String? details;
+  final List<CommonTaskName> commonTaskNames;
 
   @override
   State<CreateEditTaskForm> createState() => _CreateEditTaskFormState();
@@ -69,22 +73,23 @@ class _CreateEditTaskFormState extends State<CreateEditTaskForm> {
       );
     _detailsController = TextEditingController(text: widget.details);
 
-    _commonTaskNames = [
-      const DropdownMenuEntry<String>(value: "Task 1", label: "Task 1"),
-      const DropdownMenuEntry<String>(value: "Task 2", label: "Task 2"),
-      const DropdownMenuEntry<String>(value: "Task 3", label: "Task 3"),
-      const DropdownMenuEntry<String>(value: "Task 4", label: "Task 4"),
-      const DropdownMenuEntry<String>(value: "Task 5", label: "Task 5"),
-    ];
+    _commonTaskNames = [];
+    for (var taskName in widget.commonTaskNames) {
+      var dropdownMenuEntry = DropdownMenuEntry<String>(value: taskName.name, label: taskName.name);
+
+      _commonTaskNames.add(dropdownMenuEntry);
+    }
   }
 
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
     _taskNameController.dispose();
+    _taskNameSelectionController.dispose();
     _startTimestampController.dispose();
     _endTimestampController.dispose();
     _detailsController.dispose();
+
     super.dispose();
   }
 
