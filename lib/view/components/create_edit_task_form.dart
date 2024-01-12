@@ -26,15 +26,19 @@ class CreateEditTaskForm extends StatefulWidget {
 class _CreateEditTaskFormState extends State<CreateEditTaskForm> {
   late GlobalKey<FormState> _formKey;
   late TextEditingController _taskNameController;
+  late TextEditingController _taskNameSelectionController;
   late TextEditingController _startTimestampController;
   late TextEditingController _endTimestampController;
   late TextEditingController _detailsController;
   late DateTime _selectedStartTimeStamp;
   late DateTime _selectedEndTimeStamp;
+  late String? _taskNameSelectionErrorText;
+  late List<DropdownMenuEntry<String>> _commonTaskNames;
 
   @override
   void initState() {
     _formKey = GlobalKey<FormState>();
+    _taskNameSelectionErrorText = null;
     initForm();
 
     super.initState();
@@ -56,6 +60,7 @@ class _CreateEditTaskFormState extends State<CreateEditTaskForm> {
     }
 
     _taskNameController = TextEditingController(text: widget.taskName);
+    _taskNameSelectionController = TextEditingController();
     _startTimestampController = TextEditingController(
         text: DateFormatter.formatDateWithTime(_selectedStartTimeStamp)
     );
@@ -63,6 +68,24 @@ class _CreateEditTaskFormState extends State<CreateEditTaskForm> {
             text: DateFormatter.formatDateWithTime(_selectedEndTimeStamp)
       );
     _detailsController = TextEditingController(text: widget.details);
+
+    _commonTaskNames = [
+      const DropdownMenuEntry<String>(value: "Task 1", label: "Task 1"),
+      const DropdownMenuEntry<String>(value: "Task 2", label: "Task 2"),
+      const DropdownMenuEntry<String>(value: "Task 3", label: "Task 3"),
+      const DropdownMenuEntry<String>(value: "Task 4", label: "Task 4"),
+      const DropdownMenuEntry<String>(value: "Task 5", label: "Task 5"),
+    ];
+  }
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    _taskNameController.dispose();
+    _startTimestampController.dispose();
+    _endTimestampController.dispose();
+    _detailsController.dispose();
+    super.dispose();
   }
 
   Future<void> _selectDate(bool isStart) async {
@@ -113,14 +136,26 @@ class _CreateEditTaskFormState extends State<CreateEditTaskForm> {
     });
   }
 
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    _taskNameController.dispose();
-    _startTimestampController.dispose();
-    _endTimestampController.dispose();
-    _detailsController.dispose();
-    super.dispose();
+  Future<void> submitForm() async {
+    bool isValid = _formKey.currentState!.validate();
+
+    if (_taskNameController.text.isEmpty && _taskNameSelectionController.text.isEmpty) {
+      setState(() {
+        _taskNameSelectionErrorText = 'Or select a task name.';
+      });
+    }
+
+    if (isValid) {
+      var taskName = _taskNameController.text.isEmpty ?
+      _taskNameSelectionController.text : _taskNameController.text;
+
+      await widget.onSavePressed(
+          taskName,
+          _selectedStartTimeStamp,
+          _selectedEndTimeStamp,
+          _detailsController.text
+      );
+    }
   }
 
   @override
@@ -132,23 +167,58 @@ class _CreateEditTaskFormState extends State<CreateEditTaskForm> {
         children: [
           Padding(
             padding: const EdgeInsets.all(16),
-            child: TextFormField(
-              key: const Key('taskNameTextField'),
-              controller: _taskNameController,
-              decoration: const InputDecoration(
-                labelText: 'Task name',
-                border: OutlineInputBorder(),
-                focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blue)
-                ),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter some text.';
-                }
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    key: const Key('taskNameTextField'),
+                    controller: _taskNameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Task name',
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue)
+                      ),
+                    ),
+                    onChanged: (_) {
+                      setState(() {
+                        _taskNameSelectionController.text = '';
+                      });
+                    },
+                    validator: (value) {
+                      if (_taskNameSelectionController.text.isEmpty && (value == null || value.isEmpty)) {
+                        return 'Please enter a task name.';
+                      }
 
-                return null;
-              },
+                      return null;
+                    },
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: DropdownMenu<String>(
+                    controller: _taskNameSelectionController,
+                    label: const Text('Common Task name'),
+                    errorText: _taskNameSelectionErrorText,
+                    expandedInsets: const EdgeInsets.all(0) ,
+                    enableFilter: true,
+                    inputDecorationTheme: const InputDecorationTheme(
+                      border: OutlineInputBorder(),
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue)
+                      ),
+                    ),
+                    onSelected: (String? value) {
+                      setState(() {
+                        _taskNameController.text = '';
+                        _taskNameSelectionErrorText = null;
+                      });
+                    },
+                    dropdownMenuEntries: _commonTaskNames,
+                  ),
+                ),
+              ],
             ),
           ),
           Padding(
@@ -236,16 +306,7 @@ class _CreateEditTaskFormState extends State<CreateEditTaskForm> {
                     padding: const EdgeInsets.all(8.0),
                     child: ElevatedButton(
                       key: const Key('saveButton'),
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
-                          await widget.onSavePressed(
-                              _taskNameController.text,
-                              _selectedStartTimeStamp,
-                              _selectedEndTimeStamp,
-                              _detailsController.text
-                          );
-                        }
-                      },
+                      onPressed: submitForm,
                       child: const Text('Save'),
                     ),
                   ),
