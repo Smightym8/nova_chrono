@@ -22,6 +22,6 @@ class CommonTaskNameEditServiceImpl implements CommonTaskNameEditService {
 
     commonTaskName?.update(name);
 
-    _commonTaskNameRepository.updateCommonTaskName(commonTaskName!);
+    await _commonTaskNameRepository.updateCommonTaskName(commonTaskName!);
   }
 }

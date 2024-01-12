@@ -44,8 +44,6 @@ void main() async {
   getIt.registerSingleton<CommonTaskNameListService>(CommonTaskNameListServiceImpl());
   getIt.registerSingleton<CommonTaskNameDeleteService>(CommonTaskNameDeleteServiceImpl());
 
-  await databaseProvider.initDatabase();
-
   runApp(
     MultiProvider(
       providers: [

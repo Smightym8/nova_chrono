@@ -15,5 +15,4 @@ class CommonTaskNameListServiceImpl implements CommonTaskNameListService {
   Future<List<CommonTaskName>> getAllCommonTaskNames() async {
     return await _commonTaskNameRepository.getAll();
   }
-
 }

@@ -1,3 +1,3 @@
 abstract class CommonTaskNameEditService {
-  void editCommonTaskName(String id, String name);
+  Future<void> editCommonTaskName(String id, String name);
 }

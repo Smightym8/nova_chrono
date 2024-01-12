@@ -44,15 +44,19 @@ class _CreateEditCommonTaskNamePageState extends State<CreateEditCommonTaskNameP
     }
   }
 
-  void save(String commonTaskName) {
+  Future<void> save(String commonTaskName) async {
     if (widget.commonTaskNameId == null) {
-      _commonTaskNameCreateService.createCommonTaskName(
+      await _commonTaskNameCreateService.createCommonTaskName(
           commonTaskName);
     } else {
-      _commonTaskNameEditService.editCommonTaskName(
+      await _commonTaskNameEditService.editCommonTaskName(
           widget.commonTaskNameId!, commonTaskName);
     }
 
+    navigateToHomePage();
+  }
+
+  void navigateToHomePage() {
     Navigator.push(
         context,
         MaterialPageRoute(

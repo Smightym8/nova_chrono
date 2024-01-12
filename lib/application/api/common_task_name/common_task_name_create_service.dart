@@ -1,3 +1,3 @@
 abstract class CommonTaskNameCreateService {
-  void createCommonTaskName(String name);
+  Future<void> createCommonTaskName(String name);
 }

@@ -11,12 +11,11 @@ class CommonTaskNameCreateServiceImpl implements CommonTaskNameCreateService {
   }
 
   @override
-  void createCommonTaskName(String name) {
+  Future<void> createCommonTaskName(String name) async {
     String id = _commonTaskNameRepository.nextIdentity();
 
     var commonTaskName = CommonTaskName(id, name);
 
-    _commonTaskNameRepository.add(commonTaskName);
+    await _commonTaskNameRepository.add(commonTaskName);
   }
-
 }
