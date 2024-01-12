@@ -3,16 +3,23 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i5;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i3;
-import 'package:nova_chrono/application/api/task/task_create_service.dart' as _i6;
-import 'package:nova_chrono/application/api/task/task_delete_service.dart' as _i9;
-import 'package:nova_chrono/application/api/task/task_edit_service.dart' as _i8;
-import 'package:nova_chrono/application/api/task/task_list_service.dart' as _i7;
-import 'package:nova_chrono/domain/model/task.dart' as _i5;
-import 'package:nova_chrono/domain/repository/task_repository.dart' as _i2;
+import 'package:mockito/src/dummies.dart' as _i4;
+import 'package:nova_chrono/application/api/common_task_name_delete_service.dart'
+    as _i13;
+import 'package:nova_chrono/application/api/common_task_name_list_service.dart'
+    as _i12;
+import 'package:nova_chrono/application/api/task_create_service.dart' as _i7;
+import 'package:nova_chrono/application/api/task_delete_service.dart' as _i10;
+import 'package:nova_chrono/application/api/task_edit_service.dart' as _i9;
+import 'package:nova_chrono/application/api/task_list_service.dart' as _i8;
+import 'package:nova_chrono/domain/model/common_task_name.dart' as _i2;
+import 'package:nova_chrono/domain/model/task.dart' as _i6;
+import 'package:nova_chrono/domain/repository/common_task_name_repository.dart'
+    as _i11;
+import 'package:nova_chrono/domain/repository/task_repository.dart' as _i3;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -27,10 +34,21 @@ import 'package:nova_chrono/domain/repository/task_repository.dart' as _i2;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
+class _FakeCommonTaskName_0 extends _i1.SmartFake
+    implements _i2.CommonTaskName {
+  _FakeCommonTaskName_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [TaskRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTaskRepository extends _i1.Mock implements _i2.TaskRepository {
+class MockTaskRepository extends _i1.Mock implements _i3.TaskRepository {
   MockTaskRepository() {
     _i1.throwOnMissingStub(this);
   }
@@ -41,7 +59,7 @@ class MockTaskRepository extends _i1.Mock implements _i2.TaskRepository {
           #nextIdentity,
           [],
         ),
-        returnValue: _i3.dummyValue<String>(
+        returnValue: _i4.dummyValue<String>(
           this,
           Invocation.method(
             #nextIdentity,
@@ -51,63 +69,63 @@ class MockTaskRepository extends _i1.Mock implements _i2.TaskRepository {
       ) as String);
 
   @override
-  _i4.Future<int> add(_i5.Task? task) => (super.noSuchMethod(
+  _i5.Future<int> add(_i6.Task? task) => (super.noSuchMethod(
         Invocation.method(
           #add,
           [task],
         ),
-        returnValue: _i4.Future<int>.value(0),
-      ) as _i4.Future<int>);
+        returnValue: _i5.Future<int>.value(0),
+      ) as _i5.Future<int>);
 
   @override
-  _i4.Future<_i5.Task?> getById(String? taskId) => (super.noSuchMethod(
+  _i5.Future<_i6.Task?> getById(String? taskId) => (super.noSuchMethod(
         Invocation.method(
           #getById,
           [taskId],
         ),
-        returnValue: _i4.Future<_i5.Task?>.value(),
-      ) as _i4.Future<_i5.Task?>);
+        returnValue: _i5.Future<_i6.Task?>.value(),
+      ) as _i5.Future<_i6.Task?>);
 
   @override
-  _i4.Future<List<_i5.Task>> getByDate(DateTime? date) => (super.noSuchMethod(
+  _i5.Future<List<_i6.Task>> getByDate(DateTime? date) => (super.noSuchMethod(
         Invocation.method(
           #getByDate,
           [date],
         ),
-        returnValue: _i4.Future<List<_i5.Task>>.value(<_i5.Task>[]),
-      ) as _i4.Future<List<_i5.Task>>);
+        returnValue: _i5.Future<List<_i6.Task>>.value(<_i6.Task>[]),
+      ) as _i5.Future<List<_i6.Task>>);
 
   @override
-  _i4.Future<void> updateTask(_i5.Task? task) => (super.noSuchMethod(
+  _i5.Future<void> updateTask(_i6.Task? task) => (super.noSuchMethod(
         Invocation.method(
           #updateTask,
           [task],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 
   @override
-  _i4.Future<void> deleteTask(String? id) => (super.noSuchMethod(
+  _i5.Future<void> deleteTask(String? id) => (super.noSuchMethod(
         Invocation.method(
           #deleteTask,
           [id],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 }
 
 /// A class which mocks [TaskCreateService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTaskCreateService extends _i1.Mock implements _i6.TaskCreateService {
+class MockTaskCreateService extends _i1.Mock implements _i7.TaskCreateService {
   MockTaskCreateService() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<String> createTask(
+  _i5.Future<String> createTask(
     String? taskName,
     DateTime? startTimestamp,
     DateTime? endTimestamp,
@@ -123,7 +141,7 @@ class MockTaskCreateService extends _i1.Mock implements _i6.TaskCreateService {
             details,
           ],
         ),
-        returnValue: _i4.Future<String>.value(_i3.dummyValue<String>(
+        returnValue: _i5.Future<String>.value(_i4.dummyValue<String>(
           this,
           Invocation.method(
             #createTask,
@@ -135,38 +153,38 @@ class MockTaskCreateService extends _i1.Mock implements _i6.TaskCreateService {
             ],
           ),
         )),
-      ) as _i4.Future<String>);
+      ) as _i5.Future<String>);
 }
 
 /// A class which mocks [TaskListService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTaskListService extends _i1.Mock implements _i7.TaskListService {
+class MockTaskListService extends _i1.Mock implements _i8.TaskListService {
   MockTaskListService() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<List<_i5.Task>> getTasksByDate(DateTime? date) =>
+  _i5.Future<List<_i6.Task>> getTasksByDate(DateTime? date) =>
       (super.noSuchMethod(
         Invocation.method(
           #getTasksByDate,
           [date],
         ),
-        returnValue: _i4.Future<List<_i5.Task>>.value(<_i5.Task>[]),
-      ) as _i4.Future<List<_i5.Task>>);
+        returnValue: _i5.Future<List<_i6.Task>>.value(<_i6.Task>[]),
+      ) as _i5.Future<List<_i6.Task>>);
 }
 
 /// A class which mocks [TaskEditService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTaskEditService extends _i1.Mock implements _i8.TaskEditService {
+class MockTaskEditService extends _i1.Mock implements _i9.TaskEditService {
   MockTaskEditService() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<void> editTask(
+  _i5.Future<void> editTask(
     String? taskId,
     String? taskName,
     DateTime? startTimestamp,
@@ -184,26 +202,147 @@ class MockTaskEditService extends _i1.Mock implements _i8.TaskEditService {
             details,
           ],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 }
 
 /// A class which mocks [TaskDeleteService].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockTaskDeleteService extends _i1.Mock implements _i9.TaskDeleteService {
+class MockTaskDeleteService extends _i1.Mock implements _i10.TaskDeleteService {
   MockTaskDeleteService() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i4.Future<void> deleteTask(String? taskId) => (super.noSuchMethod(
+  _i5.Future<void> deleteTask(String? taskId) => (super.noSuchMethod(
         Invocation.method(
           #deleteTask,
           [taskId],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+}
+
+/// A class which mocks [CommonTaskNameRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCommonTaskNameRepository extends _i1.Mock
+    implements _i11.CommonTaskNameRepository {
+  MockCommonTaskNameRepository() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  String nextIdentity() => (super.noSuchMethod(
+        Invocation.method(
+          #nextIdentity,
+          [],
+        ),
+        returnValue: _i4.dummyValue<String>(
+          this,
+          Invocation.method(
+            #nextIdentity,
+            [],
+          ),
+        ),
+      ) as String);
+
+  @override
+  void add(_i2.CommonTaskName? commonTaskName) => super.noSuchMethod(
+        Invocation.method(
+          #add,
+          [commonTaskName],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i5.Future<void> updateCommonTaskName(_i2.CommonTaskName? commonTaskName) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateCommonTaskName,
+          [commonTaskName],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i5.Future<void> deleteCommonTaskName(String? id) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteCommonTaskName,
+          [id],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i5.Future<_i2.CommonTaskName> getById(String? id) => (super.noSuchMethod(
+        Invocation.method(
+          #getById,
+          [id],
+        ),
+        returnValue: _i5.Future<_i2.CommonTaskName>.value(_FakeCommonTaskName_0(
+          this,
+          Invocation.method(
+            #getById,
+            [id],
+          ),
+        )),
+      ) as _i5.Future<_i2.CommonTaskName>);
+
+  @override
+  _i5.Future<List<_i2.CommonTaskName>> getAll() => (super.noSuchMethod(
+        Invocation.method(
+          #getAll,
+          [],
+        ),
+        returnValue:
+            _i5.Future<List<_i2.CommonTaskName>>.value(<_i2.CommonTaskName>[]),
+      ) as _i5.Future<List<_i2.CommonTaskName>>);
+}
+
+/// A class which mocks [CommonTaskNameListService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCommonTaskNameListService extends _i1.Mock
+    implements _i12.CommonTaskNameListService {
+  MockCommonTaskNameListService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.Future<List<_i2.CommonTaskName>> getAllCommonTaskNames() =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getAllCommonTaskNames,
+          [],
+        ),
+        returnValue:
+            _i5.Future<List<_i2.CommonTaskName>>.value(<_i2.CommonTaskName>[]),
+      ) as _i5.Future<List<_i2.CommonTaskName>>);
+}
+
+/// A class which mocks [CommonTaskNameDeleteService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCommonTaskNameDeleteService extends _i1.Mock
+    implements _i13.CommonTaskNameDeleteService {
+  MockCommonTaskNameDeleteService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i5.Future<void> deleteCommonTaskName(String? id) => (super.noSuchMethod(
+        Invocation.method(
+          #deleteCommonTaskName,
+          [id],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 }

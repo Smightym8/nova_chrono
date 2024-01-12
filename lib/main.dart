@@ -27,7 +27,7 @@ import 'application/impl/common_task_name/common_task_name_delete_service_impl.d
 import 'application/impl/common_task_name/common_task_name_edit_service_impl.dart';
 import 'application/impl/common_task_name/common_task_name_list_service_impl.dart';
 
-// This is our global ServiceLocator
+// TODO: Fix dependencies so that not all dependencies have to be passed to every widget
 GetIt getIt = GetIt.instance;
 DatabaseProvider databaseProvider = DatabaseProvider.instance;
 

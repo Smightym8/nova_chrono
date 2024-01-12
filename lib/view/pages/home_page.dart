@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:nova_chrono/application/api/task/task_delete_service.dart';
-import 'package:nova_chrono/application/api/task/task_edit_service.dart';
-import 'package:nova_chrono/application/api/task/task_list_service.dart';
+import 'package:nova_chrono/application/api/common_task_name_delete_service.dart';
+import 'package:nova_chrono/application/api/task_delete_service.dart';
+import 'package:nova_chrono/application/api/task_edit_service.dart';
+import 'package:nova_chrono/application/api/task_list_service.dart';
 import 'package:nova_chrono/view/pages/common_task_names_list_page.dart';
 import 'package:nova_chrono/view/pages/task_list_page.dart';
-import 'package:nova_chrono/view/providers/selected_page_provider.dart';
-import 'package:provider/provider.dart';
 
-import '../../application/api/task/task_create_service.dart';
+import '../../application/api/common_task_name_list_service.dart';
+import '../../application/api/task_create_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -16,7 +16,9 @@ class HomePage extends StatefulWidget {
     this.taskListService,
     this.taskDeleteService,
     this.taskCreateService,
-    this.taskEditService
+    this.taskEditService,
+    this.commonTaskNameListService,
+    this.commonTaskNameDeleteService,
   });
 
   final String title;
@@ -24,19 +26,19 @@ class HomePage extends StatefulWidget {
   final TaskDeleteService? taskDeleteService;
   final TaskCreateService? taskCreateService;
   final TaskEditService? taskEditService;
+  final CommonTaskNameListService? commonTaskNameListService;
+  final CommonTaskNameDeleteService? commonTaskNameDeleteService;
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  late SelectedPageProvider _selectedPageProvider;
-  late int _selectedPageIndex;
+  late int _selectedIndex;
 
   @override
   void initState() {
-    _selectedPageProvider = context.read<SelectedPageProvider>();
-    _selectedPageIndex = _selectedPageProvider.selectedPageIndex;
+    _selectedIndex = 0;
 
     super.initState();
   }
@@ -44,7 +46,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Widget page;
-    switch (_selectedPageIndex) {
+    switch (_selectedIndex) {
       case 0:
         page = TaskListPage(
           title: widget.title,
@@ -57,9 +59,11 @@ class _HomePageState extends State<HomePage> {
       case 1:
         page = CommonTaskNamesListPage(
           title: widget.title,
+          commonTaskNameListService: widget.commonTaskNameListService,
+          commonTaskNameDeleteService: widget.commonTaskNameDeleteService,
         );
       default:
-        throw UnimplementedError('no widget for $_selectedPageIndex');
+        throw UnimplementedError('no widget for $_selectedIndex');
     }
 
     return LayoutBuilder(
@@ -81,12 +85,10 @@ class _HomePageState extends State<HomePage> {
                         label: Text('Common Task Names'),
                       ),
                     ],
-                    selectedIndex: _selectedPageIndex,
+                    selectedIndex: _selectedIndex,
                     onDestinationSelected: (value) {
-                      _selectedPageProvider.selectedPageIndex = value;
-
                       setState(() {
-                        _selectedPageIndex = value;
+                        _selectedIndex = value;
                       });
                     },
                   ),
