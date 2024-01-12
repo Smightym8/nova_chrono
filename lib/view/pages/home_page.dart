@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:nova_chrono/application/api/common_task_name_delete_service.dart';
-import 'package:nova_chrono/application/api/task_delete_service.dart';
-import 'package:nova_chrono/application/api/task_edit_service.dart';
-import 'package:nova_chrono/application/api/task_list_service.dart';
 import 'package:nova_chrono/view/pages/common_task_names_list_page.dart';
 import 'package:nova_chrono/view/pages/task_list_page.dart';
 
-import '../../application/api/common_task_name_list_service.dart';
-import '../../application/api/task_create_service.dart';
+import '../../application/api/common_task_name/common_task_name_delete_service.dart';
+import '../../application/api/common_task_name/common_task_name_list_service.dart';
+import '../../application/api/task/task_create_service.dart';
+import '../../application/api/task/task_delete_service.dart';
+import '../../application/api/task/task_edit_service.dart';
+import '../../application/api/task/task_list_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
