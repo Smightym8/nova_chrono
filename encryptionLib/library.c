@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 
-void hello(void) {
+int hello(void) {
     printf("Hello, World!\n");
+
+    return 42;
 }

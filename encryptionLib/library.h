@@ -1,6 +1,6 @@
 #ifndef ENCRYPTIONLIB_LIBRARY_H
 #define ENCRYPTIONLIB_LIBRARY_H
 
-void hello(void);
+int hello(void);
 
 #endif //ENCRYPTIONLIB_LIBRARY_H

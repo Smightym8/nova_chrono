@@ -70,9 +70,16 @@ add_executable(${BINARY_NAME}
 # that need different build settings.
 apply_standard_settings(${BINARY_NAME})
 
+# Specify the binary directory for the out-of-source build.
+set(BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}/build")
+
+# Add the encryptionLib directory and build the C project.
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../encryptionLib ${BINARY_DIR})
+
 # Add dependency libraries. Add any application-specific dependencies here.
 target_link_libraries(${BINARY_NAME} PRIVATE flutter)
 target_link_libraries(${BINARY_NAME} PRIVATE PkgConfig::GTK)
+target_link_libraries(${BINARY_NAME} PRIVATE encryptionLib)
 
 # Run the Flutter tool portions of the build. This must not be removed.
 add_dependencies(${BINARY_NAME} flutter_assemble)
@@ -143,3 +150,7 @@ if(NOT CMAKE_BUILD_TYPE MATCHES "Debug")
   install(FILES "${AOT_LIBRARY}" DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
     COMPONENT Runtime)
 endif()
+
+# Install the shared library from encryptionLib to the lib directory of the bundle.
+install(TARGETS encryptionLib LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/lib"
+  COMPONENT Runtime)

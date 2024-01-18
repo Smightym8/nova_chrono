@@ -36,12 +36,12 @@ GetIt getIt = GetIt.instance;
 DatabaseProvider databaseProvider = DatabaseProvider.instance;
 
 // FFI signature of the hello_world C function
-typedef HelloWorldFunc = ffi.Void Function();
+typedef HelloWorldFunc = ffi.Int Function();
 // Dart type definition for calling the C foreign function
-typedef HelloWorld = void Function();
+typedef HelloWorld = int Function();
 
 void runCLib() {
-  var libraryPath = join(Directory.current.path, 'lib', 'encryptionLib', 'cmake-build-release', 'libencryptionLib.so');
+  var libraryPath = 'libencryptionLib.so';
 
   if (Platform.isMacOS) {
     libraryPath =
@@ -53,14 +53,16 @@ void runCLib() {
         Directory.current.path, 'lib', 'encryptionLib', 'cmake-build-release', 'libencryptionLib.dll');
   }
 
-  final dylib = ffi.DynamicLibrary.open(libraryPath);
+  final encryptionLib = ffi.DynamicLibrary.open(libraryPath);
 
   // Look up the C function 'hello_world'
-  final HelloWorld hello = dylib
+  final HelloWorld hello = encryptionLib
       .lookup<ffi.NativeFunction<HelloWorldFunc>>('hello')
       .asFunction();
   // Call the function
-  hello();
+  var value = hello();
+
+  print(value);
 }
 
 void main() async {
