@@ -1,3 +1,6 @@
+import 'dart:ffi' as ffi;
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nova_chrono/application/api/task/task_create_service.dart';
@@ -17,6 +20,7 @@ import 'package:nova_chrono/infrastructure/task_repository_impl.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
 import 'package:nova_chrono/view/providers/selected_page_provider.dart';
 import 'package:nova_chrono/view/providers/task_filter_date_provider.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
 import 'application/api/common_task_name/common_task_name_create_service.dart';
@@ -31,6 +35,34 @@ import 'application/impl/common_task_name/common_task_name_list_service_impl.dar
 GetIt getIt = GetIt.instance;
 DatabaseProvider databaseProvider = DatabaseProvider.instance;
 
+// FFI signature of the hello_world C function
+typedef HelloWorldFunc = ffi.Void Function();
+// Dart type definition for calling the C foreign function
+typedef HelloWorld = void Function();
+
+void runCLib() {
+  var libraryPath = join(Directory.current.path, 'lib', 'encryptionLib', 'cmake-build-release', 'libencryptionLib.so');
+
+  if (Platform.isMacOS) {
+    libraryPath =
+        join(Directory.current.path, 'lib', 'encryptionLib', 'cmake-build-release', 'libencryptionLib.dylib');
+  }
+
+  if (Platform.isWindows) {
+    libraryPath = join(
+        Directory.current.path, 'lib', 'encryptionLib', 'cmake-build-release', 'libencryptionLib.dll');
+  }
+
+  final dylib = ffi.DynamicLibrary.open(libraryPath);
+
+  // Look up the C function 'hello_world'
+  final HelloWorld hello = dylib
+      .lookup<ffi.NativeFunction<HelloWorldFunc>>('hello')
+      .asFunction();
+  // Call the function
+  hello();
+}
+
 void main() async {
   await databaseProvider.initDatabase();
 
@@ -44,6 +76,8 @@ void main() async {
   getIt.registerSingleton<CommonTaskNameEditService>(CommonTaskNameEditServiceImpl());
   getIt.registerSingleton<CommonTaskNameListService>(CommonTaskNameListServiceImpl());
   getIt.registerSingleton<CommonTaskNameDeleteService>(CommonTaskNameDeleteServiceImpl());
+
+  runCLib();
 
   runApp(
     MultiProvider(

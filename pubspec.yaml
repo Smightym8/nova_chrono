@@ -44,6 +44,7 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.18
   uuid: ^4.2.2
   provider: ^6.1.1
+  ffi: ^2.1.0
 
 dev_dependencies:
   flutter_test:
