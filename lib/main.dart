@@ -44,8 +44,7 @@ void runCLib() {
   var libraryPath = 'libencryptionLib.so';
 
   if (Platform.isMacOS) {
-    libraryPath =
-        join(Directory.current.path, 'lib', 'encryptionLib', 'cmake-build-release', 'libencryptionLib.dylib');
+    libraryPath = 'libencryptionLib.dylib';
   }
 
   if (Platform.isWindows) {

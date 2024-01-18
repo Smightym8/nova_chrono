@@ -28,6 +28,7 @@
 		33CC10F32044A3C60003C045 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F22044A3C60003C045 /* Assets.xcassets */; };
 		33CC10F62044A3C60003C045 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 33CC10F42044A3C60003C045 /* MainMenu.xib */; };
 		33CC11132044BFA00003C045 /* MainFlutterWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC11122044BFA00003C045 /* MainFlutterWindow.swift */; };
+		5230D57B2B599CD90005B370 /* libencryptionLib.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5230D57A2B599CD90005B370 /* libencryptionLib.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		B8748E0DF740EE0878CEBD05 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FD6CC3A7AF5693D816AD8F7D /* Pods_Runner.framework */; };
 /* End PBXBuildFile section */
 
@@ -59,6 +60,16 @@
 			name = "Bundle Framework";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5230D5792B599C9E0005B370 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5230D57B2B599CD90005B370 /* libencryptionLib.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -79,6 +90,7 @@
 		33E51914231749380026EE4D /* Release.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = Release.entitlements; sourceTree = "<group>"; };
 		33E5194F232828860026EE4D /* AppInfo.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = AppInfo.xcconfig; sourceTree = "<group>"; };
 		4B17E509AC13A8E378CAF29B /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
+		5230D57A2B599CD90005B370 /* libencryptionLib.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libencryptionLib.dylib; path = Flutter/ephemeral/libencryptionLib.dylib; sourceTree = "<group>"; };
 		5C934FAF6522304CFD0290C9 /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		5C9E3CF5CBCD6D8085BAD8A3 /* Pods_RunnerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RunnerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		718872BA80AD202D0452720D /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
@@ -132,6 +144,7 @@
 		33CC10E42044A3C60003C045 = {
 			isa = PBXGroup;
 			children = (
+				5230D57A2B599CD90005B370 /* libencryptionLib.dylib */,
 				33FAB671232836740065AC1E /* Runner */,
 				33CEB47122A05771004F2AC0 /* Flutter */,
 				331C80D6294CF71000263BE5 /* RunnerTests */,
@@ -195,7 +208,6 @@
 				4B17E509AC13A8E378CAF29B /* Pods-RunnerTests.release.xcconfig */,
 				C48EDC294853B41E0525DDF3 /* Pods-RunnerTests.profile.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -241,6 +253,7 @@
 				33CC110E2044A8840003C045 /* Bundle Framework */,
 				3399D490228B24CF009A79C7 /* ShellScript */,
 				F403C418A3F0330DB010F394 /* [CP] Embed Pods Frameworks */,
+				5230D5792B599C9E0005B370 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -337,8 +350,9 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "echo \"$PRODUCT_NAME.app\" > \"$PROJECT_DIR\"/Flutter/ephemeral/.app_filename && \"$FLUTTER_ROOT\"/packages/flutter_tools/bin/macos_assemble.sh embed\n";
+			shellPath = /bin/bash;
+			shellScript = "# Basisverzeichnis für die Library (angenommen, das Skript befindet sich im Verzeichnis 'nova_chrono/macos/scripts')\nLIB_DIR=\"${SRCROOT}/../encryptionLib\"\n\n# Verzeichnis für den Build\nBUILD_DIR=\"${LIB_DIR}/cmake-build-release\"\n\n# Erstellen Sie das Build-Verzeichnis, wenn es nicht existiert\nmkdir -p \"${BUILD_DIR}\"\n\n# Wechseln in das Build-Verzeichnis\ncd \"${BUILD_DIR}\"\n\n# Führen Sie CMake aus, um die Build-Systemdateien zu konfigurieren\ncmake -DCMAKE_BUILD_TYPE=Release \"${LIB_DIR}\"\n\n# Kompilieren Sie die Bibliothek\ncmake --build .\n\n# Überprüfen, ob die Kompilierung erfolgreich war\nif [ $? -ne 0 ]; then\n    echo \"Fehler beim Kompilieren der C-Bibliothek\"\n    exit 1\nfi\n\n# Der Name der kompilierten Bibliothek (angepasst an den tatsächlichen Namen)\nLIB_NAME=\"libencryptionLib.dylib\"\n\n# Ort, an dem die Bibliothek kopiert werden soll (angepasst an Ihre Struktur)\n# Nehmen wir an, Sie möchten sie im 'macos' Ordner des Flutter-Projekts ablegen\nDEST_DIR=\"${SRCROOT}/Flutter/ephemeral\"\n\n# Kopieren Sie die kompilierte Bibliothek ins richtige Verzeichnis der Flutter-Anwendung\ncp \"${BUILD_DIR}/${LIB_NAME}\" \"${DEST_DIR}\"\n\necho \"C-Bibliothek erfolgreich kompiliert und kopiert\"\n";
+			showEnvVarsInLog = 0;
 		};
 		33CC111E2044C6BF0003C045 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
