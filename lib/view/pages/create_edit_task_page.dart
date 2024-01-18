@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:nova_chrono/application/api/common_task_name/common_task_name_list_service.dart';
 import 'package:nova_chrono/application/api/task/task_create_service.dart';
 import 'package:nova_chrono/application/api/task/task_delete_service.dart';
 import 'package:nova_chrono/application/api/task/task_edit_service.dart';
+import 'package:nova_chrono/domain/model/common_task_name.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
 import 'package:provider/provider.dart';
 
 import '../../application/api/task/task_list_service.dart';
-import '../../domain/model/task.dart';
 import '../../main.dart';
 import '../components/create_edit_task_form.dart';
 import '../providers/task_filter_date_provider.dart';
@@ -18,6 +19,7 @@ class CreateEditTaskPage extends StatefulWidget {
     this.taskEditService,
     this.taskListService,
     this.taskDeleteService,
+    this.commonTaskNameListService,
     this.taskId,
     this.taskName,
     this.startTimestamp,
@@ -27,6 +29,7 @@ class CreateEditTaskPage extends StatefulWidget {
 
   final TaskCreateService? taskCreateService;
   final TaskEditService? taskEditService;
+  final CommonTaskNameListService? commonTaskNameListService;
   final TaskListService? taskListService;  // Only for passing mock to homepage
   final TaskDeleteService? taskDeleteService; // Only for passing mock to homepage
   final String? taskId;
@@ -41,10 +44,11 @@ class CreateEditTaskPage extends StatefulWidget {
 
 class _CreateEditTaskPageState extends State<CreateEditTaskPage> {
   late String title;
-  late Future<Task?> task;
+  late Future<List<CommonTaskName>> _commonTaskNamesFuture;
 
   late TaskCreateService _taskCreateService;
   late TaskEditService _taskEditService;
+  late CommonTaskNameListService _commonTaskNameListService;
 
   @override
   void initState() {
@@ -53,6 +57,9 @@ class _CreateEditTaskPageState extends State<CreateEditTaskPage> {
     title = "Create Task";
     _taskCreateService = widget.taskCreateService ?? getIt<TaskCreateService>();
     _taskEditService = widget.taskEditService ?? getIt<TaskEditService>();
+    _commonTaskNameListService = widget.commonTaskNameListService ?? getIt<CommonTaskNameListService>();
+    _commonTaskNamesFuture = _commonTaskNameListService.getAllCommonTaskNames();
+
 
     if (widget.taskId != null) {
       title = "Edit Task";
@@ -96,17 +103,45 @@ class _CreateEditTaskPageState extends State<CreateEditTaskPage> {
           backgroundColor: Theme.of(context).colorScheme.inversePrimary,
           title: Text(title),
         ),
-        body: Padding(
-          padding: const EdgeInsets.only(top: 20),
-          child: SingleChildScrollView(
-            child: CreateEditTaskForm(
-              onSavePressed: save,
-              taskName: widget.taskName,
-              startTimestamp: widget.startTimestamp,
-              endTimestamp: widget.endTimestamp,
-              details: widget.details,
-            ),
-          ),
+        body: FutureBuilder<List<CommonTaskName>> (
+          future: _commonTaskNamesFuture,
+          builder: (BuildContext context, AsyncSnapshot<List<CommonTaskName>> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: Text(
+                  "Loading common task names...",
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold, color: Colors.black,),
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return const Center(
+                child: Text(
+                  "An error occurred",
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              );
+            } else {
+              var commonTaskNames = snapshot.data ?? <CommonTaskName>[];
+
+              return  Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: SingleChildScrollView(
+                  child: CreateEditTaskForm(
+                    onSavePressed: save,
+                    taskName: widget.taskName,
+                    startTimestamp: widget.startTimestamp,
+                    endTimestamp: widget.endTimestamp,
+                    details: widget.details,
+                    commonTaskNames: commonTaskNames
+                  ),
+                ),
+              );
+            }
+          },
         )
     );
   }

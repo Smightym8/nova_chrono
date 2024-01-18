@@ -123,7 +123,7 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      expect(find.text('Please enter some text.'), findsOneWidget);
+      expect(find.text('Please enter a task name.'), findsOneWidget);
       verifyNever(mockTaskCreateService.createTask(any, any, any, any));
     });
 
