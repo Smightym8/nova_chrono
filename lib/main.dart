@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:nova_chrono/application/api/task/task_create_service.dart';
@@ -28,6 +30,7 @@ import 'application/api/common_task_name/common_task_name_list_service.dart';
 import 'application/impl/common_task_name/common_task_name_delete_service_impl.dart';
 import 'application/impl/common_task_name/common_task_name_edit_service_impl.dart';
 import 'application/impl/common_task_name/common_task_name_list_service_impl.dart';
+import 'infrastructure/encryption_service.dart';
 
 // TODO: Fix dependencies so that not all dependencies have to be passed to every widget
 GetIt getIt = GetIt.instance;
@@ -37,7 +40,12 @@ int key = 0x42;
 void main() async {
   await databaseProvider.initDatabase();
 
-  getIt.registerSingleton<NativeEncryptionLibBridge>(NativeEncryptionLibBridgeImpl());
+  if (Platform.isWindows) {
+    getIt.registerSingleton<NativeEncryptionLibBridge>(EncryptionService());
+  } else {
+    getIt.registerSingleton<NativeEncryptionLibBridge>(NativeEncryptionLibBridgeImpl());
+  }
+
   getIt.registerSingleton<TaskRepository>(TaskRepositoryImpl());
   getIt.registerSingleton<TaskCreateService>(TaskCreateServiceImpl());
   getIt.registerSingleton<TaskListService>(TaskListServiceImpl());
