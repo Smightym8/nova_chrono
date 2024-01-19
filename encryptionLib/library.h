@@ -1,6 +1,6 @@
 #ifndef ENCRYPTIONLIB_LIBRARY_H
 #define ENCRYPTIONLIB_LIBRARY_H
 
-int hello(void);
+void encryptAndDecrypt(char plainOrCiphertext[], int length, int key);
 
 #endif //ENCRYPTIONLIB_LIBRARY_H

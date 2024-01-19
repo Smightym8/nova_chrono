@@ -1,14 +1,17 @@
 import 'package:nova_chrono/application/api/task/task_edit_service.dart';
 
 import '../../../domain/model/task.dart';
+import '../../../domain/repository/native_encryption_lib_bridge.dart';
 import '../../../domain/repository/task_repository.dart';
 import '../../../main.dart';
 
 class TaskEditServiceImpl implements TaskEditService {
   late TaskRepository _taskRepository;
+  late NativeEncryptionLibBridge _nativeEncryptionLibBridge;
 
-  TaskEditServiceImpl({TaskRepository? taskRepository}) {
+  TaskEditServiceImpl({TaskRepository? taskRepository, NativeEncryptionLibBridge? nativeEncryptionLibBridge}) {
     _taskRepository = taskRepository ?? getIt<TaskRepository>();
+    _nativeEncryptionLibBridge = nativeEncryptionLibBridge ?? getIt<NativeEncryptionLibBridge>();
   }
 
   @override
@@ -18,7 +21,10 @@ class TaskEditServiceImpl implements TaskEditService {
     // TODO: Fetch task from db by id and update it instead of creating new task
     details = details ?? "";
 
-    var task = Task(taskId, taskName, startTimestamp, endTimestamp, details);
+    var encryptedTaskName = _nativeEncryptionLibBridge.encrypt(taskName);
+    var encryptedDetails = _nativeEncryptionLibBridge.encrypt(details);
+
+    var task = Task(taskId, encryptedTaskName, startTimestamp, endTimestamp, encryptedDetails);
 
     await _taskRepository.updateTask(task);
   }

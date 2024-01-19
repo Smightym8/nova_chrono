@@ -2,8 +2,8 @@
 
 #include <stdio.h>
 
-int hello(void) {
-    printf("Hello, World!\n");
-
-    return 42;
+void encryptAndDecrypt(char plainOrCiphertext[], int length, int key) {
+    for (int i = 0; i < length; i++) {
+        plainOrCiphertext[i] = (char)(plainOrCiphertext[i] ^ key);
+    }
 }
