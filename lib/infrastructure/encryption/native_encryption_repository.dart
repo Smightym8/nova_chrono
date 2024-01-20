@@ -2,18 +2,18 @@ import 'dart:ffi';
 import 'dart:io';
 
 import 'package:ffi/ffi.dart';
-import 'package:nova_chrono/domain/repository/native_encryption_lib_bridge.dart';
+import 'package:nova_chrono/domain/repository/encryption_repository.dart';
 import 'package:path/path.dart';
 
-import '../main.dart';
+import '../../main.dart';
 
 typedef EncryptFunc = Void Function(Pointer<Utf8> plainOrCiphertext, Int32 length, Int32 key);
 typedef Encrypt = void Function(Pointer<Utf8> plainOrCiphertext, int length, int key);
 
-class NativeEncryptionLibBridgeImpl implements NativeEncryptionLibBridge {
+class NativeEncryptionRepository implements EncryptionRepository {
   late String _libraryPath;
 
-  NativeEncryptionLibBridgeImpl() {
+  NativeEncryptionRepository() {
     _libraryPath = 'libencryptionLib.so';
 
     if (Platform.isMacOS) {

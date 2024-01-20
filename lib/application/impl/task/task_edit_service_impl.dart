@@ -1,17 +1,17 @@
 import 'package:nova_chrono/application/api/task/task_edit_service.dart';
 
 import '../../../domain/model/task.dart';
-import '../../../domain/repository/native_encryption_lib_bridge.dart';
+import '../../../domain/repository/encryption_repository.dart';
 import '../../../domain/repository/task_repository.dart';
 import '../../../injection_container.dart';
 
 class TaskEditServiceImpl implements TaskEditService {
   late TaskRepository _taskRepository;
-  late NativeEncryptionLibBridge _nativeEncryptionLibBridge;
+  late EncryptionRepository _nativeEncryptionLibBridge;
 
-  TaskEditServiceImpl({TaskRepository? taskRepository, NativeEncryptionLibBridge? nativeEncryptionLibBridge}) {
+  TaskEditServiceImpl({TaskRepository? taskRepository, EncryptionRepository? nativeEncryptionLibBridge}) {
     _taskRepository = taskRepository ?? getIt<TaskRepository>();
-    _nativeEncryptionLibBridge = nativeEncryptionLibBridge ?? getIt<NativeEncryptionLibBridge>();
+    _nativeEncryptionLibBridge = nativeEncryptionLibBridge ?? getIt<EncryptionRepository>();
   }
 
   @override

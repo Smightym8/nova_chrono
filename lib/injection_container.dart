@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:get_it/get_it.dart';
+import 'package:nova_chrono/infrastructure/database_provider/database_provider.dart';
 
 import 'application/api/common_task_name/common_task_name_create_service.dart';
 import 'application/api/common_task_name/common_task_name_delete_service.dart';
@@ -19,25 +20,29 @@ import 'application/impl/task/task_delete_service_impl.dart';
 import 'application/impl/task/task_edit_service_impl.dart';
 import 'application/impl/task/task_list_service_impl.dart';
 import 'domain/repository/common_task_name_repository.dart';
-import 'domain/repository/native_encryption_lib_bridge.dart';
+import 'domain/repository/encryption_repository.dart';
 import 'domain/repository/task_repository.dart';
-import 'infrastructure/common_task_name_repository_impl.dart';
-import 'infrastructure/database_provider.dart';
-import 'infrastructure/encryption_service.dart';
-import 'infrastructure/native_encryption_lib_bridge_impl.dart';
-import 'infrastructure/task_repository_impl.dart';
+import 'infrastructure/database_provider/database_provider_prod.dart';
+import 'infrastructure/database_provider/database_provider_test.dart';
+import 'infrastructure/encryption/dart_encryption_repository.dart';
+import 'infrastructure/encryption/native_encryption_repository.dart';
+import 'infrastructure/repository/common_task_name_repository_impl.dart';
+import 'infrastructure/repository/task_repository_impl.dart';
 
 // TODO: Fix dependencies so that not all dependencies have to be passed to every widget
 GetIt getIt = GetIt.instance;
-DatabaseProvider databaseProvider = DatabaseProvider.instance;
 
-Future<void> initializeDependencies({required bool isTesting}) async {
-  await databaseProvider.initDatabase();
-
-  if (Platform.isWindows) {
-    getIt.registerSingleton<NativeEncryptionLibBridge>(EncryptionService());
+Future<void> initializeDependencies({bool isTesting = false, bool isIntegrationTesting = false}) async {
+  if (isTesting) {
+    getIt.registerSingleton<DatabaseProvider>(DatabaseProviderTest());
   } else {
-    getIt.registerSingleton<NativeEncryptionLibBridge>(NativeEncryptionLibBridgeImpl());
+    getIt.registerSingleton<DatabaseProvider>(DatabaseProviderProduction());
+  }
+
+  if (Platform.isWindows || isIntegrationTesting) {
+    getIt.registerSingleton<EncryptionRepository>(DartEncryptionRepository());
+  } else {
+    getIt.registerSingleton<EncryptionRepository>(NativeEncryptionRepository());
   }
 
   getIt.registerSingleton<TaskRepository>(TaskRepositoryImpl());

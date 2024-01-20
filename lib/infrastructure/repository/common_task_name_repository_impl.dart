@@ -1,13 +1,20 @@
 import 'package:nova_chrono/domain/model/common_task_name.dart';
 import 'package:nova_chrono/domain/repository/common_task_name_repository.dart';
+import 'package:nova_chrono/infrastructure/database_provider/database_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
-import '../injection_container.dart';
+import '../../injection_container.dart';
 
 class CommonTaskNameRepositoryImpl implements CommonTaskNameRepository {
   static const String table = 'common_task_name';
   static const uuid = Uuid();
+
+  late DatabaseProvider _databaseProvider;
+
+  CommonTaskNameRepositoryImpl() {
+    _databaseProvider = getIt<DatabaseProvider>();
+  }
 
   @override
   String nextIdentity() {
@@ -16,7 +23,7 @@ class CommonTaskNameRepositoryImpl implements CommonTaskNameRepository {
 
   @override
   Future<void> add(CommonTaskName commonTaskName) async {
-    var database = databaseProvider.database;
+    var database = _databaseProvider.database;
 
     await database.insert(
         table,
@@ -27,7 +34,7 @@ class CommonTaskNameRepositoryImpl implements CommonTaskNameRepository {
 
   @override
   Future<void> updateCommonTaskName(CommonTaskName commonTaskName) async {
-    var database = databaseProvider.database;
+    var database = _databaseProvider.database;
 
     await database.update(
         table,
@@ -39,7 +46,7 @@ class CommonTaskNameRepositoryImpl implements CommonTaskNameRepository {
 
   @override
   Future<void> deleteCommonTaskName(String id) async {
-    var database = databaseProvider.database;
+    var database = _databaseProvider.database;
 
     await database.delete(
       table,
@@ -50,7 +57,7 @@ class CommonTaskNameRepositoryImpl implements CommonTaskNameRepository {
 
   @override
   Future<List<CommonTaskName>> getAll() async {
-    var database = databaseProvider.database;
+    var database = _databaseProvider.database;
 
     final List<Map<String, dynamic>> maps = await database.query(
       table
@@ -69,7 +76,7 @@ class CommonTaskNameRepositoryImpl implements CommonTaskNameRepository {
 
   @override
   Future<CommonTaskName> getById(String id) async {
-    var database = databaseProvider.database;
+    var database = _databaseProvider.database;
 
     final List<Map<String, dynamic>> maps = await database.query(
       table,

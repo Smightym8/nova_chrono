@@ -1,29 +1,29 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nova_chrono/application/api/task/task_edit_service.dart';
-import 'package:nova_chrono/application/impl/task/task_edit_service_impl.dart';
 import 'package:nova_chrono/domain/model/task.dart';
 import 'package:nova_chrono/domain/repository/task_repository.dart';
-import 'package:nova_chrono/infrastructure/task_repository_impl.dart';
-
-import '../../../integration_test/test_database_provider.dart';
+import 'package:nova_chrono/infrastructure/database_provider/database_provider.dart';
+import 'package:nova_chrono/injection_container.dart';
 
 void main() {
   group("TaskEditService Integration Tests", () {
-    late TestDatabaseProvider testDatabaseProvider;
     late TaskRepository taskRepository;
     late TaskEditService taskEditService;
 
-    setUp(() async {
-      testDatabaseProvider = TestDatabaseProvider.instance;
-      await testDatabaseProvider.initDatabase();
+    setUpAll(() async {
+      await initializeDependencies(isTesting: true, isIntegrationTesting: true);
+    });
 
-      taskRepository = TaskRepositoryImpl(database: testDatabaseProvider.database);
-      taskEditService = TaskEditServiceImpl(taskRepository: taskRepository);
+    setUp(() async {
+      await getIt<DatabaseProvider>().initDatabase();
+
+      taskRepository = getIt<TaskRepository>();
+      taskEditService = getIt<TaskEditService>();
     });
 
     tearDown(() async {
-      await testDatabaseProvider.closeDatabase();
-      await testDatabaseProvider.deleteDatabase();
+      await getIt<DatabaseProvider>().closeDatabase();
+      await getIt<DatabaseProvider>().deleteDatabase();
     });
 
     test("Given task when update then task is updated", () async {

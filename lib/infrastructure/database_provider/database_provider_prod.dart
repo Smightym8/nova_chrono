@@ -1,36 +1,31 @@
+import 'package:nova_chrono/infrastructure/database_provider/database_provider.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-class TestDatabaseProvider {
-  static const _databaseName = "novachrono_test.db";
+class DatabaseProviderProduction implements DatabaseProvider {
+  static const _databaseName = "novachrono.db";
   static const _databaseVersion = 1;
   late Database _database;
 
-  TestDatabaseProvider._privateConstructor();
-
-  static final TestDatabaseProvider instance = TestDatabaseProvider
-      ._privateConstructor();
-
   Database get database => _database;
 
+  @override
   Future<void> initDatabase() async {
     String path = join(".", _databaseName);
 
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
 
-    _database = await openDatabase(
-      path,
-      version: _databaseVersion,
-      onCreate: _onCreate,
-      readOnly: false
-    );
+    _database = await openDatabase(path,
+        version: _databaseVersion, onCreate: _onCreate);
   }
 
+  @override
   Future<void> closeDatabase() async {
     await _database.close();
   }
 
+  @override
   Future<void> deleteDatabase() async {
     String path = join(".", _databaseName);
 
@@ -45,6 +40,13 @@ class TestDatabaseProvider {
             startTimestamp TEXT NOT NULL,
             endTimestamp TEXT NOT NULL,
             details TEXT NOT NULL
+          )
+    ''');
+
+    await db.execute('''
+          CREATE TABLE common_task_name (
+            id TEXT PRIMARY KEY,
+            name TEXT NOT NULL
           )
     ''');
 
@@ -97,5 +99,18 @@ class TestDatabaseProvider {
     VALUES('4', ?, '${startTimestamp4.toString()}', 
     '${endTimestamp4.toString()}', ?);
     ''', [taskName, taskDetails]);
+
+    // TODO: Maybe store common task names encrypted
+    var commonTaskNameId = 1;
+    for (int i = 0; i < 5; i++) {
+      final sqlStatement = '''
+          INSERT INTO common_task_name(id, name)
+          VALUES('$commonTaskNameId', 'Common task name $commonTaskNameId');
+        ''';
+
+      await db.execute(sqlStatement);
+
+      commonTaskNameId++;
+    }
   }
 }

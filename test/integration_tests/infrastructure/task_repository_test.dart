@@ -1,25 +1,26 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nova_chrono/domain/model/task.dart';
 import 'package:nova_chrono/domain/repository/task_repository.dart';
-import 'package:nova_chrono/infrastructure/task_repository_impl.dart';
-
-import '../../../integration_test/test_database_provider.dart';
+import 'package:nova_chrono/infrastructure/database_provider/database_provider.dart';
+import 'package:nova_chrono/injection_container.dart';
 
 void main() {
   group("TaskRepository integration tests", () {
-    late TestDatabaseProvider testDatabaseProvider;
     late TaskRepository taskRepository;
 
-    setUp(() async {
-      testDatabaseProvider = TestDatabaseProvider.instance;
-      await testDatabaseProvider.initDatabase();
+    setUpAll(() async {
+      await initializeDependencies(isTesting: true);
+    });
 
-      taskRepository = TaskRepositoryImpl(database: testDatabaseProvider.database);
+    setUp(() async {
+      await getIt<DatabaseProvider>().initDatabase();
+
+      taskRepository = getIt<TaskRepository>();
     });
 
     tearDown(() async {
-      await testDatabaseProvider.closeDatabase();
-      await testDatabaseProvider.deleteDatabase();
+      await getIt<DatabaseProvider>().closeDatabase();
+      await getIt<DatabaseProvider>().deleteDatabase();
     });
 
     test("Given task when add then expected task is saved in database", () async {
@@ -40,9 +41,9 @@ void main() {
     test("Given date when getByDate then expected tasks are returned", () async {
       // Given
       var now = DateTime.now();
-      var startTimestamp3 = now.subtract(const Duration(days: 2));
+      var startTimestamp3 = now.subtract(const Duration(days: 1));
       var endTimestamp3 = startTimestamp3.add(const Duration(hours: 1));
-      var startTimestamp4 = now.subtract(const Duration(days: 2)).add(const Duration(hours: 1));
+      var startTimestamp4 = now.subtract(const Duration(days: 1)).add(const Duration(hours: 1));
       var endTimestamp4 = startTimestamp4.add(const Duration(hours: 2));
       var tasksExpected = <Task>[
         Task("3", "Task 3", startTimestamp3,
