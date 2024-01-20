@@ -30,3 +30,7 @@ flutter_testapp.iml
 
 # MacOS
 .DS_Store
+
+# C
+**/cmake-build-debug
+**/cmake-build-release
