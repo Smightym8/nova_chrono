@@ -1,6 +1,6 @@
 import 'package:nova_chrono/domain/repository/common_task_name_repository.dart';
-import 'package:nova_chrono/main.dart';
 
+import '../../../injection_container.dart';
 import '../../api/common_task_name/common_task_name_edit_service.dart';
 
 

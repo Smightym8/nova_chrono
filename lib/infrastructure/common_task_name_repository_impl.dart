@@ -1,8 +1,9 @@
 import 'package:nova_chrono/domain/model/common_task_name.dart';
 import 'package:nova_chrono/domain/repository/common_task_name_repository.dart';
-import 'package:nova_chrono/main.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
+
+import '../injection_container.dart';
 
 class CommonTaskNameRepositoryImpl implements CommonTaskNameRepository {
   static const String table = 'common_task_name';

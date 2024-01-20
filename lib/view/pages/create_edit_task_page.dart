@@ -8,7 +8,7 @@ import 'package:nova_chrono/view/pages/home_page.dart';
 import 'package:provider/provider.dart';
 
 import '../../application/api/task/task_list_service.dart';
-import '../../main.dart';
+import '../../injection_container.dart';
 import '../components/create_edit_task_form.dart';
 import '../providers/task_filter_date_provider.dart';
 

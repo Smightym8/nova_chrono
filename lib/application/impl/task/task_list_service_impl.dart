@@ -3,7 +3,7 @@ import 'package:nova_chrono/domain/model/task.dart';
 
 import '../../../domain/repository/native_encryption_lib_bridge.dart';
 import '../../../domain/repository/task_repository.dart';
-import '../../../main.dart';
+import '../../../injection_container.dart';
 
 class TaskListServiceImpl implements TaskListService {
   late TaskRepository _taskRepository;

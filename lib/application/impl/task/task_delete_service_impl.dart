@@ -1,7 +1,7 @@
 import 'package:nova_chrono/application/api/task/task_delete_service.dart';
 
 import '../../../domain/repository/task_repository.dart';
-import '../../../main.dart';
+import '../../../injection_container.dart';
 
 class TaskDeleteServiceImpl implements TaskDeleteService {
   late TaskRepository _taskRepository;

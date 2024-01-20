@@ -1,8 +1,9 @@
 import 'package:nova_chrono/domain/model/task.dart';
 import 'package:nova_chrono/domain/repository/task_repository.dart';
-import 'package:nova_chrono/main.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
+
+import '../injection_container.dart';
 
 class TaskRepositoryImpl implements TaskRepository {
   static const String table = 'task';

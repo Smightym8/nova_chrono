@@ -2,7 +2,7 @@ import 'package:nova_chrono/domain/model/task.dart';
 import 'package:nova_chrono/domain/repository/task_repository.dart';
 
 import '../../../domain/repository/native_encryption_lib_bridge.dart';
-import '../../../main.dart';
+import '../../../injection_container.dart';
 import '../../api/task/task_create_service.dart';
 
 class TaskCreateServiceImpl implements TaskCreateService {

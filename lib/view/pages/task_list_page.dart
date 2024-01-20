@@ -6,7 +6,7 @@ import '../../application/api/task/task_delete_service.dart';
 import '../../application/api/task/task_edit_service.dart';
 import '../../application/api/task/task_list_service.dart';
 import '../../domain/model/task.dart';
-import '../../main.dart';
+import '../../injection_container.dart';
 import '../components/search_box.dart';
 import '../components/task_list.dart';
 import '../providers/task_filter_date_provider.dart';
