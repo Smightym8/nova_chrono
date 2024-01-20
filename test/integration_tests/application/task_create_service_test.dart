@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nova_chrono/application/api/task/task_create_service.dart';
+import 'package:nova_chrono/domain/repository/encryption_repository.dart';
 import 'package:nova_chrono/domain/repository/task_repository.dart';
 import 'package:nova_chrono/infrastructure/database_provider/database_provider.dart';
 import 'package:nova_chrono/injection_container.dart';
@@ -43,10 +44,14 @@ void main() {
       // Then
       var taskActual = await taskRepository.getById(taskId);
       expect(taskActual, isNot(null));
-      expect(taskActual?.name, nameExpected);
-      expect(taskActual?.startTimestamp, startTimestampExpected);
-      expect(taskActual?.endTimestamp, endTimestampExpected);
-      expect(taskActual?.details, '');
+
+      var decryptedTaskName = getIt<EncryptionRepository>().decrypt(taskActual!.name);
+      var decryptedDetails = getIt<EncryptionRepository>().decrypt(taskActual.details);
+
+      expect(decryptedTaskName, nameExpected);
+      expect(taskActual.startTimestamp, startTimestampExpected);
+      expect(taskActual.endTimestamp, endTimestampExpected);
+      expect(decryptedDetails, '');
     });
 
     test('given id, taskName, startTimestamp, endTimestamp and details. '
@@ -68,10 +73,14 @@ void main() {
       // Then
       var taskActual = await taskRepository.getById(taskId);
       expect(taskActual, isNot(null));
-      expect(taskActual?.name, nameExpected);
-      expect(taskActual?.startTimestamp, startTimestampExpected);
-      expect(taskActual?.endTimestamp, endTimestampExpected);
-      expect(taskActual?.details, detailsExpected);
+
+      var decryptedTaskName = getIt<EncryptionRepository>().decrypt(taskActual!.name);
+      var decryptedDetails = getIt<EncryptionRepository>().decrypt(taskActual.details);
+
+      expect(decryptedTaskName, nameExpected);
+      expect(taskActual.startTimestamp, startTimestampExpected);
+      expect(taskActual.endTimestamp, endTimestampExpected);
+      expect(decryptedDetails, detailsExpected);
     });
   });
 }

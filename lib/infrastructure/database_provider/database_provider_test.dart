@@ -82,7 +82,7 @@ class DatabaseProviderTest implements DatabaseProvider {
     '${endTimestamp2.toString()}', ?);
     ''', [taskName, taskDetails]);
 
-    var startTimestamp3 = now.subtract(const Duration(days: 1));
+    var startTimestamp3 = DateTime(2023, 12, 12, 13, 30);
     var endTimestamp3 = startTimestamp3.add(const Duration(hours: 1));
     taskName = '#1)bq';
     taskDetails = '-/\'b&\'6#+.1b\$-0b6#1)bq';
@@ -93,7 +93,7 @@ class DatabaseProviderTest implements DatabaseProvider {
     '${endTimestamp3.toString()}', ?);
     ''', [taskName, taskDetails]);
 
-    var startTimestamp4 = now.subtract(const Duration(days: 1)).add(const Duration(hours: 1));
+    var startTimestamp4 = DateTime(2023, 12, 12, 14, 30);
     var endTimestamp4 = startTimestamp4.add(const Duration(hours: 2));
     taskName = '#1)bv';
     taskDetails = '-/\'b&\'6#+.1b\$-0b6#1)bv';
