@@ -9,9 +9,9 @@ class TaskCreateServiceImpl implements TaskCreateService {
   late TaskRepository _taskRepository;
   late EncryptionRepository _nativeEncryptionLibBridge;
 
-  TaskCreateServiceImpl({TaskRepository? taskRepository, EncryptionRepository? nativeEncryptionLibBridge}) {
-    _taskRepository = taskRepository ?? getIt<TaskRepository>();
-    _nativeEncryptionLibBridge = nativeEncryptionLibBridge ?? getIt<EncryptionRepository>();
+  TaskCreateServiceImpl() {
+    _taskRepository = getIt<TaskRepository>();
+    _nativeEncryptionLibBridge = getIt<EncryptionRepository>();
   }
 
   @override
@@ -25,11 +25,7 @@ class TaskCreateServiceImpl implements TaskCreateService {
 
     var task = Task(id, encryptedTaskName, startTimestamp, endTimestamp, encryptedDetails);
 
-    int dbId = await _taskRepository.add(task);
-    if (dbId == 0) {
-      // TODO: Handle error
-      print("Error during saving task!");
-    }
+    await _taskRepository.add(task);
 
     return id;
   }

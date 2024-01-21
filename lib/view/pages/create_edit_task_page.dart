@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:nova_chrono/application/api/common_task_name/common_task_name_list_service.dart';
 import 'package:nova_chrono/application/api/task/task_create_service.dart';
-import 'package:nova_chrono/application/api/task/task_delete_service.dart';
 import 'package:nova_chrono/application/api/task/task_edit_service.dart';
 import 'package:nova_chrono/domain/model/common_task_name.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
 import 'package:provider/provider.dart';
 
-import '../../application/api/task/task_list_service.dart';
 import '../../injection_container.dart';
 import '../components/create_edit_task_form.dart';
 import '../providers/task_filter_date_provider.dart';
@@ -15,11 +13,6 @@ import '../providers/task_filter_date_provider.dart';
 class CreateEditTaskPage extends StatefulWidget {
   const CreateEditTaskPage({
     super.key,
-    this.taskCreateService,
-    this.taskEditService,
-    this.taskListService,
-    this.taskDeleteService,
-    this.commonTaskNameListService,
     this.taskId,
     this.taskName,
     this.startTimestamp,
@@ -27,11 +20,6 @@ class CreateEditTaskPage extends StatefulWidget {
     this.details
   });
 
-  final TaskCreateService? taskCreateService;
-  final TaskEditService? taskEditService;
-  final CommonTaskNameListService? commonTaskNameListService;
-  final TaskListService? taskListService;  // Only for passing mock to homepage
-  final TaskDeleteService? taskDeleteService; // Only for passing mock to homepage
   final String? taskId;
   final String? taskName;
   final DateTime? startTimestamp;
@@ -55,9 +43,9 @@ class _CreateEditTaskPageState extends State<CreateEditTaskPage> {
     super.initState();
 
     title = "Create Task";
-    _taskCreateService = widget.taskCreateService ?? getIt<TaskCreateService>();
-    _taskEditService = widget.taskEditService ?? getIt<TaskEditService>();
-    _commonTaskNameListService = widget.commonTaskNameListService ?? getIt<CommonTaskNameListService>();
+    _taskCreateService = getIt<TaskCreateService>();
+    _taskEditService = getIt<TaskEditService>();
+    _commonTaskNameListService = getIt<CommonTaskNameListService>();
     _commonTaskNamesFuture = _commonTaskNameListService.getAllCommonTaskNames();
 
 
@@ -87,11 +75,7 @@ class _CreateEditTaskPageState extends State<CreateEditTaskPage> {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => HomePage(
-              title: "NovaChrono",
-              taskListService: widget.taskListService,
-              taskDeleteService: widget.taskDeleteService,
-            )
+            builder: (context) => const HomePage(title: "NovaChrono")
         )
     );
   }

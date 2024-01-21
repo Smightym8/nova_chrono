@@ -12,7 +12,7 @@ void main() {
     late TaskEditService taskEditService;
 
     setUpAll(() async {
-      await initializeDependencies(isTesting: true, isIntegrationTesting: true);
+      await initializeDependencies(isIntegrationTest: true);
     });
 
     setUp(() async {

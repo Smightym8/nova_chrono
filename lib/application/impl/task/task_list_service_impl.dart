@@ -9,9 +9,9 @@ class TaskListServiceImpl implements TaskListService {
   late TaskRepository _taskRepository;
   late EncryptionRepository _nativeEncryptionLibBridge;
 
-  TaskListServiceImpl({TaskRepository? taskRepository, EncryptionRepository? nativeEncryptionLibBridge}) {
-    _taskRepository = taskRepository ?? getIt<TaskRepository>();
-    _nativeEncryptionLibBridge = nativeEncryptionLibBridge ?? getIt<EncryptionRepository>();
+  TaskListServiceImpl() {
+    _taskRepository = getIt<TaskRepository>();
+    _nativeEncryptionLibBridge = getIt<EncryptionRepository>();
   }
 
   @override

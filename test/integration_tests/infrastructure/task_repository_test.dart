@@ -9,7 +9,7 @@ void main() {
     late TaskRepository taskRepository;
 
     setUpAll(() async {
-      await initializeDependencies(isTesting: true);
+      await initializeDependencies(isIntegrationTest: true);
     });
 
     setUp(() async {

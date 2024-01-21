@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../application/api/common_task_name/common_task_name_create_service.dart';
 import '../../application/api/common_task_name/common_task_name_delete_service.dart';
-import '../../application/api/common_task_name/common_task_name_edit_service.dart';
 import '../../application/api/common_task_name/common_task_name_list_service.dart';
 import '../../domain/model/common_task_name.dart';
 import '../../injection_container.dart';
@@ -13,17 +11,9 @@ class CommonTaskNamesListPage extends StatefulWidget {
   const CommonTaskNamesListPage({
     super.key,
     required this.title,
-    this.commonTaskNameListService,
-    this.commonTaskNameDeleteService,
-    this.commonTaskNameCreateService,
-    this.commonTaskNameEditService,
   });
 
   final String title;
-  final CommonTaskNameListService? commonTaskNameListService;
-  final CommonTaskNameDeleteService? commonTaskNameDeleteService;
-  final CommonTaskNameCreateService? commonTaskNameCreateService;
-  final CommonTaskNameEditService? commonTaskNameEditService;
 
   @override
   State<CommonTaskNamesListPage> createState() =>
@@ -38,10 +28,8 @@ class _CommonTaskNamesListPageState extends State<CommonTaskNamesListPage> {
 
   @override
   void initState() {
-    _commonTaskNameListService =
-        widget.commonTaskNameListService ?? getIt<CommonTaskNameListService>();
-    _commonTaskNameDeleteService = widget.commonTaskNameDeleteService ??
-        getIt<CommonTaskNameDeleteService>();
+    _commonTaskNameListService = getIt<CommonTaskNameListService>();
+    _commonTaskNameDeleteService = getIt<CommonTaskNameDeleteService>();
     _searchTerm = "";
     _commonTaskNamesFuture = _commonTaskNameListService.getAllCommonTaskNames();
 
@@ -181,13 +169,11 @@ class _CommonTaskNamesListPageState extends State<CommonTaskNamesListPage> {
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (context) => CreateEditCommonTaskNamePage(
-                                                            commonTaskNameCreateService:
-                                                            widget.commonTaskNameCreateService,
-                                                            commonTaskNameEditService:
-                                                            widget.commonTaskNameEditService,
                                                             commonTaskNameId: id,
                                                             commonTaskName: name,
-                                                          )));
+                                                          )
+                                                      )
+                                                  );
                                                 },
                                                 child: const Icon(
                                                   Icons.edit,
@@ -224,12 +210,9 @@ class _CommonTaskNamesListPageState extends State<CommonTaskNamesListPage> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => CreateEditCommonTaskNamePage(
-                        commonTaskNameCreateService:
-                            widget.commonTaskNameCreateService,
-                        commonTaskNameEditService:
-                            widget.commonTaskNameEditService,
-                      )));
+                  builder: (context) => const CreateEditCommonTaskNamePage()
+              )
+          );
         },
         tooltip: 'Add new common task name',
         heroTag: "newCommonTaskNameButton",

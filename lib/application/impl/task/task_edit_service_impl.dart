@@ -9,9 +9,9 @@ class TaskEditServiceImpl implements TaskEditService {
   late TaskRepository _taskRepository;
   late EncryptionRepository _nativeEncryptionLibBridge;
 
-  TaskEditServiceImpl({TaskRepository? taskRepository, EncryptionRepository? nativeEncryptionLibBridge}) {
-    _taskRepository = taskRepository ?? getIt<TaskRepository>();
-    _nativeEncryptionLibBridge = nativeEncryptionLibBridge ?? getIt<EncryptionRepository>();
+  TaskEditServiceImpl() {
+    _taskRepository = getIt<TaskRepository>();
+    _nativeEncryptionLibBridge = getIt<EncryptionRepository>();
   }
 
   @override

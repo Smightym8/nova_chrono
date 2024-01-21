@@ -11,7 +11,7 @@ void main() {
     late TaskCreateService taskCreateService;
 
     setUpAll(() async {
-      await initializeDependencies(isTesting: true, isIntegrationTesting: true);
+      await initializeDependencies(isIntegrationTest: true);
     });
 
     setUp(() async {

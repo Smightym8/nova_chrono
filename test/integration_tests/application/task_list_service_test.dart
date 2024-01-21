@@ -9,7 +9,7 @@ void main() {
     late TaskListService taskListService;
 
     setUpAll(() async {
-      await initializeDependencies(isTesting: true, isIntegrationTesting: true);
+      await initializeDependencies(isIntegrationTest: true);
     });
 
     setUp(() async {

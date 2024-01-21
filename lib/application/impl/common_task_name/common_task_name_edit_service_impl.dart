@@ -7,8 +7,8 @@ import '../../api/common_task_name/common_task_name_edit_service.dart';
 class CommonTaskNameEditServiceImpl implements CommonTaskNameEditService {
   late CommonTaskNameRepository _commonTaskNameRepository;
 
-  CommonTaskNameEditServiceImpl({CommonTaskNameRepository? commonTaskNameRepository}) {
-    _commonTaskNameRepository = commonTaskNameRepository ?? getIt<CommonTaskNameRepository>();
+  CommonTaskNameEditServiceImpl() {
+    _commonTaskNameRepository = getIt<CommonTaskNameRepository>();
   }
 
   @override

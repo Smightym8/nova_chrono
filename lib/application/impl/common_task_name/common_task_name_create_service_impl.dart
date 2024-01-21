@@ -6,8 +6,8 @@ import '../../api/common_task_name/common_task_name_create_service.dart';
 class CommonTaskNameCreateServiceImpl implements CommonTaskNameCreateService {
   late CommonTaskNameRepository _commonTaskNameRepository;
 
-  CommonTaskNameCreateServiceImpl({CommonTaskNameRepository? commonTaskNameRepository}) {
-    _commonTaskNameRepository = commonTaskNameRepository ?? getIt<CommonTaskNameRepository>();
+  CommonTaskNameCreateServiceImpl() {
+    _commonTaskNameRepository = getIt<CommonTaskNameRepository>();
   }
 
   @override

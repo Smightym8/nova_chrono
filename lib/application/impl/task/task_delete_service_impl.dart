@@ -6,8 +6,8 @@ import '../../../injection_container.dart';
 class TaskDeleteServiceImpl implements TaskDeleteService {
   late TaskRepository _taskRepository;
 
-  TaskDeleteServiceImpl({TaskRepository? taskRepository}) {
-    _taskRepository = taskRepository ?? getIt<TaskRepository>();
+  TaskDeleteServiceImpl() {
+    _taskRepository = getIt<TaskRepository>();
   }
 
   @override

@@ -32,14 +32,14 @@ import 'infrastructure/repository/task_repository_impl.dart';
 // TODO: Fix dependencies so that not all dependencies have to be passed to every widget
 GetIt getIt = GetIt.instance;
 
-Future<void> initializeDependencies({bool isTesting = false, bool isIntegrationTesting = false}) async {
-  if (isTesting) {
+Future<void> initializeDependencies({bool isIntegrationTest = false}) async {
+  if (isIntegrationTest) {
     getIt.registerSingleton<DatabaseProvider>(DatabaseProviderTest());
   } else {
     getIt.registerSingleton<DatabaseProvider>(DatabaseProviderProduction());
   }
 
-  if (Platform.isWindows || isIntegrationTesting) {
+  if (Platform.isWindows || isIntegrationTest) {
     getIt.registerSingleton<EncryptionRepository>(DartEncryptionRepository());
   } else {
     getIt.registerSingleton<EncryptionRepository>(NativeEncryptionRepository());

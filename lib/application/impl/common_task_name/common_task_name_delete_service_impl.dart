@@ -6,8 +6,8 @@ import '../../api/common_task_name/common_task_name_delete_service.dart';
 class CommonTaskNameDeleteServiceImpl implements CommonTaskNameDeleteService {
   late CommonTaskNameRepository _commonTaskNameRepository;
 
-  CommonTaskNameDeleteServiceImpl({CommonTaskNameRepository? commonTaskNameRepository}) {
-    _commonTaskNameRepository = commonTaskNameRepository ?? getIt<CommonTaskNameRepository>();
+  CommonTaskNameDeleteServiceImpl() {
+    _commonTaskNameRepository = getIt<CommonTaskNameRepository>();
   }
 
   @override

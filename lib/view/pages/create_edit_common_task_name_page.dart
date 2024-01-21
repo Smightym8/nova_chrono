@@ -8,15 +8,12 @@ import '../../injection_container.dart';
 import '../components/create_edit_common_task_name_form.dart';
 
 class CreateEditCommonTaskNamePage extends StatefulWidget {
-  const CreateEditCommonTaskNamePage(
-      {super.key,
-        this.commonTaskNameCreateService,
-        this.commonTaskNameEditService,
-        this.commonTaskNameId,
-        this.commonTaskName});
+  const CreateEditCommonTaskNamePage({
+    super.key,
+    this.commonTaskNameId,
+    this.commonTaskName
+  });
 
-  final CommonTaskNameCreateService? commonTaskNameCreateService;
-  final CommonTaskNameEditService? commonTaskNameEditService;
   final String? commonTaskNameId;
   final String? commonTaskName;
 
@@ -36,8 +33,8 @@ class _CreateEditCommonTaskNamePageState extends State<CreateEditCommonTaskNameP
     super.initState();
 
     title = "Create Common Task Name";
-    _commonTaskNameCreateService = widget.commonTaskNameCreateService ?? getIt<CommonTaskNameCreateService>();
-    _commonTaskNameEditService = widget.commonTaskNameEditService ?? getIt<CommonTaskNameEditService>();
+    _commonTaskNameCreateService = getIt<CommonTaskNameCreateService>();
+    _commonTaskNameEditService = getIt<CommonTaskNameEditService>();
 
     if (widget.commonTaskNameId != null) {
       title = "Edit Common Task Name";

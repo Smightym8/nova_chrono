@@ -3,33 +3,12 @@ import 'package:nova_chrono/view/pages/common_task_names_list_page.dart';
 import 'package:nova_chrono/view/pages/task_list_page.dart';
 import 'package:provider/provider.dart';
 
-import '../../application/api/common_task_name/common_task_name_delete_service.dart';
-import '../../application/api/common_task_name/common_task_name_list_service.dart';
-import '../../application/api/task/task_create_service.dart';
-import '../../application/api/task/task_delete_service.dart';
-import '../../application/api/task/task_edit_service.dart';
-import '../../application/api/task/task_list_service.dart';
 import '../providers/selected_page_provider.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({
-    super.key,
-    required this.title,
-    this.taskListService,
-    this.taskDeleteService,
-    this.taskCreateService,
-    this.taskEditService,
-    this.commonTaskNameListService,
-    this.commonTaskNameDeleteService,
-  });
+  const HomePage({super.key, required this.title});
 
   final String title;
-  final TaskListService? taskListService;
-  final TaskDeleteService? taskDeleteService;
-  final TaskCreateService? taskCreateService;
-  final TaskEditService? taskEditService;
-  final CommonTaskNameListService? commonTaskNameListService;
-  final CommonTaskNameDeleteService? commonTaskNameDeleteService;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -53,20 +32,10 @@ class _HomePageState extends State<HomePage> {
     Widget page;
     switch (_selectedPageIndex) {
       case 0:
-        page = TaskListPage(
-          title: widget.title,
-          taskListService: widget.taskListService,
-          taskDeleteService: widget.taskDeleteService,
-          taskCreateService: widget.taskCreateService,
-          taskEditService: widget.taskEditService,
-        );
+        page = TaskListPage(title: widget.title);
         break;
       case 1:
-        page = CommonTaskNamesListPage(
-          title: widget.title,
-          commonTaskNameListService: widget.commonTaskNameListService,
-          commonTaskNameDeleteService: widget.commonTaskNameDeleteService,
-        );
+        page = CommonTaskNamesListPage(title: widget.title);
       default:
         throw UnimplementedError('no widget for $_selectedPageIndex');
     }

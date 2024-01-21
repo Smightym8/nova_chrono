@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../application/api/task/task_create_service.dart';
 import '../../application/api/task/task_delete_service.dart';
-import '../../application/api/task/task_edit_service.dart';
 import '../../application/api/task/task_list_service.dart';
 import '../../domain/model/task.dart';
 import '../../injection_container.dart';
@@ -14,20 +12,9 @@ import '../shared/date_formatter.dart';
 import 'create_edit_task_page.dart';
 
 class TaskListPage extends StatefulWidget {
-  const TaskListPage({
-    super.key,
-    required this.title,
-    this.taskListService,
-    this.taskDeleteService,
-    this.taskCreateService,
-    this.taskEditService
-  });
+  const TaskListPage({super.key, required this.title});
 
   final String title;
-  final TaskListService? taskListService;
-  final TaskDeleteService? taskDeleteService;
-  final TaskCreateService? taskCreateService;
-  final TaskEditService? taskEditService;
 
   @override
   State<TaskListPage> createState() => _TaskListPageState();
@@ -47,8 +34,8 @@ class _TaskListPageState extends State<TaskListPage> {
     _dateProvider = context.read<TaskFilterDateProvider>();
     _selectedDateController = TextEditingController(
         text: DateFormatter.formatDateWithoutTime(_dateProvider.selectedDate));
-    _taskListService = widget.taskListService ?? getIt<TaskListService>();
-    _taskDeleteService = widget.taskDeleteService ?? getIt<TaskDeleteService>();
+    _taskListService = getIt<TaskListService>();
+    _taskDeleteService = getIt<TaskDeleteService>();
 
     _tasksFuture = _taskListService.getTasksByDate(_dateProvider.selectedDate);
 
@@ -187,10 +174,6 @@ class _TaskListPageState extends State<TaskListPage> {
                       return TaskList(
                         tasks: filteredTasks,
                         onDeletePressedFunction: delete,
-                        taskCreateService: widget.taskCreateService,
-                        taskEditService: widget.taskEditService,
-                        taskListService: _taskListService,
-                        taskDeleteService: _taskDeleteService,
                       );
                     }
                   }
@@ -206,12 +189,7 @@ class _TaskListPageState extends State<TaskListPage> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => CreateEditTaskPage(
-                    taskCreateService: widget.taskCreateService,
-                    taskEditService: widget.taskEditService,
-                    taskListService: _taskListService,
-                    taskDeleteService: _taskDeleteService,
-                  )
+                  builder: (context) => const CreateEditTaskPage()
               )
           );
         },

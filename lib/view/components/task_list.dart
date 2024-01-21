@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nova_chrono/application/api/task/task_delete_service.dart';
 import 'package:nova_chrono/domain/model/task.dart';
 import 'package:nova_chrono/view/shared/date_formatter.dart';
 
-import '../../application/api/task/task_create_service.dart';
-import '../../application/api/task/task_edit_service.dart';
-import '../../application/api/task/task_list_service.dart';
 import '../pages/create_edit_task_page.dart';
 
 class TaskList extends StatelessWidget {
@@ -13,18 +9,10 @@ class TaskList extends StatelessWidget {
     super.key,
     required this.tasks,
     required this.onDeletePressedFunction,
-    this.taskCreateService,
-    this.taskEditService,
-    this.taskListService,
-    this.taskDeleteService
   });
 
   final List<Task> tasks;
   final Function onDeletePressedFunction;
-  final TaskCreateService? taskCreateService;
-  final TaskEditService? taskEditService;
-  final TaskListService? taskListService;
-  final TaskDeleteService? taskDeleteService;
   static const int color = 600;
 
   @override
@@ -91,10 +79,6 @@ class TaskList extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => CreateEditTaskPage(
-                                      taskCreateService: taskCreateService,
-                                      taskEditService: taskEditService,
-                                      taskListService: taskListService,
-                                      taskDeleteService: taskDeleteService,
                                       taskId: taskId,
                                       taskName: taskName,
                                       startTimestamp: startTimestamp,
