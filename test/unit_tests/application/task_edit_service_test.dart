@@ -25,7 +25,7 @@ void main() {
     });
 
     test("Given task with details when update then taskRepository.updateTask "
-        "is called with expected task", () {
+        "is called with expected task", () async {
       // Given
       const taskId = '1';
       const taskName = 'Test Task';
@@ -36,16 +36,17 @@ void main() {
 
       when(mockEncryptionRepository.encrypt(taskName)).thenReturn(taskName);
       when(mockEncryptionRepository.encrypt(details)).thenReturn(details);
+      when(mockTaskRepository.getById(taskId)).thenAnswer((_) async => taskExpected);
 
       // When
-      taskEditService.editTask(taskId, taskName, startTimestamp, endTimestamp, details);
+      await taskEditService.editTask(taskId, taskName, startTimestamp, endTimestamp, details);
 
       // Then
       verify(mockTaskRepository.updateTask(taskExpected));
     });
 
     test("Given task without details when update then taskRepository.updateTask "
-        "is called with expected task", () {
+        "is called with expected task", () async {
       // Given
       const taskId = '1';
       const taskName = 'Test Task';
@@ -55,9 +56,10 @@ void main() {
 
       when(mockEncryptionRepository.encrypt(taskName)).thenReturn(taskName);
       when(mockEncryptionRepository.encrypt('')).thenReturn('');
+      when(mockTaskRepository.getById(taskId)).thenAnswer((_) async => taskExpected);
 
       // When
-      taskEditService.editTask(taskId, taskName, startTimestamp, endTimestamp, null);
+      await taskEditService.editTask(taskId, taskName, startTimestamp, endTimestamp, null);
 
       // Then
       verify(mockTaskRepository.updateTask(taskExpected));

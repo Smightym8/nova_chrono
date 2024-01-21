@@ -1,3 +1,4 @@
+import 'package:nova_chrono/application/api/exception/common_task_name_not_found_exception.dart';
 import 'package:nova_chrono/domain/repository/common_task_name_repository.dart';
 
 import '../../../injection_container.dart';
@@ -12,7 +13,12 @@ class CommonTaskNameDeleteServiceImpl implements CommonTaskNameDeleteService {
 
   @override
   Future<void> deleteCommonTaskName(String id) async {
+    var commonTaskName = await _commonTaskNameRepository.getById(id);
+
+    if (commonTaskName == null) {
+      throw CommonTaskNameNotFoundException('Common task name with id $id not found');
+    }
+
     await _commonTaskNameRepository.deleteCommonTaskName(id);
   }
-
 }

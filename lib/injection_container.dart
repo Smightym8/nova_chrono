@@ -29,7 +29,6 @@ import 'infrastructure/encryption/native_encryption_repository.dart';
 import 'infrastructure/repository/common_task_name_repository_impl.dart';
 import 'infrastructure/repository/task_repository_impl.dart';
 
-// TODO: Fix dependencies so that not all dependencies have to be passed to every widget
 GetIt getIt = GetIt.instance;
 
 Future<void> initializeDependencies({bool isIntegrationTest = false}) async {

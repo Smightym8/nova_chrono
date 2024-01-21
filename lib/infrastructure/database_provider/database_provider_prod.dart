@@ -100,7 +100,6 @@ class DatabaseProviderProduction implements DatabaseProvider {
     '${endTimestamp4.toString()}', ?);
     ''', [taskName, taskDetails]);
 
-    // TODO: Maybe store common task names encrypted
     var commonTaskNameId = 1;
     for (int i = 0; i < 5; i++) {
       final sqlStatement = '''
