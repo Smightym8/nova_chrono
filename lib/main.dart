@@ -3,6 +3,7 @@ import 'package:nova_chrono/app_state.dart';
 import 'package:nova_chrono/infrastructure/database_provider/database_provider.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
 import 'package:provider/provider.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'injection_container.dart';
 
@@ -11,6 +12,7 @@ int key = 0x42;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  WindowManager.instance.setMinimumSize(const Size(1200, 600));
   await initializeDependencies();
   await getIt<DatabaseProvider>().initDatabase();
 
