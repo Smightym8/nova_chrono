@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../application/api/exception/task_not_found_exception.dart';
 import '../../application/api/task/task_delete_service.dart';
 import '../../application/api/task/task_list_service.dart';
 import '../../domain/model/task.dart';
@@ -10,6 +11,7 @@ import '../components/task_list.dart';
 import '../providers/task_filter_date_provider.dart';
 import '../shared/date_formatter.dart';
 import 'create_edit_task_page.dart';
+import 'error_page.dart';
 
 class TaskListPage extends StatefulWidget {
   const TaskListPage({super.key, required this.title});
@@ -72,11 +74,24 @@ class _TaskListPageState extends State<TaskListPage> {
   }
 
   Future<void> delete(String taskId) async {
-    await _taskDeleteService.deleteTask(taskId);
+    try {
+      await _taskDeleteService.deleteTask(taskId);
+    } on TaskNotFoundException catch (e) {
+      navigateToErrorPage(e.cause);
+    }
 
     setState(() {
       _tasksFuture = _taskListService.getTasksByDate(_dateProvider.selectedDate);
     });
+  }
+
+  void navigateToErrorPage(String errorMessage) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ErrorPage(errorMessage: errorMessage)
+        )
+    );
   }
 
   void setSearchTerm(String searchTerm) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nova_chrono/application/api/exception/common_task_name_not_found_exception.dart';
 
 import '../../application/api/common_task_name/common_task_name_delete_service.dart';
 import '../../application/api/common_task_name/common_task_name_list_service.dart';
@@ -6,6 +7,7 @@ import '../../domain/model/common_task_name.dart';
 import '../../injection_container.dart';
 import '../components/search_box.dart';
 import 'create_edit_common_task_name_page.dart';
+import 'error_page.dart';
 
 class CommonTaskNamesListPage extends StatefulWidget {
   const CommonTaskNamesListPage({
@@ -43,12 +45,25 @@ class _CommonTaskNamesListPageState extends State<CommonTaskNamesListPage> {
   }
 
   Future<void> onDeletePressed(String id) async {
-    await _commonTaskNameDeleteService.deleteCommonTaskName(id);
+    try {
+      await _commonTaskNameDeleteService.deleteCommonTaskName(id);
+    } on CommonTaskNameNotFoundException catch (e) {
+      navigateToErrorPage(e.cause);
+    }
 
     setState(() {
       _commonTaskNamesFuture =
           _commonTaskNameListService.getAllCommonTaskNames();
     });
+  }
+
+  void navigateToErrorPage(String errorMessage) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ErrorPage(errorMessage: errorMessage)
+        )
+    );
   }
 
   @override

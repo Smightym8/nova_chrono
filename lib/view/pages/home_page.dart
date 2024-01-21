@@ -4,6 +4,7 @@ import 'package:nova_chrono/view/pages/task_list_page.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/selected_page_provider.dart';
+import 'error_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -37,7 +38,10 @@ class _HomePageState extends State<HomePage> {
       case 1:
         page = CommonTaskNamesListPage(title: widget.title);
       default:
-        throw UnimplementedError('no widget for $_selectedPageIndex');
+        // Don't show back button in this case as home would have an invalid
+        // value for selectedPage index and the user can see the navigation bar
+        var errorMessage = 'No widget for selected page index: $_selectedPageIndex';
+        page = ErrorPage(errorMessage: errorMessage, showBackToHomeButton: false);
     }
 
     return LayoutBuilder(

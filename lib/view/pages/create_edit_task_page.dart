@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nova_chrono/application/api/common_task_name/common_task_name_list_service.dart';
+import 'package:nova_chrono/application/api/exception/task_not_found_exception.dart';
 import 'package:nova_chrono/application/api/task/task_create_service.dart';
 import 'package:nova_chrono/application/api/task/task_edit_service.dart';
 import 'package:nova_chrono/domain/model/common_task_name.dart';
+import 'package:nova_chrono/view/pages/error_page.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
 import 'package:provider/provider.dart';
 
@@ -64,8 +66,12 @@ class _CreateEditTaskPageState extends State<CreateEditTaskPage> {
       await _taskCreateService.createTask(
           taskName, startTimestamp, endTimestamp, details);
     } else {
-      await _taskEditService.editTask(
-          widget.taskId!, taskName, startTimestamp, endTimestamp, details);
+      try {
+        await _taskEditService.editTask(
+            widget.taskId!, taskName, startTimestamp, endTimestamp, details);
+      } on TaskNotFoundException catch (e) {
+         navigateToErrorPage(e.cause);
+      }
     }
 
     navigateToHomePage();
@@ -76,6 +82,15 @@ class _CreateEditTaskPageState extends State<CreateEditTaskPage> {
         context,
         MaterialPageRoute(
             builder: (context) => const HomePage(title: "NovaChrono")
+        )
+    );
+  }
+
+  void navigateToErrorPage(String errorMessage) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ErrorPage(errorMessage: errorMessage)
         )
     );
   }
