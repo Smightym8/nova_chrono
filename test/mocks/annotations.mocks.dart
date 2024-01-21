@@ -7,8 +7,12 @@ import 'dart:async' as _i4;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i3;
-import 'package:nova_chrono/application/api/common_task_name/common_task_name_delete_service.dart'
+import 'package:nova_chrono/application/api/common_task_name/common_task_name_create_service.dart'
     as _i14;
+import 'package:nova_chrono/application/api/common_task_name/common_task_name_delete_service.dart'
+    as _i16;
+import 'package:nova_chrono/application/api/common_task_name/common_task_name_edit_service.dart'
+    as _i15;
 import 'package:nova_chrono/application/api/common_task_name/common_task_name_list_service.dart'
     as _i13;
 import 'package:nova_chrono/application/api/task/task_create_service.dart'
@@ -357,11 +361,58 @@ class MockCommonTaskNameListService extends _i1.Mock
       ) as _i4.Future<List<_i12.CommonTaskName>>);
 }
 
+/// A class which mocks [CommonTaskNameCreateService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCommonTaskNameCreateService extends _i1.Mock
+    implements _i14.CommonTaskNameCreateService {
+  MockCommonTaskNameCreateService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<void> createCommonTaskName(String? name) => (super.noSuchMethod(
+        Invocation.method(
+          #createCommonTaskName,
+          [name],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+}
+
+/// A class which mocks [CommonTaskNameEditService].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCommonTaskNameEditService extends _i1.Mock
+    implements _i15.CommonTaskNameEditService {
+  MockCommonTaskNameEditService() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<void> editCommonTaskName(
+    String? id,
+    String? name,
+  ) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #editCommonTaskName,
+          [
+            id,
+            name,
+          ],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+}
+
 /// A class which mocks [CommonTaskNameDeleteService].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockCommonTaskNameDeleteService extends _i1.Mock
-    implements _i14.CommonTaskNameDeleteService {
+    implements _i16.CommonTaskNameDeleteService {
   MockCommonTaskNameDeleteService() {
     _i1.throwOnMissingStub(this);
   }

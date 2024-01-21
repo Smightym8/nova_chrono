@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:nova_chrono/domain/model/task.dart';
+import 'package:nova_chrono/application/api/common_task_name/common_task_name_list_service.dart';
+import 'package:nova_chrono/application/api/task/task_create_service.dart';
+import 'package:nova_chrono/application/api/task/task_edit_service.dart';
+import 'package:nova_chrono/application/api/task/task_list_service.dart';
+import 'package:nova_chrono/injection_container.dart';
 import 'package:nova_chrono/view/pages/create_edit_task_page.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
 import 'package:nova_chrono/view/providers/selected_page_provider.dart';
@@ -9,19 +13,22 @@ import 'package:nova_chrono/view/providers/task_filter_date_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../mocks/annotations.mocks.dart';
+import '../unit_test_injection_container.dart';
 
 void main() {
   group('CreateEditTaskPage Unit Tests', () {
     late MockTaskCreateService mockTaskCreateService;
     late MockTaskListService mockTaskListService;
     late MockTaskEditService mockTaskEditService;
-    late MockTaskDeleteService mockTaskDeleteService;
+    late MockCommonTaskNameListService mockCommonTaskNameListService;
 
     setUpAll(() {
-      mockTaskCreateService = MockTaskCreateService();
-      mockTaskListService = MockTaskListService();
-      mockTaskEditService = MockTaskEditService();
-      mockTaskDeleteService = MockTaskDeleteService();
+      initializeMockDependencies();
+
+      mockTaskCreateService = getIt<TaskCreateService>() as MockTaskCreateService;
+      mockTaskListService = getIt<TaskListService>() as MockTaskListService;
+      mockTaskEditService = getIt<TaskEditService>() as MockTaskEditService;
+      mockCommonTaskNameListService = getIt<CommonTaskNameListService>() as MockCommonTaskNameListService;
     });
 
     testWidgets('CreateEditTaskPage has a form, two buttons and '
@@ -29,25 +36,25 @@ void main() {
       var expectedNumberOfTextFormFields = 4;
       var expectedNumberOfButtons = 2;
 
+      when(mockCommonTaskNameListService.getAllCommonTaskNames()).thenAnswer((_) async => []);
+
       await tester.pumpWidget(
-        Directionality(
+        const Directionality(
           textDirection: TextDirection.ltr,
           child: MaterialApp(
-            home: CreateEditTaskPage(
-              taskCreateService: mockTaskCreateService,
-              taskEditService: mockTaskEditService,
-            ),
+            home: CreateEditTaskPage(),
           ),
         ),
       );
+
+      await tester.pumpAndSettle();
 
       final formFinder = find.byType(Form);
       final textFormFieldFinder = find.byType(TextFormField);
       final buttonsFinder = find.byType(ElevatedButton);
 
       expect(formFinder, findsOneWidget);
-      expect(
-          textFormFieldFinder, findsNWidgets(expectedNumberOfTextFormFields));
+      expect(textFormFieldFinder, findsNWidgets(expectedNumberOfTextFormFields));
       expect(buttonsFinder, findsNWidgets(expectedNumberOfButtons));
     });
 
@@ -57,11 +64,10 @@ void main() {
       final GlobalKey<NavigatorState> navigatorKey =
           GlobalKey<NavigatorState>();
 
-      final List<Task> tasks = <Task>[];
-      final Future<List<Task>> tasksFuture = Future(() => tasks);
-
       when(mockTaskListService.getTasksByDate(any))
-          .thenAnswer((_) => tasksFuture);
+          .thenAnswer((_) async => []);
+
+      when(mockCommonTaskNameListService.getAllCommonTaskNames()).thenAnswer((_) async => []);
 
       await tester.pumpWidget(
         MultiProvider(
@@ -73,21 +79,18 @@ void main() {
             textDirection: TextDirection.ltr,
             child: MaterialApp(
               navigatorKey: navigatorKey,
-              home: CreateEditTaskPage(
-                taskCreateService: mockTaskCreateService,
-                taskEditService: mockTaskEditService,
-              ),
+              home: const CreateEditTaskPage(),
             ),
           ),
         )
       );
 
+      await tester.pumpAndSettle();
+
       // Manually push HomePage onto the navigation stack
       navigatorKey.currentState!.push(MaterialPageRoute(
-          builder: (context) => HomePage(
+          builder: (context) => const HomePage(
                 title: "NovaChrono",
-                taskListService: mockTaskListService,
-                taskDeleteService: mockTaskDeleteService,
               )));
 
       // Tap on the button
@@ -105,17 +108,18 @@ void main() {
     testWidgets('When the save button is pressed and the fields are empty '
         'it does not call TaskCreateService and '
         'validation messages are shown', (tester) async {
+      when(mockCommonTaskNameListService.getAllCommonTaskNames()).thenAnswer((_) async => []);
+
       await tester.pumpWidget(
-        Directionality(
+        const Directionality(
           textDirection: TextDirection.ltr,
           child: MaterialApp(
-            home: CreateEditTaskPage(
-              taskCreateService: mockTaskCreateService,
-              taskEditService: mockTaskEditService,
-            ),
+            home: CreateEditTaskPage(),
           ),
         ),
       );
+
+      await tester.pumpAndSettle();
 
       var saveButtonFinder = find.byKey(const Key('saveButton'));
       await tester.ensureVisible(saveButtonFinder);
@@ -132,7 +136,8 @@ void main() {
       const taskNameExpected = "Some task";
       const detailsExpected = "Some details";
 
-      when(mockTaskCreateService.createTask(taskNameExpected, any, any, detailsExpected)).thenAnswer((_) => Future(() => "1"));
+      when(mockTaskCreateService.createTask(taskNameExpected, any, any, detailsExpected)).thenAnswer((_) async => "1");
+      when(mockCommonTaskNameListService.getAllCommonTaskNames()).thenAnswer((_) async => []);
 
       await tester.pumpWidget(
           MultiProvider(
@@ -140,19 +145,16 @@ void main() {
               ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
               ChangeNotifierProvider(create: (context) => SelectedPageProvider()),
             ],
-            child:  Directionality(
+            child: const Directionality(
               textDirection: TextDirection.ltr,
               child: MaterialApp(
-                home: CreateEditTaskPage(
-                  taskCreateService: mockTaskCreateService,
-                  taskEditService: mockTaskEditService,
-                  taskListService: mockTaskListService,
-                  taskDeleteService: mockTaskDeleteService,
-                ),
+                home: CreateEditTaskPage(),
               ),
             ),
           )
       );
+
+      await tester.pumpAndSettle();
 
       var taskNameTextFieldFinder = find.byKey(const Key("taskNameTextField"));
       await tester.enterText(taskNameTextFieldFinder, taskNameExpected);
@@ -177,6 +179,8 @@ void main() {
 
     testWidgets("Given task when all fields are valid editTask is called "
         "and it navigates to homepage", (tester) async {
+      when(mockCommonTaskNameListService.getAllCommonTaskNames()).thenAnswer((_) async => []);
+
       const taskId = "1";
       const taskName = "Some task";
       const details = "Some details";
@@ -192,14 +196,10 @@ void main() {
               ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
               ChangeNotifierProvider(create: (context) => SelectedPageProvider()),
             ],
-            child:  Directionality(
+            child: Directionality(
               textDirection: TextDirection.ltr,
               child: MaterialApp(
                 home: CreateEditTaskPage(
-                  taskCreateService: mockTaskCreateService,
-                  taskEditService: mockTaskEditService,
-                  taskListService: mockTaskListService,
-                  taskDeleteService: mockTaskDeleteService,
                   taskId: taskId,
                   taskName: taskName,
                   startTimestamp: startTimestamp,
@@ -210,6 +210,8 @@ void main() {
             ),
           )
       );
+
+      await tester.pumpAndSettle();
 
       var detailsTextFieldFinder = find.byKey(const Key("detailsTextField"));
       await tester.enterText(detailsTextFieldFinder, updatedDetails);
