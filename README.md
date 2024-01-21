@@ -15,6 +15,14 @@ Engine • revision 6e2ea58a5c
 Tools • Dart 3.2.5 • DevTools 2.28.5
 ```
 
+To check the build on windows we used the following versions of flutter and dart:
+```txt
+Flutter 3.16.2 • channel stable • https://github.com/flutter/flutter.git
+Framework • revision 9e1c857886 (7 weeks ago) • 2023-11-30 11:51:18 -0600
+Engine • revision cf7a9d0800
+Tools • Dart 3.2.2 • DevTools 2.28.3
+```
+
 ## Requirements
 ### Windows
 
@@ -60,6 +68,8 @@ Substitute platform with one of the following:
 ```bash
 flutter build windows --release
 ```
+
+You can find the build in `build\windows\x64\runner\Release\`.
 
 * linux
 
@@ -130,6 +140,8 @@ It is recommended to show hidden folders/files.
 
 ### File location when the release build is run
 #### Windows
+On Windows the .db file is stored in the directory `build/windows/x64/runner/Release/.dart_tool/sqflite_common_ffi/databases/novachrono.db`.
+
 #### Linux
 On Linux the .db fle is stored in the directory `build/linux/x64/release/bundle/.dart_tool/sqflite_common_ffi/databases/novachrono.db`.
 
