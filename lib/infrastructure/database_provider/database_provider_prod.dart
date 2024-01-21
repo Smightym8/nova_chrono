@@ -7,14 +7,16 @@ class DatabaseProviderProduction implements DatabaseProvider {
   static const _databaseVersion = 1;
   late Database _database;
 
+  @override
   Database get database => _database;
 
   @override
   Future<void> initDatabase() async {
-    String path = join(".", _databaseName);
-
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
+
+    String dbPath = await getDatabasesPath();
+    String path = join(dbPath, _databaseName);
 
     _database = await openDatabase(path,
         version: _databaseVersion, onCreate: _onCreate);
@@ -27,7 +29,8 @@ class DatabaseProviderProduction implements DatabaseProvider {
 
   @override
   Future<void> deleteDatabase() async {
-    String path = join(".", _databaseName);
+    String dbPath = await getDatabasesPath();
+    String path = join(dbPath, _databaseName);
 
     await databaseFactory.deleteDatabase(path);
   }

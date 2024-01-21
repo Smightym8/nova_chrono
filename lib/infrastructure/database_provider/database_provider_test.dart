@@ -7,6 +7,7 @@ class DatabaseProviderTest implements DatabaseProvider {
   static const _databaseVersion = 1;
   late Database _database;
 
+  @override
   Database get database => _database;
 
   @override
