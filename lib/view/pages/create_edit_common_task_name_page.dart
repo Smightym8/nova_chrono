@@ -3,20 +3,19 @@ import 'package:nova_chrono/view/pages/home_page.dart';
 
 import '../../application/api/common_task_name/common_task_name_create_service.dart';
 import '../../application/api/common_task_name/common_task_name_edit_service.dart';
+import '../../application/api/exception/common_task_name_not_found_exception.dart';
 import '../../domain/model/task.dart';
-import '../../main.dart';
+import '../../injection_container.dart';
 import '../components/create_edit_common_task_name_form.dart';
+import 'error_page.dart';
 
 class CreateEditCommonTaskNamePage extends StatefulWidget {
-  const CreateEditCommonTaskNamePage(
-      {super.key,
-        this.commonTaskNameCreateService,
-        this.commonTaskNameEditService,
-        this.commonTaskNameId,
-        this.commonTaskName});
+  const CreateEditCommonTaskNamePage({
+    super.key,
+    this.commonTaskNameId,
+    this.commonTaskName
+  });
 
-  final CommonTaskNameCreateService? commonTaskNameCreateService;
-  final CommonTaskNameEditService? commonTaskNameEditService;
   final String? commonTaskNameId;
   final String? commonTaskName;
 
@@ -36,8 +35,8 @@ class _CreateEditCommonTaskNamePageState extends State<CreateEditCommonTaskNameP
     super.initState();
 
     title = "Create Common Task Name";
-    _commonTaskNameCreateService = widget.commonTaskNameCreateService ?? getIt<CommonTaskNameCreateService>();
-    _commonTaskNameEditService = widget.commonTaskNameEditService ?? getIt<CommonTaskNameEditService>();
+    _commonTaskNameCreateService = getIt<CommonTaskNameCreateService>();
+    _commonTaskNameEditService = getIt<CommonTaskNameEditService>();
 
     if (widget.commonTaskNameId != null) {
       title = "Edit Common Task Name";
@@ -49,8 +48,12 @@ class _CreateEditCommonTaskNamePageState extends State<CreateEditCommonTaskNameP
       await _commonTaskNameCreateService.createCommonTaskName(
           commonTaskName);
     } else {
-      await _commonTaskNameEditService.editCommonTaskName(
-          widget.commonTaskNameId!, commonTaskName);
+      try {
+        await _commonTaskNameEditService.editCommonTaskName(
+            widget.commonTaskNameId!, commonTaskName);
+      } on CommonTaskNameNotFoundException catch (e) {
+        navigateToErrorPage(e.cause);
+      }
     }
 
     navigateToHomePage();
@@ -61,6 +64,15 @@ class _CreateEditCommonTaskNamePageState extends State<CreateEditCommonTaskNameP
         context,
         MaterialPageRoute(
             builder: (context) => const HomePage(title: "NovaChrono")));
+  }
+
+  void navigateToErrorPage(String errorMessage) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ErrorPage(errorMessage: errorMessage)
+        )
+    );
   }
 
   @override

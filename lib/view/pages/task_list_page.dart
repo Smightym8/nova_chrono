@@ -1,33 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:nova_chrono/app_state.dart';
 import 'package:provider/provider.dart';
 
-import '../../application/api/task/task_create_service.dart';
+import '../../application/api/exception/task_not_found_exception.dart';
 import '../../application/api/task/task_delete_service.dart';
-import '../../application/api/task/task_edit_service.dart';
 import '../../application/api/task/task_list_service.dart';
 import '../../domain/model/task.dart';
-import '../../main.dart';
+import '../../injection_container.dart';
 import '../components/search_box.dart';
 import '../components/task_list.dart';
-import '../providers/task_filter_date_provider.dart';
 import '../shared/date_formatter.dart';
 import 'create_edit_task_page.dart';
+import 'error_page.dart';
 
 class TaskListPage extends StatefulWidget {
-  const TaskListPage({
-    super.key,
-    required this.title,
-    this.taskListService,
-    this.taskDeleteService,
-    this.taskCreateService,
-    this.taskEditService
-  });
+  const TaskListPage({super.key, required this.title});
 
   final String title;
-  final TaskListService? taskListService;
-  final TaskDeleteService? taskDeleteService;
-  final TaskCreateService? taskCreateService;
-  final TaskEditService? taskEditService;
 
   @override
   State<TaskListPage> createState() => _TaskListPageState();
@@ -35,7 +24,7 @@ class TaskListPage extends StatefulWidget {
 
 class _TaskListPageState extends State<TaskListPage> {
   late Future<List<Task>> _tasksFuture;
-  late TaskFilterDateProvider _dateProvider;
+  late AppState _appState;
   late String _searchTerm;
   late TextEditingController _selectedDateController;
   late TaskListService _taskListService;
@@ -44,13 +33,13 @@ class _TaskListPageState extends State<TaskListPage> {
   @override
   void initState() {
     _searchTerm = "";
-    _dateProvider = context.read<TaskFilterDateProvider>();
+    _appState = context.read<AppState>();
     _selectedDateController = TextEditingController(
-        text: DateFormatter.formatDateWithoutTime(_dateProvider.selectedDate));
-    _taskListService = widget.taskListService ?? getIt<TaskListService>();
-    _taskDeleteService = widget.taskDeleteService ?? getIt<TaskDeleteService>();
+        text: DateFormatter.formatDateWithoutTime(_appState.selectedDate));
+    _taskListService = getIt<TaskListService>();
+    _taskDeleteService = getIt<TaskDeleteService>();
 
-    _tasksFuture = _taskListService.getTasksByDate(_dateProvider.selectedDate);
+    _tasksFuture = _taskListService.getTasksByDate(_appState.selectedDate);
 
     super.initState();
   }
@@ -67,17 +56,17 @@ class _TaskListPageState extends State<TaskListPage> {
 
     await showDatePicker(
         context: context,
-        initialDate: _dateProvider.selectedDate,
+        initialDate: _appState.selectedDate,
         firstDate: DateTime(0),
         lastDate: now
     )
         .then((selectedDate) {
       if (selectedDate != null) {
-        _dateProvider.selectedDate = selectedDate;
+        _appState.selectedDate = selectedDate;
 
         setState(() {
           _selectedDateController.text = DateFormatter.formatDateWithoutTime(selectedDate);
-          _tasksFuture = _taskListService.getTasksByDate(_dateProvider.selectedDate);
+          _tasksFuture = _taskListService.getTasksByDate(_appState.selectedDate);
         });
       }
     }
@@ -85,11 +74,24 @@ class _TaskListPageState extends State<TaskListPage> {
   }
 
   Future<void> delete(String taskId) async {
-    await _taskDeleteService.deleteTask(taskId);
+    try {
+      await _taskDeleteService.deleteTask(taskId);
+    } on TaskNotFoundException catch (e) {
+      navigateToErrorPage(e.cause);
+    }
 
     setState(() {
-      _tasksFuture = _taskListService.getTasksByDate(_dateProvider.selectedDate);
+      _tasksFuture = _taskListService.getTasksByDate(_appState.selectedDate);
     });
+  }
+
+  void navigateToErrorPage(String errorMessage) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ErrorPage(errorMessage: errorMessage)
+        )
+    );
   }
 
   void setSearchTerm(String searchTerm) {
@@ -187,10 +189,6 @@ class _TaskListPageState extends State<TaskListPage> {
                       return TaskList(
                         tasks: filteredTasks,
                         onDeletePressedFunction: delete,
-                        taskCreateService: widget.taskCreateService,
-                        taskEditService: widget.taskEditService,
-                        taskListService: _taskListService,
-                        taskDeleteService: _taskDeleteService,
                       );
                     }
                   }
@@ -206,12 +204,7 @@ class _TaskListPageState extends State<TaskListPage> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => CreateEditTaskPage(
-                    taskCreateService: widget.taskCreateService,
-                    taskEditService: widget.taskEditService,
-                    taskListService: _taskListService,
-                    taskDeleteService: _taskDeleteService,
-                  )
+                  builder: (context) => const CreateEditTaskPage()
               )
           );
         },

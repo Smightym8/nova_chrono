@@ -1,28 +1,29 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nova_chrono/application/api/task/task_create_service.dart';
-import 'package:nova_chrono/application/impl/task/task_create_service_impl.dart';
+import 'package:nova_chrono/domain/repository/encryption_repository.dart';
 import 'package:nova_chrono/domain/repository/task_repository.dart';
-import 'package:nova_chrono/infrastructure/task_repository_impl.dart';
-
-import '../../../integration_test/test_database_provider.dart';
+import 'package:nova_chrono/infrastructure/database_provider/database_provider.dart';
+import 'package:nova_chrono/injection_container.dart';
 
 void main() {
   group("TaskCreateService Integration Tests", () {
-    late TestDatabaseProvider testDatabaseProvider;
     late TaskRepository taskRepository;
     late TaskCreateService taskCreateService;
 
-    setUp(() async {
-      testDatabaseProvider = TestDatabaseProvider.instance;
-      await testDatabaseProvider.initDatabase();
+    setUpAll(() async {
+      await initializeDependencies(isIntegrationTest: true);
+    });
 
-      taskRepository = TaskRepositoryImpl(database: testDatabaseProvider.database);
-      taskCreateService = TaskCreateServiceImpl(taskRepository: taskRepository);
+    setUp(() async {
+      await getIt<DatabaseProvider>().initDatabase();
+
+      taskRepository = getIt<TaskRepository>();
+      taskCreateService = getIt<TaskCreateService>();
     });
 
     tearDown(() async {
-      await testDatabaseProvider.closeDatabase();
-      await testDatabaseProvider.deleteDatabase();
+      await getIt<DatabaseProvider>().closeDatabase();
+      await getIt<DatabaseProvider>().deleteDatabase();
     });
 
     test('given id, taskName, startTimestamp and endTimestamp. When createTask '
@@ -43,10 +44,14 @@ void main() {
       // Then
       var taskActual = await taskRepository.getById(taskId);
       expect(taskActual, isNot(null));
-      expect(taskActual?.name, nameExpected);
-      expect(taskActual?.startTimestamp, startTimestampExpected);
-      expect(taskActual?.endTimestamp, endTimestampExpected);
-      expect(taskActual?.details, '');
+
+      var decryptedTaskName = getIt<EncryptionRepository>().decrypt(taskActual!.name);
+      var decryptedDetails = getIt<EncryptionRepository>().decrypt(taskActual.details);
+
+      expect(decryptedTaskName, nameExpected);
+      expect(taskActual.startTimestamp, startTimestampExpected);
+      expect(taskActual.endTimestamp, endTimestampExpected);
+      expect(decryptedDetails, '');
     });
 
     test('given id, taskName, startTimestamp, endTimestamp and details. '
@@ -68,10 +73,14 @@ void main() {
       // Then
       var taskActual = await taskRepository.getById(taskId);
       expect(taskActual, isNot(null));
-      expect(taskActual?.name, nameExpected);
-      expect(taskActual?.startTimestamp, startTimestampExpected);
-      expect(taskActual?.endTimestamp, endTimestampExpected);
-      expect(taskActual?.details, detailsExpected);
+
+      var decryptedTaskName = getIt<EncryptionRepository>().decrypt(taskActual!.name);
+      var decryptedDetails = getIt<EncryptionRepository>().decrypt(taskActual.details);
+
+      expect(decryptedTaskName, nameExpected);
+      expect(taskActual.startTimestamp, startTimestampExpected);
+      expect(taskActual.endTimestamp, endTimestampExpected);
+      expect(decryptedDetails, detailsExpected);
     });
   });
 }

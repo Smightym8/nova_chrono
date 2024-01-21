@@ -1,26 +1,38 @@
+import 'package:nova_chrono/infrastructure/database_provider/database_provider.dart';
 import 'package:path/path.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-class DatabaseProvider {
+class DatabaseProviderProduction implements DatabaseProvider {
   static const _databaseName = "novachrono.db";
   static const _databaseVersion = 1;
   late Database _database;
 
-  DatabaseProvider._privateConstructor();
-
-  static final DatabaseProvider instance =
-      DatabaseProvider._privateConstructor();
-
+  @override
   Database get database => _database;
 
-  initDatabase() async {
-    String path = join(".", _databaseName);
-
+  @override
+  Future<void> initDatabase() async {
     sqfliteFfiInit();
     databaseFactory = databaseFactoryFfi;
 
+    String dbPath = await getDatabasesPath();
+    String path = join(dbPath, _databaseName);
+
     _database = await openDatabase(path,
         version: _databaseVersion, onCreate: _onCreate);
+  }
+
+  @override
+  Future<void> closeDatabase() async {
+    await _database.close();
+  }
+
+  @override
+  Future<void> deleteDatabase() async {
+    String dbPath = await getDatabasesPath();
+    String path = join(dbPath, _databaseName);
+
+    await databaseFactory.deleteDatabase(path);
   }
 
   Future _onCreate(Database db, int version) async {
@@ -91,7 +103,6 @@ class DatabaseProvider {
     '${endTimestamp4.toString()}', ?);
     ''', [taskName, taskDetails]);
 
-    // TODO: Maybe store common task names encrypted
     var commonTaskNameId = 1;
     for (int i = 0; i < 5; i++) {
       final sqlStatement = '''

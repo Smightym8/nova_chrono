@@ -1,9 +1,9 @@
 class Task {
   late final String _id;
-  late final String _name;
-  late final DateTime _startTimestamp;
-  late final DateTime _endTimestamp;
-  late final String _details;
+  late String _name;
+  late DateTime _startTimestamp;
+  late DateTime _endTimestamp;
+  late String _details;
 
   Task(String id, String name, DateTime startTimestamp, DateTime endTimestamp,
       String details) {
@@ -23,6 +23,13 @@ class Task {
   DateTime get endTimestamp => _endTimestamp;
 
   String get details => _details;
+
+  void update(String name, DateTime startTimestamp, DateTime endTimestamp, String details) {
+    _name = name;
+    _startTimestamp = startTimestamp;
+    _endTimestamp = endTimestamp;
+    _details = details;
+  }
 
   Map<String, dynamic> toMap() {
     return {

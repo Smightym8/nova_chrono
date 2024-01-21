@@ -1,7 +1,7 @@
-import '../domain/repository/native_encryption_lib_bridge.dart';
-import '../main.dart';
+import '../../domain/repository/encryption_repository.dart';
+import '../../main.dart';
 
-class EncryptionService implements NativeEncryptionLibBridge {
+class DartEncryptionRepository implements EncryptionRepository {
 
   @override
   String encrypt(String stringToEncrypt) {

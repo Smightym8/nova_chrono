@@ -1,37 +1,33 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:nova_chrono/application/api/task/task_list_service.dart';
-import 'package:nova_chrono/application/impl/task/task_list_service_impl.dart';
 import 'package:nova_chrono/domain/model/task.dart';
-import 'package:nova_chrono/domain/repository/task_repository.dart';
-import 'package:nova_chrono/infrastructure/task_repository_impl.dart';
-
-import '../../../integration_test/test_database_provider.dart';
+import 'package:nova_chrono/infrastructure/database_provider/database_provider.dart';
+import 'package:nova_chrono/injection_container.dart';
 
 void main() {
   group("TaskListService Integration Tests", () {
-    late TestDatabaseProvider testDatabaseProvider;
-    late TaskRepository taskRepository;
     late TaskListService taskListService;
 
-    setUp(() async {
-      testDatabaseProvider = TestDatabaseProvider.instance;
-      await testDatabaseProvider.initDatabase();
+    setUpAll(() async {
+      await initializeDependencies(isIntegrationTest: true);
+    });
 
-      taskRepository = TaskRepositoryImpl(database: testDatabaseProvider.database);
-      taskListService = TaskListServiceImpl(taskRepository: taskRepository);
+    setUp(() async {
+      await getIt<DatabaseProvider>().initDatabase();
+
+      taskListService = getIt<TaskListService>();
     });
 
     tearDown(() async {
-      await testDatabaseProvider.closeDatabase();
-      await testDatabaseProvider.deleteDatabase();
+      await getIt<DatabaseProvider>().closeDatabase();
+      await getIt<DatabaseProvider>().deleteDatabase();
     });
 
     test("Given date when getByDate then expected tasks are returned", () async {
       // Given
-      var now = DateTime.now();
-      var startTimestamp3 = now.subtract(const Duration(days: 2));
+      var startTimestamp3 = DateTime(2023, 12, 12, 13, 30);
       var endTimestamp3 = startTimestamp3.add(const Duration(hours: 1));
-      var startTimestamp4 = now.subtract(const Duration(days: 2)).add(const Duration(hours: 1));
+      var startTimestamp4 =  DateTime(2023, 12, 12, 14, 30);
       var endTimestamp4 = startTimestamp4.add(const Duration(hours: 2));
       var tasksExpected = <Task>[
         Task("4", "Task 4", startTimestamp4,

@@ -1,14 +1,15 @@
 import 'package:nova_chrono/domain/repository/common_task_name_repository.dart';
-import 'package:nova_chrono/main.dart';
 
+import '../../../injection_container.dart';
 import '../../api/common_task_name/common_task_name_edit_service.dart';
+import '../../api/exception/common_task_name_not_found_exception.dart';
 
 
 class CommonTaskNameEditServiceImpl implements CommonTaskNameEditService {
   late CommonTaskNameRepository _commonTaskNameRepository;
 
-  CommonTaskNameEditServiceImpl({CommonTaskNameRepository? commonTaskNameRepository}) {
-    _commonTaskNameRepository = commonTaskNameRepository ?? getIt<CommonTaskNameRepository>();
+  CommonTaskNameEditServiceImpl() {
+    _commonTaskNameRepository = getIt<CommonTaskNameRepository>();
   }
 
   @override
@@ -16,12 +17,11 @@ class CommonTaskNameEditServiceImpl implements CommonTaskNameEditService {
     var commonTaskName = await _commonTaskNameRepository.getById(id);
 
     if (commonTaskName == null) {
-      // TODO: Throw exception
-      print("CommonTaskName not found!");
+      throw CommonTaskNameNotFoundException('Common task name with id $id not found');
     }
 
-    commonTaskName?.update(name);
+    commonTaskName.update(name);
 
-    await _commonTaskNameRepository.updateCommonTaskName(commonTaskName!);
+    await _commonTaskNameRepository.updateCommonTaskName(commonTaskName);
   }
 }
