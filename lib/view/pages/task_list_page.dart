@@ -24,7 +24,7 @@ class TaskListPage extends StatefulWidget {
 
 class _TaskListPageState extends State<TaskListPage> {
   late Future<List<Task>> _tasksFuture;
-  late AppState _dateProvider;
+  late AppState _appState;
   late String _searchTerm;
   late TextEditingController _selectedDateController;
   late TaskListService _taskListService;
@@ -33,13 +33,13 @@ class _TaskListPageState extends State<TaskListPage> {
   @override
   void initState() {
     _searchTerm = "";
-    _dateProvider = context.read<AppState>();
+    _appState = context.read<AppState>();
     _selectedDateController = TextEditingController(
-        text: DateFormatter.formatDateWithoutTime(_dateProvider.selectedDate));
+        text: DateFormatter.formatDateWithoutTime(_appState.selectedDate));
     _taskListService = getIt<TaskListService>();
     _taskDeleteService = getIt<TaskDeleteService>();
 
-    _tasksFuture = _taskListService.getTasksByDate(_dateProvider.selectedDate);
+    _tasksFuture = _taskListService.getTasksByDate(_appState.selectedDate);
 
     super.initState();
   }
@@ -56,17 +56,17 @@ class _TaskListPageState extends State<TaskListPage> {
 
     await showDatePicker(
         context: context,
-        initialDate: _dateProvider.selectedDate,
+        initialDate: _appState.selectedDate,
         firstDate: DateTime(0),
         lastDate: now
     )
         .then((selectedDate) {
       if (selectedDate != null) {
-        _dateProvider.selectedDate = selectedDate;
+        _appState.selectedDate = selectedDate;
 
         setState(() {
           _selectedDateController.text = DateFormatter.formatDateWithoutTime(selectedDate);
-          _tasksFuture = _taskListService.getTasksByDate(_dateProvider.selectedDate);
+          _tasksFuture = _taskListService.getTasksByDate(_appState.selectedDate);
         });
       }
     }
@@ -81,7 +81,7 @@ class _TaskListPageState extends State<TaskListPage> {
     }
 
     setState(() {
-      _tasksFuture = _taskListService.getTasksByDate(_dateProvider.selectedDate);
+      _tasksFuture = _taskListService.getTasksByDate(_appState.selectedDate);
     });
   }
 

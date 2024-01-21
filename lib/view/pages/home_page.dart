@@ -6,42 +6,27 @@ import 'package:provider/provider.dart';
 
 import 'error_page.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   const HomePage({super.key, required this.title});
 
   final String title;
 
   @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  late int _selectedPageIndex;
-  late AppState _selectedPageProvider;
-
-  @override
-  void initState() {
-    _selectedPageIndex = 0;
-    _selectedPageProvider = context.read<AppState>();
-    _selectedPageIndex = _selectedPageProvider.selectedPageIndex;
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    int selectedPageIndex = Provider.of<AppState>(context).selectedPageIndex;
+
     Widget page;
-    switch (_selectedPageIndex) {
+    switch (selectedPageIndex) {
       case 0:
-        page = TaskListPage(title: widget.title);
+        page = TaskListPage(title: title);
         break;
       case 1:
-        page = CommonTaskNamesListPage(title: widget.title);
+        page = CommonTaskNamesListPage(title: title);
         break;
       default:
-        // Don't show back button in this case as home would have an invalid
-        // value for selectedPage index and the user can see the navigation bar
-        var errorMessage = 'No widget for selected page index: $_selectedPageIndex';
+      // Don't show back button in this case as home would have an invalid
+      // value for selectedPage index and the user can see the navigation bar
+        var errorMessage = 'No widget for selected page index: $selectedPageIndex';
         page = ErrorPage(errorMessage: errorMessage, showBackToHomeButton: false);
     }
 
@@ -64,13 +49,9 @@ class _HomePageState extends State<HomePage> {
                         label: Text('Common Task Names'),
                       ),
                     ],
-                    selectedIndex: _selectedPageIndex,
+                    selectedIndex: selectedPageIndex,
                     onDestinationSelected: (value) {
-                      _selectedPageProvider.selectedPageIndex = value;
-
-                      setState(() {
-                        _selectedPageIndex = value;
-                      });
+                      Provider.of<AppState>(context, listen: false).selectedPageIndex = value;
                     },
                   ),
                 ),
