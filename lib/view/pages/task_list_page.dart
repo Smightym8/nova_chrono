@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nova_chrono/app_state.dart';
 import 'package:provider/provider.dart';
 
 import '../../application/api/exception/task_not_found_exception.dart';
@@ -8,7 +9,6 @@ import '../../domain/model/task.dart';
 import '../../injection_container.dart';
 import '../components/search_box.dart';
 import '../components/task_list.dart';
-import '../providers/task_filter_date_provider.dart';
 import '../shared/date_formatter.dart';
 import 'create_edit_task_page.dart';
 import 'error_page.dart';
@@ -24,7 +24,7 @@ class TaskListPage extends StatefulWidget {
 
 class _TaskListPageState extends State<TaskListPage> {
   late Future<List<Task>> _tasksFuture;
-  late TaskFilterDateProvider _dateProvider;
+  late AppState _dateProvider;
   late String _searchTerm;
   late TextEditingController _selectedDateController;
   late TaskListService _taskListService;
@@ -33,7 +33,7 @@ class _TaskListPageState extends State<TaskListPage> {
   @override
   void initState() {
     _searchTerm = "";
-    _dateProvider = context.read<TaskFilterDateProvider>();
+    _dateProvider = context.read<AppState>();
     _selectedDateController = TextEditingController(
         text: DateFormatter.formatDateWithoutTime(_dateProvider.selectedDate));
     _taskListService = getIt<TaskListService>();

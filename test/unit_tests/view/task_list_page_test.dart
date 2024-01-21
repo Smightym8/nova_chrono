@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:nova_chrono/app_state.dart';
 import 'package:nova_chrono/application/api/common_task_name/common_task_name_list_service.dart';
 import 'package:nova_chrono/application/api/task/task_delete_service.dart';
 import 'package:nova_chrono/application/api/task/task_list_service.dart';
@@ -10,8 +11,6 @@ import 'package:nova_chrono/view/components/search_box.dart';
 import 'package:nova_chrono/view/components/task_list.dart';
 import 'package:nova_chrono/view/pages/create_edit_task_page.dart';
 import 'package:nova_chrono/view/pages/task_list_page.dart';
-import 'package:nova_chrono/view/providers/selected_page_provider.dart';
-import 'package:nova_chrono/view/providers/task_filter_date_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../mocks/annotations.mocks.dart';
@@ -44,11 +43,8 @@ void main() {
               .thenAnswer((_) => tasksFuture);
 
           await tester.pumpWidget(
-              MultiProvider(
-                providers: [
-                  ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
-                  ChangeNotifierProvider(create: (context) => SelectedPageProvider()),
-                ],
+              ChangeNotifierProvider(
+                create: (context) => AppState(),
                 child: const Directionality(
                   textDirection: TextDirection.ltr,
                   child: MaterialApp(
@@ -84,11 +80,8 @@ void main() {
       when(mockCommonTaskNameListService.getAllCommonTaskNames()).thenAnswer((_) async => []);
 
       await tester.pumpWidget(
-          MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
-              ChangeNotifierProvider(create: (context) => SelectedPageProvider()),
-            ],
+          ChangeNotifierProvider(
+            create: (context) => AppState(),
             child: const Directionality(
               textDirection: TextDirection.ltr,
               child: MaterialApp(
@@ -123,11 +116,8 @@ void main() {
           .thenAnswer((_) => tasksFuture);
 
       await tester.pumpWidget(
-          MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
-              ChangeNotifierProvider(create: (context) => SelectedPageProvider()),
-            ],
+          ChangeNotifierProvider(
+            create: (context) => AppState(),
             child: const Directionality(
               textDirection: TextDirection.ltr,
               child: MaterialApp(
@@ -161,17 +151,14 @@ void main() {
       when(mockCommonTaskNameListService.getAllCommonTaskNames()).thenAnswer((_) async => []);
 
       await tester.pumpWidget(
-          MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
-              ChangeNotifierProvider(create: (context) => SelectedPageProvider()),
-            ],
-            child: const Directionality(
-              textDirection: TextDirection.ltr,
-              child: MaterialApp(
-                home: TaskListPage(title: title),
+          ChangeNotifierProvider(
+              create: (context) => AppState(),
+              child: const Directionality(
+                textDirection: TextDirection.ltr,
+                child: MaterialApp(
+                  home: TaskListPage(title: title),
+                ),
               ),
-            ),
           )
       );
 
@@ -200,11 +187,8 @@ void main() {
           .thenAnswer((_) => tasksFuture);
 
       await tester.pumpWidget(
-          MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
-              ChangeNotifierProvider(create: (context) => SelectedPageProvider()),
-            ],
+          ChangeNotifierProvider(
+            create: (context) => AppState(),
             child: const Directionality(
               textDirection: TextDirection.ltr,
               child: MaterialApp(
@@ -248,11 +232,8 @@ void main() {
           .thenAnswer((_) => tasksAfterDateSelectedFuture);
 
       await tester.pumpWidget(
-          MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
-              ChangeNotifierProvider(create: (context) => SelectedPageProvider()),
-            ],
+          ChangeNotifierProvider(
+            create: (context) => AppState(),
             child: const Directionality(
               textDirection: TextDirection.ltr,
               child: MaterialApp(

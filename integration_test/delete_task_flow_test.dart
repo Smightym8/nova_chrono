@@ -4,9 +4,6 @@ import 'package:integration_test/integration_test.dart';
 import 'package:nova_chrono/infrastructure/database_provider/database_provider.dart';
 import 'package:nova_chrono/injection_container.dart';
 import 'package:nova_chrono/main.dart';
-import 'package:nova_chrono/view/providers/selected_page_provider.dart';
-import 'package:nova_chrono/view/providers/task_filter_date_provider.dart';
-import 'package:provider/provider.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -24,15 +21,7 @@ void main() {
     testWidgets("Given at least one task in the task list when deleting a task "
         "the task is not in the list anymore", (tester) async {
       await tester.runAsync(() async {
-        await tester.pumpWidget(
-          MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
-              ChangeNotifierProvider(create: (context) => SelectedPageProvider()),
-            ],
-            child: const App(),
-          ),
-        );
+        await tester.pumpWidget(const App());
 
         await Future.delayed(const Duration(seconds: 1));
         await tester.pumpAndSettle();

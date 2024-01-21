@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:nova_chrono/app_state.dart';
 import 'package:nova_chrono/application/api/common_task_name/common_task_name_list_service.dart';
 import 'package:nova_chrono/application/api/task/task_create_service.dart';
 import 'package:nova_chrono/application/api/task/task_edit_service.dart';
@@ -8,8 +9,6 @@ import 'package:nova_chrono/application/api/task/task_list_service.dart';
 import 'package:nova_chrono/injection_container.dart';
 import 'package:nova_chrono/view/pages/create_edit_task_page.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
-import 'package:nova_chrono/view/providers/selected_page_provider.dart';
-import 'package:nova_chrono/view/providers/task_filter_date_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../mocks/annotations.mocks.dart';
@@ -60,48 +59,37 @@ void main() {
 
     testWidgets('When the cancel button is pressed it navigates to HomePage',
         (tester) async {
-      // Use a GlobalKey to get access to the NavigatorState
-      final GlobalKey<NavigatorState> navigatorKey =
-          GlobalKey<NavigatorState>();
-
       when(mockTaskListService.getTasksByDate(any))
           .thenAnswer((_) async => []);
 
       when(mockCommonTaskNameListService.getAllCommonTaskNames()).thenAnswer((_) async => []);
 
+      // Start from home page as we need the route pushed on the stack
       await tester.pumpWidget(
-        MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
-            ChangeNotifierProvider(create: (context) => SelectedPageProvider()),
-          ],
-          child: Directionality(
-            textDirection: TextDirection.ltr,
-            child: MaterialApp(
-              navigatorKey: navigatorKey,
-              home: const CreateEditTaskPage(),
+          ChangeNotifierProvider(
+            create: (context) => AppState(),
+            child: const Directionality(
+              textDirection: TextDirection.ltr,
+              child: MaterialApp(
+                home: HomePage(title: "NovaChrono"),
+              ),
             ),
-          ),
-        )
+          )
       );
 
       await tester.pumpAndSettle();
 
-      // Manually push HomePage onto the navigation stack
-      navigatorKey.currentState!.push(MaterialPageRoute(
-          builder: (context) => const HomePage(
-                title: "NovaChrono",
-              )));
+      var createEditTaskPageFloatingActionButtonFinder = find.byKey(const Key("createEditTaskPageFloatingActionButton"));
+      await tester.tap(createEditTaskPageFloatingActionButtonFinder);
 
-      // Tap on the button
+      await tester.pumpAndSettle();
+
       var cancelButtonFinder = find.byKey(const Key('cancelButton'));
       await tester.ensureVisible(cancelButtonFinder);
       await tester.tapAt(tester.getCenter(cancelButtonFinder));
 
-      // Trigger a frame
       await tester.pumpAndSettle();
 
-      // Verify that the navigation occurred by checking the presence of a widget on the next page
       expect(find.byType(HomePage), findsOneWidget);
     });
 
@@ -140,11 +128,8 @@ void main() {
       when(mockCommonTaskNameListService.getAllCommonTaskNames()).thenAnswer((_) async => []);
 
       await tester.pumpWidget(
-          MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
-              ChangeNotifierProvider(create: (context) => SelectedPageProvider()),
-            ],
+          ChangeNotifierProvider(
+            create: (context) => AppState(),
             child: const Directionality(
               textDirection: TextDirection.ltr,
               child: MaterialApp(
@@ -191,11 +176,8 @@ void main() {
 
 
       await tester.pumpWidget(
-          MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
-              ChangeNotifierProvider(create: (context) => SelectedPageProvider()),
-            ],
+        ChangeNotifierProvider(
+            create: (context) => AppState(),
             child: Directionality(
               textDirection: TextDirection.ltr,
               child: MaterialApp(
@@ -208,7 +190,7 @@ void main() {
                 ),
               ),
             ),
-          )
+        )
       );
 
       await tester.pumpAndSettle();

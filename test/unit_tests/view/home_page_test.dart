@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
+import 'package:nova_chrono/app_state.dart';
 import 'package:nova_chrono/application/api/common_task_name/common_task_name_list_service.dart';
 import 'package:nova_chrono/application/api/task/task_list_service.dart';
 import 'package:nova_chrono/domain/model/common_task_name.dart';
@@ -9,8 +10,6 @@ import 'package:nova_chrono/injection_container.dart';
 import 'package:nova_chrono/view/pages/common_task_names_list_page.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
 import 'package:nova_chrono/view/pages/task_list_page.dart';
-import 'package:nova_chrono/view/providers/selected_page_provider.dart';
-import 'package:nova_chrono/view/providers/task_filter_date_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../mocks/annotations.mocks.dart';
@@ -36,19 +35,16 @@ void main() {
           .thenAnswer((_) async => tasks);
 
       await tester.pumpWidget(
-          MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
-              ChangeNotifierProvider(create: (context) => SelectedPageProvider()),
-            ],
-            child: const Directionality(
-              textDirection: TextDirection.ltr,
-              child: MaterialApp(
-                home: HomePage(
-                  title: title,
+          ChangeNotifierProvider(
+              create: (context) => AppState(),
+              child: const Directionality(
+                textDirection: TextDirection.ltr,
+                child: MaterialApp(
+                  home: HomePage(
+                    title: title,
+                  ),
                 ),
               ),
-            ),
           )
       );
 
@@ -65,11 +61,8 @@ void main() {
           .thenAnswer((_) async => commonTaskNames);
 
       await tester.pumpWidget(
-          MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
-              ChangeNotifierProvider(create: (context) => SelectedPageProvider()),
-            ],
+          ChangeNotifierProvider(
+            create: (context) => AppState(),
             child: const Directionality(
               textDirection: TextDirection.ltr,
               child: MaterialApp(

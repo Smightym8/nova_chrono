@@ -5,9 +5,6 @@ import 'package:nova_chrono/infrastructure/database_provider/database_provider.d
 import 'package:nova_chrono/injection_container.dart';
 import 'package:nova_chrono/main.dart';
 import 'package:nova_chrono/view/pages/home_page.dart';
-import 'package:nova_chrono/view/providers/selected_page_provider.dart';
-import 'package:nova_chrono/view/providers/task_filter_date_provider.dart';
-import 'package:provider/provider.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -28,15 +25,7 @@ void main() {
         const taskNameExpected = "Test Task";
         const detailsExpected = "Details for the test task";
 
-        await tester.pumpWidget(
-          MultiProvider(
-            providers: [
-              ChangeNotifierProvider(create: (context) => TaskFilterDateProvider()),
-              ChangeNotifierProvider(create: (context) => SelectedPageProvider()),
-            ],
-            child: const App(),
-          ),
-        );
+        await tester.pumpWidget(const App());
 
         await Future.delayed(const Duration(seconds: 1));
         await tester.pumpAndSettle();

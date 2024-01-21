@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:nova_chrono/app_state.dart';
 import 'package:nova_chrono/view/pages/common_task_names_list_page.dart';
 import 'package:nova_chrono/view/pages/task_list_page.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/selected_page_provider.dart';
 import 'error_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -17,12 +17,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late int _selectedPageIndex;
-  late SelectedPageProvider _selectedPageProvider;
+  late AppState _selectedPageProvider;
 
   @override
   void initState() {
     _selectedPageIndex = 0;
-    _selectedPageProvider = context.read<SelectedPageProvider>();
+    _selectedPageProvider = context.read<AppState>();
     _selectedPageIndex = _selectedPageProvider.selectedPageIndex;
 
     super.initState();
@@ -37,6 +37,7 @@ class _HomePageState extends State<HomePage> {
         break;
       case 1:
         page = CommonTaskNamesListPage(title: widget.title);
+        break;
       default:
         // Don't show back button in this case as home would have an invalid
         // value for selectedPage index and the user can see the navigation bar
